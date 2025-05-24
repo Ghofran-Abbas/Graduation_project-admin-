@@ -12,6 +12,13 @@
   "LogoutSecretaryFailure": "Failed to logout. Please try again later",
   "LogoutSecretarySuccess": "Logout Successfully",
 
+  "CreateDepartmentFailure": "Failed to add department. Please try again later",
+  "CreateDepartmentSuccess": "Department added successfully",
+  "UpdateDepartmentFailure": "Failed to update department. Please try again later",
+  "UpdateDepartmentSuccess": "Department information updated successfully",
+  "DeleteDepartmentFailure": "Failed to delete department. Please try again later",
+  "DeleteDepartmentSuccess": "Department deleted successfully",
+
   "CreateCourseFailure": "Failed to add course. Please try again later",
   "CreateCourseSuccess": "Course added successfully",
   "UpdateCourseFailure": "Failed to update course. Please try again later",
@@ -218,6 +225,28 @@
   "No thing to display": "No thing to display",
   "this field must not be empty": "this field must not be empty",
   "Search here...": "Search here...",
+
+
+  "No departments at this time": "No departments at this time",
+  "Departments will appear here after they enroll in your institute.": "Departments will appear here after they enroll in your institute.",
+
+  "No active courses at this time": "No active courses at this time",
+  "Courses will appear here after they enroll in your institute.": "Courses will appear here after they enroll in your institute.",
+
+  "No more at this time": "No more at this time",
+  "Add a section to see more options.": "Add a section to see more options.",
+
+  "No students at this time": "No students at this time",
+  "Students will appear here after they enroll in your institute.": "Students will appear here after they enroll in your institute.",
+
+  "No trainers at this time": "No trainers at this time",
+  "Trainers will appear here after they enroll in your institute.": "Trainers will appear here after they enroll in your institute.",
+
+  "No reports at this time": "No reports at this time",
+  "Reports will appear here after they enroll in your institute.": "Reports will appear here after they enroll in your institute.",
+
+  "No complains at this time": "No complains at this time",
+  "Complains will appear here after they enroll in your institute.": "Complains will appear here after they enroll in your institute.",
 
 
 

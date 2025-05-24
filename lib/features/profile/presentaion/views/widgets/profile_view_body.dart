@@ -63,6 +63,7 @@ class ProfileViewBody extends StatelessWidget {
               secondBoxIcon: Icons.mail_outlined,
               firstFieldInfoText: 'user.birthday',
               secondFieldInfoText: 'user.gender',
+              onTapGifts: () {},
               onTap: () {}, labelText: '', tailText: '', avatarCount: 1,
             ),
           ],

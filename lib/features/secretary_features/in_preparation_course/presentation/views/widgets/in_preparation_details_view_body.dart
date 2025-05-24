@@ -99,7 +99,7 @@ class DetailsInPreparationViewBody extends StatelessWidget {
                         BlocBuilder<TrainersSectionCubit, TrainersSectionState>(
                             builder: (contextTS, stateTS) {
                               if(stateTS is TrainersSectionSuccess) {
-                                return CustomOverloadingAvatar(
+                                return stateTS.trainers.trainers![0].trainers!.isNotEmpty ? CustomOverloadingAvatar(
                                   labelText: '${AppLocalizations.of(context).translate('Look at')} ${AppLocalizations.of(context).translate('trainers in this class')}',
                                   tailText: AppLocalizations.of(context).translate('See more'),
                                   firstImage: stateTS.trainers.trainers![0].trainers!.isNotEmpty ? stateTS.trainers.trainers![0].trainers![0].photo : '',
@@ -112,6 +112,9 @@ class DetailsInPreparationViewBody extends StatelessWidget {
                                     context.go('${GoRouterPath.courses}/1${GoRouterPath.courseDetails}/1${GoRouterPath.sectionTrainers}/${stateTS.trainers.trainers![0].id}');
                                     //context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.sectionTrainers}/${state.section.id}');
                                   },
+                                ) : Text(
+                                  AppLocalizations.of(context).translate('No trainers at this time'),
+                                  style: Styles.l2Bold(color: AppColors.t4),
                                 );
                               } else if(stateTS is TrainersSectionFailure) {
                                 return CustomErrorWidget(

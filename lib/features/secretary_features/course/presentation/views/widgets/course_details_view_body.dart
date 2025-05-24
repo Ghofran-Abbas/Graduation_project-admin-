@@ -21,6 +21,7 @@ import '../../../../../../core/widgets/custom_error_widget.dart';
 import '../../../../../../core/widgets/custom_icon_button.dart';
 import '../../../../../../core/widgets/custom_image_network.dart';
 import '../../../../../../core/widgets/custom_snack_bar.dart';
+import '../../../../../../core/widgets/secretary/custom_empty_widget.dart';
 import '../../../../../../core/widgets/secretary/custom_overloading_avatar.dart';
 import '../../../../../../core/widgets/secretary/custom_check_box.dart';
 import '../../../../../../core/widgets/secretary/custom_course_information.dart';
@@ -143,7 +144,7 @@ class _CourseDetailsViewBodyState extends State<CourseDetailsViewBody> {
                 listener: (context, state) {},
                 builder: (context, state) {
                   if (state is SectionsSuccess) {
-                    final List<Section> sections = state.createResult.sections;
+                    final List<DatumSection> sections = state.createResult.data!;
                     return Padding(
                       padding: EdgeInsets.only(top: 56.0.h,),
                       child: CustomScreenBody(
@@ -152,14 +153,14 @@ class _CourseDetailsViewBodyState extends State<CourseDetailsViewBody> {
                         showFirstButton: true,
                         widget: BlocBuilder<SelectSectionCubit, SelectSectionState>(
                           builder: (context, selectState) {
-                            Section? selected;
+                            DatumSection? selected;
                             if (selectState is SelectSectionSuccess) {
                               selected = selectState.section;
                               showSecondButton = true;
                             }
                             return Padding(
                               padding: EdgeInsets.only(top: 0.h, bottom: 0.h),
-                              child: DropdownMenu<Section>(
+                              child: DropdownMenu<DatumSection>(
                                 enableSearch: false,
                                 requestFocusOnTap: false,
                                 width: 200.w,
@@ -212,12 +213,12 @@ class _CourseDetailsViewBodyState extends State<CourseDetailsViewBody> {
 
                                 ),
                                 dropdownMenuEntries: sections.map((section) {
-                                  return DropdownMenuEntry<Section>(
+                                  return DropdownMenuEntry<DatumSection>(
                                     value: section,
                                     label: section.name,
                                   );
                                 }).toList(),
-                                onSelected: (Section? selectedSection) {
+                                onSelected: (DatumSection? selectedSection) {
                                   if (selectedSection != null) {
                                     BlocProvider.of<SelectSectionCubit>(
                                         context).selectSection(
@@ -562,7 +563,7 @@ class _CourseDetailsViewBodyState extends State<CourseDetailsViewBody> {
                                                       BlocBuilder<TrainersSectionCubit, TrainersSectionState>(
                                                           builder: (contextTS, stateTS) {
                                                             if(stateTS is TrainersSectionSuccess) {
-                                                              return CustomOverloadingAvatar(
+                                                              return stateTS.trainers.trainers![0].trainers!.isNotEmpty ? CustomOverloadingAvatar(
                                                                 labelText: '${AppLocalizations.of(context).translate('Look at')} ${AppLocalizations.of(context).translate('trainers in this class')}',
                                                                 tailText: AppLocalizations.of(context).translate('See more'),
                                                                 firstImage: stateTS.trainers.trainers![0].trainers!.isNotEmpty ? stateTS.trainers.trainers![0].trainers![0].photo : '',
@@ -574,6 +575,9 @@ class _CourseDetailsViewBodyState extends State<CourseDetailsViewBody> {
                                                                 onTap: () {
                                                                   context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.sectionTrainers}/${state.section.id}');
                                                                 },
+                                                              ) : Text(
+                                                                AppLocalizations.of(context).translate('No trainers at this time'),
+                                                                style: Styles.l2Bold(color: AppColors.t4),
                                                               );
                                                             } else if(stateTS is TrainersSectionFailure) {
                                                               return CustomErrorWidget(
@@ -1064,7 +1068,14 @@ class _CourseDetailsViewBodyState extends State<CourseDetailsViewBody> {
                                               onTapFirstIcon: (){},
                                               onTapSecondIcon: (){},
                                             ),
-                                            SizedBox(height: 22.h),
+                                            //SizedBox(height: 22.h),
+                                            Padding(
+                                              padding: EdgeInsets.only(right: 87.w),
+                                              child: CustomEmptyWidget(
+                                                firstText: AppLocalizations.of(context).translate('No more at this time'),
+                                                secondText: AppLocalizations.of(context).translate('Add a section to see more options.'),
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ],

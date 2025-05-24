@@ -19,6 +19,7 @@ import '../../../../../../core/widgets/custom_image_network.dart';
 import '../../../../../../core/widgets/custom_number_pagination.dart';
 import '../../../../../../core/widgets/custom_snack_bar.dart';
 import '../../../../../../core/widgets/secretary/custom_dropdown_list.dart';
+import '../../../../../../core/widgets/secretary/custom_empty_widget.dart';
 import '../../../../../../core/widgets/secretary/custom_label_text_form_field.dart';
 import '../../../../../../core/widgets/secretary/custom_list_information_fields.dart';
 import '../../../../../../core/widgets/secretary/custom_screen_body.dart';
@@ -148,7 +149,7 @@ class _StudentsViewBodyState extends State<StudentsViewBody> {
                     physics: BouncingScrollPhysics(),
                     child: Column(
                       children: [
-                        CustomListInformationFields(
+                        state.showResult.students.data!.isNotEmpty ? CustomListInformationFields(
                           secondField: AppLocalizations.of(context).translate('Birth date'),
                           showSecondField: true,
                           widget: ListView.builder(
@@ -157,10 +158,10 @@ class _StudentsViewBodyState extends State<StudentsViewBody> {
                                 color: index % 2 != 0 ? AppColors.darkHighlightPurple : AppColors.white,
                                 image: state.showResult.students.data![index].photo,
                                 name: state.showResult.students.data![index].name,
-                                secondText: state.showResult.students.data![index].birthday,
+                                secondText: state.showResult.students.data![index].birthday.toString().replaceRange(10, 23, ''),
                                 showSecondDetailsText: true,
                                 thirdDetailsText: state.showResult.students.data![index].email,
-                                fourthDetailsText: 'Female',
+                                fourthDetailsText: state.showResult.students.data![index].gender,
 
                                 onTap: () {
                                   context.go('${GoRouterPath.studentDetails}/${state.showResult.students.data![index].id}');
@@ -173,6 +174,9 @@ class _StudentsViewBodyState extends State<StudentsViewBody> {
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                           ),
+                        ) : CustomEmptyWidget(
+                          firstText: AppLocalizations.of(context).translate('No students at this time'),
+                          secondText: AppLocalizations.of(context).translate('Students will appear here after they enroll in your institute.'),
                         ),
                         CustomNumberPagination(
                           numberPages: state.showResult.students.lastPage,

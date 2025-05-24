@@ -1,3 +1,4 @@
+import 'package:admin_alhadara_dashboard/core/utils/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -12,7 +13,7 @@ import 'custom_icon_box_information.dart';
 import 'custom_overloading_avatar.dart';
 
 class CustomProfileInformation extends StatelessWidget {
-  const CustomProfileInformation({super.key, this.image, this.imageWidth, this.imageHeight, this.borderRadius, required this.name, this.detailsText, this.showDetailsText, required this.firstBoxText, required this.firstBoxIcon, required this.secondBoxText, required this.secondBoxIcon, this.aboutText, this.showAboutText, this.firstFieldInfoTitle, required this.firstFieldInfoText, this.secondFieldInfoTitle, required this.secondFieldInfoText, this.thirdFieldInfoTitle, this.thirdFieldInfoText, this.showThirdFieldInfo, this.showThirdFieldInfoIcon, required this.labelText, this.firstImage, this.secondImage, this.thirdImage, this.fourthImage, this.fifthImage, required this.tailText, this.showOverloadingAvatar, required this.avatarCount, required this.onTap});
+  const CustomProfileInformation({super.key, this.image, this.imageWidth, this.imageHeight, this.borderRadius, required this.name, this.detailsText, this.showDetailsText, required this.firstBoxText, required this.firstBoxIcon, required this.secondBoxText, required this.secondBoxIcon, this.aboutText, this.showAboutText, this.firstFieldInfoTitle, required this.firstFieldInfoText, this.secondFieldInfoTitle, required this.secondFieldInfoText, this.thirdFieldInfoTitle, this.thirdFieldInfoText, this.showThirdFieldInfo, this.showThirdFieldInfoIcon, required this.labelText, this.firstImage, this.secondImage, this.thirdImage, this.fourthImage, this.fifthImage, required this.tailText, this.showOverloadingAvatar, required this.avatarCount, required this.onTap, this.showGifts, this.textGifts, required this.onTapGifts});
 
   final String? image;
   final double? imageWidth;
@@ -44,6 +45,9 @@ class CustomProfileInformation extends StatelessWidget {
   final String tailText;
   final int avatarCount;
   final bool? showOverloadingAvatar;
+  final bool? showGifts;
+  final String? textGifts;
+  final Function onTapGifts;
   final Function onTap;
 
   @override
@@ -101,6 +105,29 @@ class CustomProfileInformation extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              showGifts ?? false ? GestureDetector(
+                onTap: (){onTapGifts();},
+                child: Row(
+                  children: [
+                    Container(
+                      height: 75.w,
+                      width: 60.w,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(0),
+                        image: const DecorationImage(
+                          image: AssetImage(Assets.rewards),
+                        )
+                      ),
+                    ),
+                    SizedBox(width: 10.w,),
+                    Text(
+                      textGifts ?? 'Click to see Kristin’s awards',
+                      style: Styles.l1Bold(),
+                    ),
+                  ],
+                ),
+              ) : SizedBox(width: 0.w, height: 0.w,),
               showAboutText ?? false ? SizedBox(
                 width: 380.w,
                 child: CustomAbout(
@@ -109,7 +136,7 @@ class CustomProfileInformation extends StatelessWidget {
                 ),
               ) : SizedBox(width: 0.w, height: 0.w,),
               //showAboutText ?? false ? SizedBox(height: 75.h) : SizedBox(width: 0.w, height: 0.w,),
-              SizedBox(height: showAboutText ?? false ? 75.h : 405.h),
+              SizedBox(height: (showAboutText ?? false) || (showGifts ?? false)  ? 75.h : 405.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -126,7 +153,7 @@ class CustomProfileInformation extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 52.h,),
-              CustomOverloadingAvatar(
+              showOverloadingAvatar ?? false ? CustomOverloadingAvatar(
                 labelText: labelText,
                 firstImage: firstImage,
                 secondImage: secondImage,
@@ -136,7 +163,7 @@ class CustomProfileInformation extends StatelessWidget {
                 tailText: tailText,
                 avatarCount: avatarCount,
                 onTap: (){},
-              ),
+              ) : SizedBox(width: 0.w, height: 0.w,),
             ],
           ),
         ],

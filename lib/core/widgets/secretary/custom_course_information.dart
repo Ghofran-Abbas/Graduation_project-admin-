@@ -207,7 +207,7 @@ class CustomCourseInformation extends StatelessWidget {
               ),
             ],
           ),
-        ) : SizedBox(width: 0.w, height: 0.h,),
+        ) : SizedBox(width: 200.w, height: 0.h,),
         SizedBox(width: 250.w,),
         SizedBox(
           width: 324.w,

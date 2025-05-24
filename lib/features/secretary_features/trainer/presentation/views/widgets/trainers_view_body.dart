@@ -18,6 +18,7 @@ import '../../../../../../core/widgets/custom_image_network.dart';
 import '../../../../../../core/widgets/custom_number_pagination.dart';
 import '../../../../../../core/widgets/custom_snack_bar.dart';
 import '../../../../../../core/widgets/secretary/custom_dropdown_list.dart';
+import '../../../../../../core/widgets/secretary/custom_empty_widget.dart';
 import '../../../../../../core/widgets/secretary/custom_label_text_form_field.dart';
 import '../../../../../../core/widgets/secretary/custom_list_information_fields.dart';
 import '../../../../../../core/widgets/secretary/custom_screen_body.dart';
@@ -98,7 +99,7 @@ class _TrainersViewBodyState extends State<TrainersViewBody> {
                 onTapSearch: () {
                   context.go(GoRouterPath.searchTrainer);
                 },
-                body: state.showResult.trainers.data != null ? Padding(
+                body: Padding(
                   padding: EdgeInsets.only(top: 238.0.h,
                       left: 20.0.w,
                       right: 20.0.w,
@@ -107,7 +108,7 @@ class _TrainersViewBodyState extends State<TrainersViewBody> {
                     physics: BouncingScrollPhysics(),
                     child: Column(
                       children: [
-                        CustomListInformationFields(
+                        state.showResult.trainers.data!.isNotEmpty ? CustomListInformationFields(
                           secondField: AppLocalizations.of(context).translate('Subject'),
                           showSecondField: true,
                           widget: ListView.builder(
@@ -131,6 +132,9 @@ class _TrainersViewBodyState extends State<TrainersViewBody> {
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                           ),
+                        ) : CustomEmptyWidget(
+                          firstText: AppLocalizations.of(context).translate('No trainers at this time'),
+                          secondText: AppLocalizations.of(context).translate('Trainers will appear here after they enroll in your institute.'),
                         ),
                         CustomNumberPagination(
                           numberPages: state.showResult.trainers.lastPage,
@@ -143,7 +147,6 @@ class _TrainersViewBodyState extends State<TrainersViewBody> {
                     ),
                   ),
                 )
-                    : Center(child: CustomErrorWidget(errorMessage: AppLocalizations.of(context).translate('No thing to display'))),
               ),
             );
           } else if(state is TrainersFailure) {

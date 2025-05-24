@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:number_paginator/number_paginator.dart';
 
 class CustomNumberPagination extends StatelessWidget {
@@ -10,13 +11,12 @@ class CustomNumberPagination extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NumberPaginator(
+    return numberPages != 1 ? NumberPaginator(
       numberPages: numberPages ?? 1,
       initialPage: (initialPage ?? 1) - 1,
       onPageChange: (int index) {
-        // index + 1 لأن API تبدأ من 1
         onPageChange(index);
       },
-    );
+    ) : SizedBox(width: 0.w, height: 0.h,);
   }
 }

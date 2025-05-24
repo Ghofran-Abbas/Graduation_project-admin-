@@ -67,6 +67,7 @@ class TrainerDetailsViewBody extends StatelessWidget {
                         tailText: AppLocalizations.of(context).translate('See more'),
                         avatarCount: 1,
                         onTap: () {},
+                        onTapGifts: (){},
                       ),
                       Padding(
                         padding: EdgeInsets.only(

@@ -61,7 +61,7 @@ class LoginViewBody extends StatelessWidget {
                       height: 400.h,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage(Assets.logo),
+                          image: AssetImage(Assets.login),
                         ),
                       ),
                     ),

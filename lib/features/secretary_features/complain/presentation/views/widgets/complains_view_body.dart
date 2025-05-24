@@ -13,6 +13,7 @@ import '../../../../../../core/widgets/custom_circular_progress_indicator.dart';
 import '../../../../../../core/widgets/custom_error_widget.dart';
 import '../../../../../../core/widgets/custom_number_pagination.dart';
 import '../../../../../../core/widgets/custom_snack_bar.dart';
+import '../../../../../../core/widgets/secretary/custom_empty_widget.dart';
 import '../../../../../../core/widgets/secretary/custom_screen_body.dart';
 import '../../../../../../core/widgets/secretary/list_view_information_field.dart';
 import '../../../../../../core/widgets/text_icon_button.dart';
@@ -48,7 +49,7 @@ class ComplainsViewBody extends StatelessWidget {
                     onTapSearch: () {
                       context.go('${GoRouterPath.complains}${GoRouterPath.searchComplain}');
                     },
-                    body: state.complains.data.data != null ? Padding(
+                    body: Padding(
                       padding: EdgeInsets.only(top: 238.0.h,
                           left: 20.0.w,
                           right: 20.0.w,
@@ -57,7 +58,7 @@ class ComplainsViewBody extends StatelessWidget {
                         physics: BouncingScrollPhysics(),
                         child: Column(
                           children: [
-                            ListView.builder(
+                            state.complains.data.data!.isNotEmpty ? ListView.builder(
                               itemBuilder: (BuildContext context, int index) {
                                 return Align(child: InformationFieldItem(
                                   color: index % 2 != 0 ? AppColors.darkHighlightPurple : AppColors.white,
@@ -199,6 +200,9 @@ class ComplainsViewBody extends StatelessWidget {
                               itemCount: state.complains.data.data!.length,
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
+                            ) : CustomEmptyWidget(
+                              firstText: AppLocalizations.of(context).translate('No complains at this time'),
+                              secondText: AppLocalizations.of(context).translate('Complains will appear here after they enroll in your institute.'),
                             ),
                             CustomNumberPagination(
                               numberPages: state.complains.data.lastPage,
@@ -210,7 +214,7 @@ class ComplainsViewBody extends StatelessWidget {
                           ],
                         ),
                       ),
-                    )  : Center(child: CustomErrorWidget(errorMessage: AppLocalizations.of(context).translate('No thing to display'))),
+                    ),
                   ),
                 );
               } else if(state is ComplainsFailure) {
