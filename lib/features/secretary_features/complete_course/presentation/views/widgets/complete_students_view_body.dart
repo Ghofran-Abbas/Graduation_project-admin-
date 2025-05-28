@@ -115,8 +115,14 @@ class CompleteStudentsViewBody extends StatelessWidget {
                                     )
                                   ],
                                 ) : CustomEmptyWidget(
-                                  firstText: AppLocalizations.of(context).translate('No students in this section at this time'),
-                                  secondText: AppLocalizations.of(context).translate('Students will appear here after they enroll in your institute.'),
+                                  firstText: AppLocalizations
+                                      .of(context)
+                                      .translate(
+                                      'No students in this section at this time'),
+                                  secondText: AppLocalizations
+                                      .of(context)
+                                      .translate(
+                                      'Students will appear here after they add to the section.'),
                                 ),
                               ),
                             ],
