@@ -27,6 +27,8 @@ class GoRouterPath {
   static const complete = '/complete';
   static const completeDetails = '/complete/completeDetails';
   static const completeCalendar = '/completeCalendar';
+  static const completeStudents = '/completeStudents';
+  static const completeTrainers = '/completeTrainers';
   static const announcementsC = '/announcementsC';
   static const announcementCDetails = '/announcementCDetails';
   static const reports = '/reports';

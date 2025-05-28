@@ -590,43 +590,43 @@ class _DepartmentsViewBodyState extends State<DepartmentsViewBody> {
                                                     ),
                                                   ),
                                                 ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                      ));
-                                    },
-                                    itemCount: state.showResult.departments.data!.length,
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                  ) : CustomEmptyWidget(
-                                    firstText: AppLocalizations.of(context).translate('No departments at this time'),
-                                    secondText: AppLocalizations.of(context).translate('Departments will appear here after they enroll in your institute.'),
-                                  ),
-                                  CustomNumberPagination(
-                                    numberPages: state.showResult.departments.lastPage,
-                                    initialPage: state.showResult.departments.currentPage,
-                                    onPageChange: (int index) {
-                                      context.read<DepartmentsCubit>().fetchDepartments(page: index + 1);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    } else if(state is DepartmentsFailure) {
-                      return CustomErrorWidget(errorMessage: state.errorMessage);
-                    } else {
-                      return CustomCircularProgressIndicator();
-                    }
-                  }
-                );
-              }
-            );
-          }
-        );
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ));
+                        },
+                        itemCount: state.showResult.departments.data!.length,
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                      ) : CustomEmptyWidget(
+                        firstText: AppLocalizations.of(context).translate('No departments at this time'),
+                        secondText: AppLocalizations.of(context).translate('Departments will appear here after they enroll in your institute.'),
+                      ),
+                      CustomNumberPagination(
+                        numberPages: state.showResult.departments.lastPage,
+                        initialPage: state.showResult.departments.currentPage,
+                        onPageChange: (int index) {
+                          context.read<DepartmentsCubit>().fetchDepartments(page: index + 1);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else if(state is DepartmentsFailure) {
+          return CustomErrorWidget(errorMessage: state.errorMessage);
+        } else {
+          return CustomCircularProgressIndicator();
+        }
       }
     );
   }

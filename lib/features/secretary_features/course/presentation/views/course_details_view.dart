@@ -9,6 +9,7 @@ import '../manager/create_section_cubit/create_section_cubit.dart';
 import '../manager/delete_section_cubit/delete_section_cubit.dart';
 import '../manager/details_course_cubit/details_course_cubit.dart';
 import '../manager/sections_cubit/sections_cubit.dart';
+import '../manager/students_section_cubit/students_section_cubit.dart';
 import '../manager/trainers_section_cubit/trainers_section_cubit.dart';
 import '../manager/update_section_cubit/update_section_cubit.dart';
 import 'widgets/course_details_view_body.dart';
@@ -67,6 +68,13 @@ class CourseDetailsView extends StatelessWidget {
         BlocProvider(
           create: (context) {
             return TrainersSectionCubit(
+              getIt.get<CourseRepoImpl>(),
+            );
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            return StudentsSectionCubit(
               getIt.get<CourseRepoImpl>(),
             );
           },

@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/utils/service_locator.dart';
 import '../../../course/data/repos/course_repo_impl.dart';
-import '../../../course/presentation/manager/details_section_cubit/details_section_cubit.dart';
-import 'widgets/in_preparation_calendar_view_body.dart';
+import '../../../course/presentation/manager/trainers_section_cubit/trainers_section_cubit.dart';
+import 'widgets/complete_trainers_view_body.dart';
 
-class InPreparationCalendarView extends StatelessWidget {
-  const InPreparationCalendarView({super.key, required this.sectionId});
+class CompleteTrainersView extends StatelessWidget {
+  const CompleteTrainersView({super.key, required this.sectionId});
 
   final int sectionId;
 
@@ -17,13 +17,13 @@ class InPreparationCalendarView extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) {
-            return DetailsSectionCubit(
+            return TrainersSectionCubit(
               getIt.get<CourseRepoImpl>(),
-            )..fetchDetailsSection(id: sectionId);
+            )..fetchTrainersSection(id: sectionId, page: 1);
           },
         ),
       ],
-      child: InPreparationCalendarViewBody(),
+      child: CompleteTrainersViewBody(),
     );
   }
 }

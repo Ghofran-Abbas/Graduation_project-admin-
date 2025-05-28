@@ -12,8 +12,8 @@ class CustomNumberPagination extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return numberPages != 1 ? NumberPaginator(
-      numberPages: numberPages ?? 1,
-      initialPage: (initialPage ?? 1) - 1,
+      numberPages: numberPages,
+      initialPage: (initialPage) - 1,
       onPageChange: (int index) {
         onPageChange(index);
       },

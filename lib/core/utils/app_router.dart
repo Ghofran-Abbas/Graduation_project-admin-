@@ -9,6 +9,8 @@ import '../../features/secretary_features/complete_course/presentation/views/ann
 import '../../features/secretary_features/complete_course/presentation/views/announcement_c_view.dart';
 import '../../features/secretary_features/complete_course/presentation/views/complete_calendar_view.dart';
 import '../../features/secretary_features/complete_course/presentation/views/complete_details_view.dart';
+import '../../features/secretary_features/complete_course/presentation/views/complete_students_view.dart';
+import '../../features/secretary_features/complete_course/presentation/views/complete_trainers_view.dart';
 import '../../features/secretary_features/complete_course/presentation/views/complete_view.dart';
 import '../../features/secretary_features/course/presentation/views/announcement_a_details_view.dart';
 import '../../features/secretary_features/course/presentation/views/announcement_a_view.dart';
@@ -65,9 +67,10 @@ class AppRouter {
                             },
                             routes: [
                               GoRoute(
-                                path: '/calendar',
+                                path: '/calendar/:sectionCalId',
                                 builder: (context, state) {
-                                  return CalendarView();
+                                  final id = state.pathParameters['sectionCalId']!;
+                                  return CalendarView(sectionId: int.parse(id),);
                                 },
                               ),
                               GoRoute(
@@ -179,13 +182,28 @@ class AppRouter {
                     path: '/completeDetails/:id',
                     builder: (context, state) {
                       final id = state.pathParameters['id']!;
-                      return CompleteDetailsView(id: int.parse(id),);
+                      return CompleteDetailsView(sectionId: int.parse(id),);
                     },
                     routes: [
                       GoRoute(
-                        path: '/completeCalendar',
+                        path: '/completeCalendar/:sectionCCalId',
                         builder: (context, state) {
-                          return CompleteCalendarView();
+                          final id = state.pathParameters['sectionCCalId']!;
+                          return CompleteCalendarView(sectionId: int.parse(id),);
+                        },
+                      ),
+                      GoRoute(
+                        path: '/completeStudents/:sectionCStudentsId',
+                        builder: (context, state) {
+                          final id = state.pathParameters['sectionCStudentsId']!;
+                          return CompleteStudentsView(sectionId: int.parse(id),);
+                        },
+                      ),
+                      GoRoute(
+                        path: '/completeTrainers/:sectionCId',
+                        builder: (context, state) {
+                          final id = state.pathParameters['sectionCId']!;
+                          return CompleteTrainersView(sectionId: int.parse(id),);
                         },
                       ),
                       GoRoute(
@@ -217,13 +235,14 @@ class AppRouter {
                     path: '/inPreparationDetails/:id',
                     builder: (context, state) {
                       final id = state.pathParameters['id']!;
-                      return DetailsInPreparationView(id: int.parse(id),);
+                      return DetailsInPreparationView(sectionId: int.parse(id),);
                     },
                     routes: [
                       GoRoute(
-                        path: '/inPreparationCalendar',
+                        path: '/inPreparationCalendar/:sectionIpCalId',
                         builder: (context, state) {
-                          return InPreparationCalendarView();
+                          final id = state.pathParameters['sectionIpCalId']!;
+                          return InPreparationCalendarView(sectionId: int.parse(id),);
                         },
                       ),
                     ]

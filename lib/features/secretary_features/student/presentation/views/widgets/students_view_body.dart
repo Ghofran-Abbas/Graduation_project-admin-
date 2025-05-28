@@ -140,7 +140,7 @@ class _StudentsViewBodyState extends State<StudentsViewBody> {
                 onTapSearch: () {
                   context.go(GoRouterPath.searchStudent);
                 },
-                body: state.showResult.students.data != null ? Padding(
+                body: Padding(
                   padding: EdgeInsets.only(top: 238.0.h,
                       left: 20.0.w,
                       right: 20.0.w,
@@ -188,7 +188,7 @@ class _StudentsViewBodyState extends State<StudentsViewBody> {
                       ],
                     ),
                   ),
-                ) : Center(child: CustomErrorWidget(errorMessage: AppLocalizations.of(context).translate('No thing to display'))),
+                ),
               ),
             );
           } else if(state is StudentsFailure) {

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:admin_alhadara_dashboard/features/secretary_features/report/data/models/delete_report_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:file_saver/file_saver.dart';
 
 import '../../../../../core/errors/failure.dart';
 import '../../../../../core/utils/api_service.dart';
@@ -162,6 +163,37 @@ class ReportRepoImpl extends ReportRepo {
 
       return right(deleteReportModel);
     } catch (e) {
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> fetchFile({
+    required String filePath,
+  }) async {
+    try{
+      var response = await dioApiService.getFile(
+        endPoint: "http://127.0.0.1:8080/$filePath",
+      );
+
+      if (response.statusCode == 200) {
+        final contentDisposition = response.headers['content-disposition']?.first;
+        final filename = contentDisposition?.split('filename=')[1] ?? 'data';
+        final bytes = response.data as Uint8List;
+
+        await FileSaver.instance.saveFile(
+          name: filename,
+          bytes: bytes,
+          ext: filePath,
+          mimeType: MimeType.microsoftExcel,
+        );
+
+        return right(response);
+      } else {
+        throw Exception('Export failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      log(e.toString());
       return left(ServerFailure(e.toString()));
     }
   }
