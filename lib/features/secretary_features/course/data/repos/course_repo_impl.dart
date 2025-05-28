@@ -11,6 +11,7 @@ import '../../../../../core/utils/api_service.dart';
 import '../../../../../core/utils/shared_preferences_helper.dart';
 import '../models/add_section_student_model.dart';
 import '../models/add_section_trainer_model.dart';
+import '../models/confirmed_students_section_model.dart';
 import '../models/courses_model.dart';
 import '../models/create_course_model.dart';
 import '../models/create_section_model.dart';
@@ -18,8 +19,11 @@ import '../models/delete_course_model.dart';
 import '../models/delete_section_model.dart';
 import '../models/delete_section_trainer_model.dart';
 import '../models/details_course_model.dart';
+import '../models/details_section_model.dart';
+import '../models/reservation_students_section_model.dart';
 import '../models/search_course_model.dart';
 import '../models/sections_model.dart';
+import '../models/students_section_model.dart';
 import '../models/trainers_section_model.dart';
 import '../models/update_course_model.dart';
 import '../models/update_section_model.dart';
@@ -32,10 +36,10 @@ class CourseRepoImpl implements CourseRepo {
   CourseRepoImpl(this.dioApiService);
 
   @override
-  Future<Either<Failure, CoursesModel>> fetchCourses({required int page}) async {
+  Future<Either<Failure, CoursesModel>> fetchCourses({required int departmentId, required int page}) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/secretary/courses?page=$page',
+        endPoint: '/secretary/departments/$departmentId/courses?page=$page',
         token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
       ));
       log(data.toString());
@@ -401,6 +405,28 @@ class CourseRepoImpl implements CourseRepo {
     }
   }
 
+  @override
+  Future<Either<Failure, DetailsSectionModel>> fetchDetailsSection({
+    required int id,
+  }) async {
+    try {
+      var data = await (dioApiService.get(
+        endPoint: '/secretary/section/ShowByIdCourseSection/$id',
+        token: Constants.adminToken,
+      ));
+      log(data.toString());
+      DetailsSectionModel detailsSectionModel;
+      detailsSectionModel = DetailsSectionModel.fromJson(data);
+
+      return right(detailsSectionModel);
+    } catch (e) {
+      if (e is DioException){
+        return left(ServerFailure.fromDioError(e),);
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
 
   @override
   Future<Either<Failure, TrainersSectionModel>> fetchTrainersSection({required int id, required int page}) async {
@@ -472,6 +498,66 @@ class CourseRepoImpl implements CourseRepo {
     }
   }
 
+
+  @override
+  Future<Either<Failure, StudentsSectionModel>> fetchStudentsSection({required int id, required int page}) async {
+    try {
+      var data = await (dioApiService.get(
+        endPoint: '/secretary/section/getStudentsInSection/$id',
+        token: Constants.adminToken,
+      ));
+      log(data.toString());
+      StudentsSectionModel studentsSectionModel;
+      studentsSectionModel = StudentsSectionModel.fromJson(data);
+
+      return right(studentsSectionModel);
+    } catch (e) {
+      if (e is DioException){
+        return left(ServerFailure.fromDioError(e),);
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ConfirmedStudentsSectionModel>> fetchConfirmedStudentsSection({required int id, required int page}) async {
+    try {
+      var data = await (dioApiService.get(
+        endPoint: '/secretary/section/getStudentsInSectionConfirmed/$id',
+        token: Constants.adminToken,
+      ));
+      log(data.toString());
+      ConfirmedStudentsSectionModel confirmedStudentsSectionModel;
+      confirmedStudentsSectionModel = ConfirmedStudentsSectionModel.fromJson(data);
+
+      return right(confirmedStudentsSectionModel);
+    } catch (e) {
+      if (e is DioException){
+        return left(ServerFailure.fromDioError(e),);
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ReservationStudentsSectionModel>> fetchReservationStudentsSection({required int id, required int page}) async {
+    try {
+      var data = await (dioApiService.get(
+        endPoint: '/secretary/reservation/showAllReservation/$id',
+        token: Constants.adminToken,
+      ));
+      log(data.toString());
+      ReservationStudentsSectionModel reservationStudentsSectionModel;
+      reservationStudentsSectionModel = ReservationStudentsSectionModel.fromJson(data);
+
+      return right(reservationStudentsSectionModel);
+    } catch (e) {
+      if (e is DioException){
+        return left(ServerFailure.fromDioError(e),);
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
 
   @override
   Future<Either<Failure, AddSectionStudentModel>> fetchAddSectionStudent({

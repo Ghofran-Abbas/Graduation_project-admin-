@@ -126,7 +126,7 @@ class CustomProfileInformation extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 52.h,),
-              CustomOverloadingAvatar(
+              showOverloadingAvatar ?? false ? CustomOverloadingAvatar(
                 labelText: labelText,
                 firstImage: firstImage,
                 secondImage: secondImage,
@@ -136,7 +136,7 @@ class CustomProfileInformation extends StatelessWidget {
                 tailText: tailText,
                 avatarCount: avatarCount,
                 onTap: (){},
-              ),
+              ) : SizedBox(width: 0.w, height: 0.w,),
             ],
           ),
         ],

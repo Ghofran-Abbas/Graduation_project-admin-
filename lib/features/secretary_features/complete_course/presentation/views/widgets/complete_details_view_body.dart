@@ -16,6 +16,8 @@ import '../../../../../../core/widgets/secretary/custom_overloading_avatar.dart'
 import '../../../../../../core/widgets/secretary/custom_screen_body.dart';
 import '../../../../../../core/widgets/secretary/grid_view_cards.dart';
 import '../../../../../../core/widgets/secretary/grid_view_files.dart';
+import '../../../../course/presentation/manager/students_section_cubit/students_section_cubit.dart';
+import '../../../../course/presentation/manager/students_section_cubit/students_section_state.dart';
 import '../../../../course/presentation/manager/trainers_section_cubit/trainers_section_cubit.dart';
 import '../../../../course/presentation/manager/trainers_section_cubit/trainers_section_state.dart';
 import '../../../../course/presentation/views/widgets/course_details_view_body.dart';
@@ -70,7 +72,7 @@ class CompleteDetailsViewBody extends StatelessWidget {
                           'deserunt reprehenderit elit laborum. ',
                       onTap: (){},
                       onTapDate: (){
-                        context.go('${GoRouterPath.completeDetails}/1${GoRouterPath.completeCalendar}');
+                        context.go('${GoRouterPath.completeDetails}/1${GoRouterPath.completeCalendar}/1');
                       },
                       onTapFirstIcon: (){},
                       onTapSecondIcon: (){},
@@ -79,27 +81,60 @@ class CompleteDetailsViewBody extends StatelessWidget {
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        CustomOverloadingAvatar(
-                          labelText: '${AppLocalizations.of(context).translate('Look at')} 17 ${AppLocalizations.of(context).translate('students in this class')}',
-                          tailText: AppLocalizations.of(context).translate('See more'),
-                          firstImage: '',
-                          secondImage: '',
-                          thirdImage: '',
-                          fourthImage: '',
-                          fifthImage: '',
-                          avatarCount: 5,
-                          onTap: (){
-                            context.go('${GoRouterPath.courses}/1${GoRouterPath.courseDetails}/1${GoRouterPath.sectionStudents}/1');
-                            //context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.sectionStudents}/${state.section.id}');
-                          },
+                        BlocBuilder<StudentsSectionCubit, StudentsSectionState>(
+                            builder: (contextSS, stateSS) {
+                              if(stateSS is StudentsSectionSuccess) {
+                                return Row(
+                                  children: [
+                                    CustomOverloadingAvatar(
+                                      labelText: '${AppLocalizations.of(context).translate('Look at')} ${stateSS.students.students.data![0].students!.length} ${AppLocalizations.of(context).translate('students in this class')}',
+                                      tailText: AppLocalizations.of(context).translate('See more'),
+                                      firstImage: stateSS.students.students.data![0].students!.isNotEmpty ? stateSS.students.students.data![0].students![0].photo : '',
+                                      secondImage: stateSS.students.students.data![0].students!.length >= 2 ? stateSS.students.students.data![0].students![1].photo : '',
+                                      thirdImage: stateSS.students.students.data![0].students!.length >= 3 ? stateSS.students.students.data![0].students![2].photo : '',
+                                      fourthImage: stateSS.students.students.data![0].students!.length >= 4 ? stateSS.students.students.data![0].students![3].photo : '',
+                                      fifthImage: stateSS.students.students.data![0].students!.length >= 5 ? stateSS.students.students.data![0].students![4].photo : '',
+                                      avatarCount: stateSS.students.students.data![0].students!.length,
+                                      onTap: () {
+                                        context.go('${GoRouterPath.completeDetails}/1${GoRouterPath.completeStudents}/${stateSS.students.students.data![0].id}');
+                                        //onTap: () {context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.sectionStudents}/${stateSec.section.id}');
+                                      },
+                                    ),
+                                    SizedBox(
+                                      width: calculateWidthBetweenAvatars(avatarCount: stateSS.students.students.data![0].students!.length) /*270.w*/,),
+                                  ],
+                                );
+                              } else if(stateSS is StudentsSectionFailure) {
+                                return Row(
+                                  children: [
+                                    CustomOverloadingAvatar(
+                                      labelText: '${AppLocalizations.of(context).translate('Look at')} ${AppLocalizations.of(context).translate('students in this class')}',
+                                      tailText: AppLocalizations.of(context).translate('See more'),
+                                      firstImage: '',
+                                      secondImage: '',
+                                      thirdImage: '',
+                                      fourthImage: '',
+                                      fifthImage: '',
+                                      avatarCount: 5,
+                                      onTap: () {
+
+                                        //onTap: () {context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.sectionStudents}/${stateSec.section.id}');
+                                      },
+                                    ),
+                                    SizedBox(
+                                      width: calculateWidthBetweenAvatars(avatarCount: 5) /*270.w*/,),
+                                  ],
+                                );
+                              } else {
+                                return CustomCircularProgressIndicator();
+                              }
+                            }
                         ),
-                        SizedBox(
-                          width: calculateWidthBetweenAvatars(avatarCount: 5),),
                         BlocBuilder<TrainersSectionCubit, TrainersSectionState>(
                             builder: (contextTS, stateTS) {
                               if(stateTS is TrainersSectionSuccess) {
                                 return CustomOverloadingAvatar(
-                                  labelText: '${AppLocalizations.of(context).translate('Look at')} ${AppLocalizations.of(context).translate('trainers in this class')}',
+                                  labelText: '${AppLocalizations.of(context).translate('Look at')} ${stateTS.trainers.trainers![0].trainers!.length} ${AppLocalizations.of(context).translate('trainers in this class')}',
                                   tailText: AppLocalizations.of(context).translate('See more'),
                                   firstImage: stateTS.trainers.trainers![0].trainers!.isNotEmpty ? stateTS.trainers.trainers![0].trainers![0].photo : '',
                                   secondImage: stateTS.trainers.trainers![0].trainers!.length >= 2 ? stateTS.trainers.trainers![0].trainers![1].photo : '',
@@ -108,13 +143,31 @@ class CompleteDetailsViewBody extends StatelessWidget {
                                   fifthImage: stateTS.trainers.trainers![0].trainers!.length >= 5 ? stateTS.trainers.trainers![0].trainers![4].photo : '',
                                   avatarCount: stateTS.trainers.trainers![0].trainers!.length,
                                   onTap: () {
-                                    context.go('${GoRouterPath.courses}/1${GoRouterPath.courseDetails}/1${GoRouterPath.sectionTrainers}/${stateTS.trainers.trainers![0].id}');
+                                    context.go('${GoRouterPath.completeDetails}/1${GoRouterPath.completeTrainers}/${stateTS.trainers.trainers![0].id}');
                                     //context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.sectionTrainers}/${state.section.id}');
                                   },
                                 );
                               } else if(stateTS is TrainersSectionFailure) {
-                                return CustomErrorWidget(
-                                    errorMessage: stateTS.errorMessage);
+                                return Row(
+                                  children: [
+                                    CustomOverloadingAvatar(
+                                      labelText: '${AppLocalizations.of(context).translate('Look at')} ${AppLocalizations.of(context).translate('students in this class')}',
+                                      tailText: AppLocalizations.of(context).translate('See more'),
+                                      firstImage: '',
+                                      secondImage: '',
+                                      thirdImage: '',
+                                      fourthImage: '',
+                                      fifthImage: '',
+                                      avatarCount: 5,
+                                      onTap: () {
+                                        //context.go('${GoRouterPath.courses}/1${GoRouterPath.courseDetails}/2${GoRouterPath.sectionTrainers}/1');
+                                        //onTap: () {context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.sectionStudents}/${stateSec.section.id}');
+                                      },
+                                    ),
+                                    SizedBox(
+                                      width: calculateWidthBetweenAvatars(avatarCount: 5) /*270.w*/,),
+                                  ],
+                                );
                               } else {
                                 return CustomCircularProgressIndicator();
                               }

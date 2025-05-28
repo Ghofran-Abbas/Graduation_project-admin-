@@ -38,7 +38,7 @@ class SelectSectionCubit extends Cubit<SelectSectionState> {
 
   SelectSectionCubit(this.courseRepo) : super(SelectSectionInitial());
 
-  void selectSection({required Section section}) {
+  void selectSection({required DatumSection section}) {
     emit(SelectSectionSuccess(section));
   }
 }

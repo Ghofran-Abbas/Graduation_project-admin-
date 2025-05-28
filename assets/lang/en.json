@@ -67,6 +67,8 @@
   "UpdateReportSuccess": "Report information updated successfully",
   "DeleteReportFailure": "Failed to delete report. Please try again later",
   "DeleteReportSuccess": "Report deleted successfully",
+  "GetFileLoading": "GetFileLoading",
+  "GetFileSuccess": "GetFileSuccess",
 
   "DeleteComplainFailure": "Failed to delete complain. Please try again later",
   "DeleteComplainSuccess": "Complain deleted successfully",
@@ -218,6 +220,26 @@
   "No thing to display": "No thing to display",
   "this field must not be empty": "this field must not be empty",
   "Search here...": "Search here...",
+
+  "No departments at this time": "No departments at this time",
+  "Departments will appear here after they enroll in your institute.": "Departments will appear here after they enroll in your institute.",
+
+  "No active courses at this time": "No active courses at this time",
+  "Courses will appear here after they enroll in your institute.": "Courses will appear here after they enroll in your institute.",
+
+  "No students in this section at this time": "No students in this section at this time",
+
+  "No more at this time": "No more at this time",
+  "Add a section to see more options.": "Add a section to see more options.",
+
+  "No students at this time": "No students at this time",
+  "Students will appear here after they enroll in your institute.": "Students will appear here after they enroll in your institute.",
+
+  "No trainers at this time": "No trainers at this time",
+  "Trainers will appear here after they enroll in your institute.": "Trainers will appear here after they enroll in your institute.",
+
+  "No reports at this time": "No reports at this time",
+  "Reports will appear here after they enroll in your institute.": "Reports will appear here after they enroll in your institute.",
 
 
 

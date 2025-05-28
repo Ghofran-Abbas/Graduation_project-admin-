@@ -17,6 +17,7 @@ import '../../../../../../core/widgets/custom_icon_button.dart';
 import '../../../../../../core/widgets/custom_image_network.dart';
 import '../../../../../../core/widgets/custom_number_pagination.dart';
 import '../../../../../../core/widgets/custom_snack_bar.dart';
+import '../../../../../../core/widgets/secretary/custom_empty_widget.dart';
 import '../../../../../../core/widgets/secretary/custom_label_text_form_field.dart';
 import '../../../../../../core/widgets/secretary/custom_screen_body.dart';
 import '../../../../../../core/widgets/secretary/grid_view_cards.dart';
@@ -161,8 +162,8 @@ class _CoursesViewBodyState extends State<CoursesViewBody> {
                                 onPressedFirst: () {},
                                 onPressedSecond: () {},
                                 onTapSearch: () {
-                                  if(state.courses.courses.data!.isNotEmpty) {
-                                    context.go('${GoRouterPath.courses}/${state.courses.courses.data![0].departmentId}${GoRouterPath.searchCourse}');
+                                  if(state.courses.courses!.isNotEmpty) {
+                                    context.go('${GoRouterPath.courses}/${state.courses.courses![0].departmentId}${GoRouterPath.searchCourse}');
                                   }
                                 },
                                 body: Padding(
@@ -221,30 +222,33 @@ class _CoursesViewBodyState extends State<CoursesViewBody> {
                                                     mainAxisSize: MainAxisSize.max,
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      state.courses.courses.data!.isNotEmpty ? GridView.builder(
+                                                      state.courses.courses!.isNotEmpty ? GridView.builder(
                                                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: crossAxisCount, crossAxisSpacing: 10.w, mainAxisExtent: 354.66.h),
                                                         itemBuilder: (BuildContext context, int index) {
                                                           return Align(child: CustomCard(
-                                                            image: state.courses.courses.data![index].photo,
-                                                            text: state.courses.courses.data![index].name,
+                                                            image: state.courses.courses![index].photo,
+                                                            text: state.courses.courses![index].name,
                                                             onTap: () {
-                                                              context.go('${GoRouterPath.courses}/${stateD.showResult.department.id}${GoRouterPath.courseDetails}/${state.courses.courses.data![index].id}');
+                                                              context.go('${GoRouterPath.courses}/${stateD.showResult.department.id}${GoRouterPath.courseDetails}/${state.courses.courses![index].id}');
                                                             },
                                                             onTapFirstIcon: () {},
                                                             onTapSecondIcon: (){},
                                                           ));
                                                         },
-                                                        itemCount: state.courses.courses.data!.length,
+                                                        itemCount: state.courses.courses!.length,
                                                         shrinkWrap: true,
                                                         physics: NeverScrollableScrollPhysics(),
-                                                      ) : Center(heightFactor: 20.h,child: CustomErrorWidget(errorMessage: AppLocalizations.of(context).translate('No thing to display'))),
-                                                      CustomNumberPagination(
+                                                      ) : CustomEmptyWidget(
+                                                        firstText: AppLocalizations.of(context).translate('No active courses at this time'),
+                                                        secondText: AppLocalizations.of(context).translate('Courses will appear here after they enroll in your institute.'),
+                                                      ),
+                                                      /*ustomNumberPagination(
                                                         numberPages: state.courses.courses.lastPage,
                                                         initialPage: state.courses.courses.currentPage,
                                                         onPageChange: (int index) {
                                                           context.read<CoursesCubit>().fetchCourses(page: index + 1);
                                                         },
-                                                      ),
+                                                      ),*/
                                                     ],
                                                   ),
                                                 ),

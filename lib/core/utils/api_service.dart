@@ -83,4 +83,13 @@ class DioApiService
 
     return response.data;
   }
+
+  Future<Response> getFile({
+    required String endPoint,
+  }) async {
+    return await _dio.get(
+      endPoint,
+      options: Options(responseType: ResponseType.bytes),
+    );
+  }
 }

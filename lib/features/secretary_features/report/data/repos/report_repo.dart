@@ -30,4 +30,8 @@ abstract class ReportRepo {
   });
 
   Future<Either<Failure, DeleteReportModel>> fetchDeleteReport({required int id,});
+
+  Future<Either<Failure, dynamic>> fetchFile({
+    required String filePath,
+  });
 }
