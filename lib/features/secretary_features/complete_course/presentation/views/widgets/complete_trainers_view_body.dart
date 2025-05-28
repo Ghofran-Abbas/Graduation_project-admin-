@@ -10,6 +10,7 @@ import '../../../../../../core/utils/go_router_path.dart';
 import '../../../../../../core/widgets/custom_circular_progress_indicator.dart';
 import '../../../../../../core/widgets/custom_error_widget.dart';
 import '../../../../../../core/widgets/custom_number_pagination.dart';
+import '../../../../../../core/widgets/secretary/custom_empty_widget.dart';
 import '../../../../../../core/widgets/secretary/custom_list_information_fields.dart';
 import '../../../../../../core/widgets/secretary/custom_screen_body.dart';
 import '../../../../../../core/widgets/secretary/custom_top_information_field.dart';
@@ -40,7 +41,7 @@ class CompleteTrainersViewBody extends StatelessWidget {
                     physics: BouncingScrollPhysics(),
                     child: Column(
                       children: [
-                        CustomTopInformationField(
+                        state.trainers.trainers![0].trainers!.isNotEmpty ? CustomTopInformationField(
                           firstText: '${state.trainers.trainers![0].trainers!.length} ${AppLocalizations.of(context).translate('Trainer')}',
                           firstIconColor: AppColors.purple,
                           secondText: '${DateFormat('yyyy-MM-dd').format(DateTime.now())}    ${DateFormat.EEEE().format(DateTime.now())}',
@@ -50,12 +51,12 @@ class CompleteTrainersViewBody extends StatelessWidget {
                           thirdIcon: Icons.watch_later_outlined,
                           thirdIconColor: AppColors.purple,
                           isTrainer: true,
-                        ),
+                        ) : SizedBox(width: 0.w, height: 0.h,),
                         SizedBox(height: 40.h,),
-                        CustomListInformationFields(
+                        state.trainers.trainers![0].trainers!.isNotEmpty ? CustomListInformationFields(
                           secondField: AppLocalizations.of(context).translate('Subject'),
                           showSecondField: true,
-                          widget: state.trainers.trainers![0].trainers!.isNotEmpty ? ListView.builder(
+                          widget: ListView.builder(
                             itemBuilder: (BuildContext context, int index) {
                               return Align(child: InformationFieldItem(
                                 color: index % 2 != 0 ? AppColors
@@ -76,7 +77,10 @@ class CompleteTrainersViewBody extends StatelessWidget {
                             itemCount: state.trainers.trainers![0].trainers!.length,
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                          )  : Center(heightFactor: 20.h,child: CustomErrorWidget(errorMessage: AppLocalizations.of(context).translate('No thing to display'))),
+                          )
+                        ) : CustomEmptyWidget(
+                          firstText: AppLocalizations.of(context).translate('No trainers in this section at this time'),
+                          secondText: AppLocalizations.of(context).translate('Trainers will appear here after they add to the section.'),
                         ),
                         CustomNumberPagination(
                           numberPages: 1/*state.trainers.trainers![0].lastPage*/,

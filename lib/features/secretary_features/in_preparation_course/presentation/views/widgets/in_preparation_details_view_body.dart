@@ -57,7 +57,7 @@ class DetailsInPreparationViewBody extends StatelessWidget {
                       ratingPercent: 0,
                       ratingPercentText: '0%',
                       circleStatusColor: AppColors.mintGreen,
-                      courseStatusText: 'In preparation',
+                      courseStatusText: 'Pending',
                       startDateText: '2025-09-02',
                       showCourseCalenderIcon: true,
                       endDateText: '2025-12-02',
@@ -146,9 +146,6 @@ class DetailsInPreparationViewBody extends StatelessWidget {
                                     context.go('${GoRouterPath.courses}/1${GoRouterPath.courseDetails}/1${GoRouterPath.sectionTrainers}/${stateTS.trainers.trainers![0].id}');
                                     //context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.sectionTrainers}/${state.section.id}');
                                   },
-                                ) : Text(
-                                  AppLocalizations.of(context).translate('No trainers at this time'),
-                                  style: Styles.l2Bold(color: AppColors.t4),
                                 );
                               } else if(stateTS is TrainersSectionFailure) {
                                 return Row(

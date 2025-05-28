@@ -1275,11 +1275,11 @@ double calculateWidthBetweenAvatars({
 
 String handleReciveState({required String state}) {
   if(state == 'pending') {
-    return 'In preparation';
+    return 'Pending';
   } else if(state == 'in_progress') {
-    return 'Active now';
+    return 'In progress';
   } else if(state == 'finished') {
-    return 'Complete';
+    return 'Finished';
   } else {
     return '';
   }

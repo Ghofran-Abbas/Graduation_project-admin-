@@ -214,7 +214,7 @@ class SectionStudentsViewBody extends StatelessWidget {
                               secondText: AppLocalizations
                                   .of(context)
                                   .translate(
-                                  'Students will appear here after they enroll in your institute.'),
+                                  'Students will appear here after they add to the section.'),
                             ),
                           ),
                         ),
