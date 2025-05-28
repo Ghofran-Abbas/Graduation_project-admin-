@@ -108,7 +108,7 @@ class _TrainersViewBodyState extends State<TrainersViewBody> {
                     physics: BouncingScrollPhysics(),
                     child: Column(
                       children: [
-                        state.showResult.trainers.data != null ? CustomListInformationFields(
+                        state.showResult.trainers.data!.isNotEmpty ? CustomListInformationFields(
                           secondField: AppLocalizations.of(context).translate('Subject'),
                           showSecondField: true,
                           widget: ListView.builder(

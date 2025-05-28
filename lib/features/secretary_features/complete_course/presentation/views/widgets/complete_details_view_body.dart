@@ -146,6 +146,9 @@ class CompleteDetailsViewBody extends StatelessWidget {
                                     context.go('${GoRouterPath.completeDetails}/1${GoRouterPath.completeTrainers}/${stateTS.trainers.trainers![0].id}');
                                     //context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.sectionTrainers}/${state.section.id}');
                                   },
+                                ) : Text(
+                                  '${AppLocalizations.of(context).translate('Look at')} ${AppLocalizations.of(context).translate('trainers in this class')}',
+                                  style: Styles.l2Bold(color: AppColors.t4),
                                 );
                               } else if(stateTS is TrainersSectionFailure) {
                                 return Row(

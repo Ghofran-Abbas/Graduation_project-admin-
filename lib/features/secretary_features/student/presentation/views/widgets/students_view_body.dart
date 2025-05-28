@@ -149,7 +149,7 @@ class _StudentsViewBodyState extends State<StudentsViewBody> {
                     physics: BouncingScrollPhysics(),
                     child: Column(
                       children: [
-                        state.showResult.students.data != null ? CustomListInformationFields(
+                        state.showResult.students.data!.isNotEmpty ? CustomListInformationFields(
                           secondField: AppLocalizations.of(context).translate('Birth date'),
                           showSecondField: true,
                           widget: ListView.builder(

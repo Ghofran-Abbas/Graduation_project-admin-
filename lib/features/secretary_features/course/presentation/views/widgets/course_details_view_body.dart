@@ -21,6 +21,7 @@ import '../../../../../../core/widgets/custom_error_widget.dart';
 import '../../../../../../core/widgets/custom_icon_button.dart';
 import '../../../../../../core/widgets/custom_image_network.dart';
 import '../../../../../../core/widgets/custom_snack_bar.dart';
+import '../../../../../../core/widgets/secretary/custom_empty_widget.dart';
 import '../../../../../../core/widgets/secretary/custom_overloading_avatar.dart';
 import '../../../../../../core/widgets/secretary/custom_check_box.dart';
 import '../../../../../../core/widgets/secretary/custom_course_information.dart';
@@ -1112,7 +1113,14 @@ class _CourseDetailsViewBodyState extends State<CourseDetailsViewBody> {
                                               onTapFirstIcon: (){},
                                               onTapSecondIcon: (){},
                                             ),
-                                            SizedBox(height: 22.h),
+                                            //SizedBox(height: 22.h),
+                                            Padding(
+                                              padding: EdgeInsets.only(right: 87.w),
+                                              child: CustomEmptyWidget(
+                                                firstText: AppLocalizations.of(context).translate('No more at this time'),
+                                                secondText: AppLocalizations.of(context).translate('Add a section to see more options.'),
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ],

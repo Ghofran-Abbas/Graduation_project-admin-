@@ -13,6 +13,7 @@ import '../../../../../../core/widgets/custom_circular_progress_indicator.dart';
 import '../../../../../../core/widgets/custom_error_widget.dart';
 import '../../../../../../core/widgets/custom_number_pagination.dart';
 import '../../../../../../core/widgets/custom_snack_bar.dart';
+import '../../../../../../core/widgets/secretary/custom_empty_widget.dart';
 import '../../../../../../core/widgets/secretary/custom_list_information_fields.dart';
 import '../../../../../../core/widgets/secretary/custom_screen_body.dart';
 import '../../../../../../core/widgets/secretary/list_view_information_field.dart';
@@ -202,7 +203,10 @@ class SearchComplainViewBody extends StatelessWidget {
                           itemCount: state.complain.data.data!.length,
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                        ) : Center(heightFactor: 20.h,child: CustomErrorWidget(errorMessage: AppLocalizations.of(context).translate('No thing to display'))),
+                        ) : CustomEmptyWidget(
+                          firstText: AppLocalizations.of(context).translate('No thing to display'),
+                          secondText: '',
+                        ),
                         CustomNumberPagination(
                           numberPages: state.complain.data.lastPage,
                           initialPage: state.complain.data.currentPage,

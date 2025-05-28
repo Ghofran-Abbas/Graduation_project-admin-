@@ -63,12 +63,15 @@ class StudentDetailsViewBody extends StatelessWidget {
                         secondBoxIcon: Icons.mail_outlined,
                         firstFieldInfoText: state.showResult.student.birthday.toString().replaceRange(10, 23, ''),
                         secondFieldInfoText: state.showResult.student.gender,
-                        thirdFieldInfoText: '150',
+                        thirdFieldInfoText: state.showResult.student.points.toString(),
                         showThirdFieldInfoIcon: true,
                         showThirdFieldInfo: true,
                         labelText: AppLocalizations.of(context).translate('Students from the same class'),
                         tailText: AppLocalizations.of(context).translate('See more'),
                         avatarCount: 1,
+                        showGifts: true,
+                        textGifts: 'Click to see ${state.showResult.student.name} awards',
+                        onTapGifts: (){},
                         onTap: () {
                           showDialog(
                             context: context,

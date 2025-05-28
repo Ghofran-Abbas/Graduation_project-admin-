@@ -15,7 +15,6 @@ class CustomNumberPagination extends StatelessWidget {
       numberPages: numberPages,
       initialPage: (initialPage) - 1,
       onPageChange: (int index) {
-        // index + 1 لأن API تبدأ من 1
         onPageChange(index);
       },
     ) : SizedBox(width: 0.w, height: 0.h,);
