@@ -33,6 +33,7 @@ class ComplainsViewBody extends StatelessWidget {
           CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('DeleteComplainFailure'),);
         } else if (state is DeleteComplainSuccess) {
           CustomSnackBar.showSnackBar(context, msg: AppLocalizations.of(context).translate('DeleteComplainSuccess'),);
+          ComplainsCubit.get(context).fetchComplains(page: 1);
         }
       },
       builder: (context, state) {

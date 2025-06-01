@@ -12,7 +12,6 @@ class GetFileCubit extends Cubit<GetFileState> {
   final ReportRepo reportRepo;
 
   Future<void> fetchFile({
-    required int id,
     required String filePath,
   }) async {
     emit(GetFileLoading());

@@ -1,134 +1,44 @@
 import 'dart:developer';
-import 'dart:typed_data';
 
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:number_paginator/number_paginator.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../../../../../core/localization/app_localizations.dart';
 import '../../../../../../core/utils/app_colors.dart';
 import '../../../../../../core/utils/go_router_path.dart';
 import '../../../../../../core/utils/styles.dart';
-import '../../../../../../core/widgets/custom_text_form_field.dart';
 import '../../../../../../core/widgets/custom_circular_progress_indicator.dart';
 import '../../../../../../core/widgets/custom_error_widget.dart';
-import '../../../../../../core/widgets/custom_icon_button.dart';
-import '../../../../../../core/widgets/custom_image_network.dart';
+import '../../../../../../core/widgets/custom_number_pagination.dart';
 import '../../../../../../core/widgets/custom_snack_bar.dart';
 import '../../../../../../core/widgets/secretary/custom_empty_widget.dart';
 import '../../../../../../core/widgets/secretary/custom_overloading_avatar.dart';
-import '../../../../../../core/widgets/secretary/custom_check_box.dart';
 import '../../../../../../core/widgets/secretary/custom_course_information.dart';
-import '../../../../../../core/widgets/secretary/custom_dropdown_list.dart';
 import '../../../../../../core/widgets/secretary/custom_label_text_form_field.dart';
-import '../../../../../../core/widgets/secretary/custom_multiple_check_box.dart';
 import '../../../../../../core/widgets/secretary/custom_over_loading_card.dart';
 import '../../../../../../core/widgets/secretary/custom_screen_body.dart';
 import '../../../../../../core/widgets/secretary/grid_view_cards.dart';
 import '../../../../../../core/widgets/secretary/grid_view_files.dart';
-import '../../../../../../core/widgets/text_icon_button.dart';
+import '../../../../report/presentation/manager/get_file_cubit/get_file_cubit.dart';
+import '../../../../report/presentation/manager/get_file_cubit/get_file_state.dart';
 import '../../../data/models/sections_model.dart';
-import '../../manager/create_section_cubit/create_section_cubit.dart';
-import '../../manager/create_section_cubit/create_section_state.dart';
-import '../../manager/delete_section_cubit/delete_section_cubit.dart';
-import '../../manager/delete_section_cubit/delete_section_state.dart';
 import '../../manager/details_course_cubit/details_course_cubit.dart';
 import '../../manager/details_course_cubit/details_course_state.dart';
+import '../../manager/files_cubit/files_cubit.dart';
+import '../../manager/files_cubit/files_state.dart';
 import '../../manager/sections_cubit/sections_cubit.dart';
 import '../../manager/sections_cubit/sections_state.dart';
 import '../../manager/students_section_cubit/students_section_cubit.dart';
 import '../../manager/students_section_cubit/students_section_state.dart';
 import '../../manager/trainers_section_cubit/trainers_section_cubit.dart';
 import '../../manager/trainers_section_cubit/trainers_section_state.dart';
-import '../../manager/update_section_cubit/update_section_cubit.dart';
-import '../../manager/update_section_cubit/update_section_state.dart';
 
 
-class CourseDetailsViewBody extends StatefulWidget {
-
-  CourseDetailsViewBody({super.key});
-
-  @override
-  State<CourseDetailsViewBody> createState() => _CourseDetailsViewBodyState();
-}
-
-class _CourseDetailsViewBodyState extends State<CourseDetailsViewBody> {
-
-  final _formKey = GlobalKey<FormState>();
-  late final TextEditingController nameController;
-  late final TextEditingController startDateController;
-  late final TextEditingController endDateController;
-  late final TextEditingController descriptionController;
-  Uint8List? selectedImage;
-
-  @override
-  void initState() {
-    super.initState();
-    _initControllers();
-  }
-
-  void _initControllers() {
-    nameController = TextEditingController();
-    startDateController = TextEditingController();
-    endDateController = TextEditingController();
-    descriptionController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    nameController.dispose();
-    startDateController.dispose();
-    endDateController.dispose();
-    descriptionController.dispose();
-    super.dispose();
-  }
-
-  Future<void> pickImage() async {
-    try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-          type: FileType.image,
-          withData: true
-      );
-      if (result != null && result.files.single.bytes != null) {
-        setState(() {
-          selectedImage = result.files.single.bytes!;
-        });
-      } else {
-        CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('No image selected or image data is unavailable.'),);
-      }
-    } catch (e) {
-      CustomSnackBar.showErrorSnackBar(context, msg: '${AppLocalizations.of(context).translate('Failed to pick image:')} $e',);
-    }
-  }
-
-  /*void register() {
-    if (_formKey.currentState!.validate() && selectedImage != null) {
-      context.read<CreateCourseCubit>().fetchCreateCourse(
-        departmentId: widget.depId,
-        name: nameController.text,
-        description: descriptionController.text,
-        photo: selectedImage!,
-      );
-    } else {
-      CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('Error, Please enter all the fields.'),);
-    }
-  }
-
-  void update(int id) {
-    context.read<UpdateCourseCubit>().fetchUpdateCourse(
-      id: id,
-      departmentId: widget.depId,
-      name: nameController.text,
-      description: descriptionController.text,
-      photo: selectedImage,
-    );
-  }*/
+class CourseDetailsViewBody extends StatelessWidget {
+  const CourseDetailsViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -235,282 +145,20 @@ class _CourseDetailsViewBodyState extends State<CourseDetailsViewBody> {
                         ),
                         onPressedFirst: () {},
                         showButtonIcon: true,
-                        textSecondButton: AppLocalizations.of(context).translate('New announcement'),
-                        showSecondButton: true,
-                        onPressedSecond: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext dialogContext) {
-                              return StatefulBuilder(
-                                  builder: (BuildContext context,
-                                      void Function(void Function()) setStateDialog) {
-                                    return Form(
-                                      key: _formKey,
-                                      child: Align(
-                                        alignment: Alignment.topRight,
-                                        child: Material(
-                                          color: Colors.transparent,
-                                          child: Container(
-                                            width: 871.w,
-                                            height: 788.h,
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 160.w,
-                                                vertical: 115.h),
-                                            padding: EdgeInsets.all(22.r),
-                                            decoration: BoxDecoration(
-                                              color: AppColors.white,
-                                              borderRadius: BorderRadius.circular(
-                                                  6.r),
-                                            ),
-                                            child: SingleChildScrollView(
-                                              physics: BouncingScrollPhysics(),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment
-                                                    .start,
-                                                children: [
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        top: 65.h,
-                                                        left: 60.w,
-                                                        right: 155.w),
-                                                    child: Text(
-                                                      AppLocalizations.of(context).translate('Add announcement'),
-                                                      style: Styles.h3Bold(
-                                                          color: AppColors.t3),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 60.w),
-                                                    child: Column(
-                                                      children: [
-                                                        Row(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: [
-                                                            Expanded(
-                                                              child: Column(
-                                                                crossAxisAlignment: CrossAxisAlignment
-                                                                    .start,
-                                                                children: [
-                                                                  Stack(
-                                                                    children: [
-                                                                      selectedImage !=
-                                                                          null
-                                                                          ? CustomMemoryImage(
-                                                                        image: selectedImage,
-                                                                        imageWidth: 186
-                                                                            .w,
-                                                                        imageHeight: 186
-                                                                            .w,
-                                                                        borderRadius: 150
-                                                                            .r,
-                                                                      )
-                                                                          : CustomImageAsset(
-                                                                        imageWidth: 186
-                                                                            .w,
-                                                                        imageHeight: 186
-                                                                            .w,
-                                                                        borderRadius: 150
-                                                                            .r,
-                                                                      ),
-                                                                      Positioned(
-                                                                        top: 140.w,
-                                                                        left: 150.w,
-                                                                        child: CustomIconButton(
-                                                                          icon: Icons
-                                                                              .add,
-                                                                          onTap: () async {
-                                                                            await pickImage();
-                                                                            setStateDialog(() {});
-                                                                          },
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  Padding(
-                                                                    padding: EdgeInsets.only(right: 65.w),
-                                                                    child: Row(
-                                                                      children: [
-                                                                        Expanded(
-                                                                          flex: 1,
-                                                                          child: CustomLabelTextFormField(
-                                                                            hintText: AppLocalizations.of(context).translate('Start date'),
-                                                                            readOnly: true,
-                                                                            controller: startDateController,
-                                                                            topPadding: 65.h,
-                                                                            leftPadding: 0.w,
-                                                                            rightPadding: 0.w,
-                                                                            bottomPadding: 33.h,
-                                                                            onTap: () async {
-                                                                              DateTime? pickedDate = await showDatePicker(
-                                                                                context: context,
-                                                                                initialDate: startDateController.text.isEmpty ? DateTime.now() : DateTime.parse(startDateController.text),
-                                                                                firstDate: DateTime(2000),
-                                                                                lastDate: DateTime(2100),
-                                                                              );
-                                                                              if (pickedDate != null) {
-                                                                                startDateController.text = DateFormat('yyyy-MM-dd').format(pickedDate).toString();
-                                                                                endDateController.clear();
-                                                                              }
-                                                                            },
-                                                                          ),
-                                                                        ),
-                                                                        SizedBox(width: 19.w,),
-                                                                        Expanded(
-                                                                          flex: 1,
-                                                                          child: CustomLabelTextFormField(
-                                                                            hintText: AppLocalizations.of(context).translate('End date'),
-                                                                            readOnly: true,
-                                                                            controller: endDateController,
-                                                                            topPadding: 65.h,
-                                                                            leftPadding: 0.w,
-                                                                            rightPadding: 0.w,
-                                                                            bottomPadding: 38.h,
-                                                                            onTap: () async {
-                                                                              if (startDateController.text.isEmpty) {
-                                                                                CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('SelectEndDateFailure'),);
-                                                                                return;
-                                                                              }
-
-                                                                              DateTime parsedStartDate = DateTime.parse(startDateController.text);
-                                                                              DateTime initialEndDate = parsedStartDate.add(Duration(days: 1));
-
-                                                                              DateTime? pickedDate = await showDatePicker(
-                                                                                context: context,
-                                                                                initialDate: endDateController.text.isEmpty
-                                                                                    ? initialEndDate
-                                                                                    : DateTime.parse(endDateController.text),
-                                                                                firstDate: initialEndDate,
-                                                                                lastDate: DateTime(2100),
-                                                                              );
-
-                                                                              if (pickedDate != null) {
-                                                                                endDateController.text = DateFormat('yyyy-MM-dd').format(pickedDate).toString();
-                                                                              }
-                                                                            },
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                              child: Column(
-                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                children: [
-                                                                  CustomLabelTextFormField(
-                                                                    labelText: AppLocalizations.of(context).translate('Description'),
-                                                                    showLabelText: true,
-                                                                    controller: descriptionController,
-                                                                    boxHeight: 327.h,
-                                                                    maxLines: 11,
-                                                                    topPadding: 35.h,
-                                                                    bottomPadding: 0.h,
-                                                                    leftPadding: 0.w,
-                                                                    rightPadding: 128
-                                                                        .w,
-                                                                    validator: (value) => value!.isEmpty ? AppLocalizations.of(context).translate('This field required') : null,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        CustomLabelTextFormField(
-                                                          labelText: AppLocalizations.of(context).translate('Title'),
-                                                          showLabelText: true,
-                                                          controller: nameController,
-                                                          topPadding: 0.h,
-                                                          bottomPadding: 0.h,
-                                                          leftPadding: 0.w,
-                                                          rightPadding: 128.w,
-                                                          validator: (value) => value!.isEmpty ? AppLocalizations.of(context).translate('This field required') : null,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        top: 60.h,
-                                                        bottom: 65.h,
-                                                        left: 47.w,
-                                                        right: 155.w),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment
-                                                          .start,
-                                                      children: [
-                                                        TextIconButton(
-                                                          textButton: AppLocalizations.of(context).translate('Add announcement'),
-                                                          bigText: true,
-                                                          textColor: AppColors.t3,
-                                                          icon: Icons.add,
-                                                          iconSize: 40.01.r,
-                                                          iconColor: AppColors.t2,
-                                                          iconLast: false,
-                                                          firstSpaceBetween: 3.w,
-                                                          buttonHeight: 53.h,
-                                                          borderWidth: 0.w,
-                                                          buttonColor: AppColors
-                                                              .white,
-                                                          borderColor: Colors
-                                                              .transparent,
-                                                          onPressed: () {
-                                                            //register();
-                                                            nameController
-                                                                .clear();
-                                                            descriptionController
-                                                                .clear();
-                                                            Navigator.pop(
-                                                                dialogContext);
-                                                          },
-                                                        ),
-                                                        SizedBox(width: 42.w,),
-                                                        TextIconButton(
-                                                          textButton: AppLocalizations.of(context).translate('       Cancel       '),
-                                                          textColor: AppColors.t3,
-                                                          iconLast: false,
-                                                          buttonHeight: 53.h,
-                                                          borderWidth: 0.w,
-                                                          borderRadius: 4.r,
-                                                          buttonColor: AppColors
-                                                              .w1,
-                                                          borderColor: AppColors
-                                                              .w1,
-                                                          onPressed: () {
-                                                            nameController
-                                                                .clear();
-                                                            descriptionController
-                                                                .clear();
-                                                            Navigator.pop(
-                                                                dialogContext);
-                                                          },
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }
-                              );
-                            },
-                          );
-                        },
-                        body: BlocBuilder<SelectSectionCubit, SelectSectionState>(
-                            builder: (contextSec, stateSec) {
-                              if (stateSec is SelectSectionSuccess) {
-                                TrainersSectionCubit.get(context).fetchTrainersSection(id: stateSec.section.id, page: 1);
-                                StudentsSectionCubit.get(context).fetchStudentsSection(id: stateSec.section.id, page: 1);
-                                return BlocConsumer<TrainersSectionCubit, TrainersSectionState>(
-                                    listener: (contextTS, stateTS) {},
-                                    builder: (contextTS, stateTS) {
-                                      return BlocBuilder<StudentsSectionCubit, StudentsSectionState>(
+                        onPressedSecond: () {},
+                        body: BlocConsumer<SelectSectionCubit, SelectSectionState>(
+                          listener: (contextSec, stateSec) {
+                            if (stateSec is SelectSectionSuccess) {
+                              TrainersSectionCubit.get(context).fetchTrainersSection(id: stateSec.section.id, page: 1);
+                              StudentsSectionCubit.get(context).fetchStudentsSection(id: stateSec.section.id, page: 1);
+                            }
+                          },
+                          builder: (contextSec, stateSec) {
+                            if (stateSec is SelectSectionSuccess) {
+                              return BlocConsumer<TrainersSectionCubit, TrainersSectionState>(
+                                  listener: (contextTS, stateTS) {},
+                                  builder: (contextTS, stateTS) {
+                                    return BlocBuilder<StudentsSectionCubit, StudentsSectionState>(
                                         builder: (contextSS, stateSS) {
                                           return Padding(
                                             padding: EdgeInsets.only(
@@ -598,18 +246,20 @@ class _CourseDetailsViewBodyState extends State<CourseDetailsViewBody> {
                                                           BlocBuilder<TrainersSectionCubit, TrainersSectionState>(
                                                               builder: (contextTS, stateTS) {
                                                                 if(stateTS is TrainersSectionSuccess) {
-                                                                  return CustomOverloadingAvatar(
-                                                                    labelText: '${AppLocalizations.of(context).translate('Look at')} ${stateTS.trainers.trainers![0].trainers!.length} ${AppLocalizations.of(context).translate('trainers in this class')}',
-                                                                    tailText: AppLocalizations.of(context).translate('See more'),
-                                                                    firstImage: stateTS.trainers.trainers![0].trainers!.isNotEmpty ? stateTS.trainers.trainers![0].trainers![0].photo : '',
-                                                                    secondImage: stateTS.trainers.trainers![0].trainers!.length >= 2 ? stateTS.trainers.trainers![0].trainers![1].photo : '',
-                                                                    thirdImage: stateTS.trainers.trainers![0].trainers!.length >= 3 ? stateTS.trainers.trainers![0].trainers![2].photo : '',
-                                                                    fourthImage: stateTS.trainers.trainers![0].trainers!.length >= 4 ? stateTS.trainers.trainers![0].trainers![3].photo : '',
-                                                                    fifthImage: stateTS.trainers.trainers![0].trainers!.length >= 5 ? stateTS.trainers.trainers![0].trainers![4].photo : '',
-                                                                    avatarCount: stateTS.trainers.trainers![0].trainers!.length,
-                                                                    onTap: () {
-                                                                      context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.sectionTrainers}/${stateSec.section.id}');
-                                                                    },
+                                                                  return Expanded(
+                                                                    child: CustomOverloadingAvatar(
+                                                                      labelText: '${AppLocalizations.of(context).translate('Look at')} ${stateTS.trainers.trainers![0].trainers!.length} ${AppLocalizations.of(context).translate('trainers in this class')}',
+                                                                      tailText: AppLocalizations.of(context).translate('See more'),
+                                                                      firstImage: stateTS.trainers.trainers![0].trainers!.isNotEmpty ? stateTS.trainers.trainers![0].trainers![0].photo : '',
+                                                                      secondImage: stateTS.trainers.trainers![0].trainers!.length >= 2 ? stateTS.trainers.trainers![0].trainers![1].photo : '',
+                                                                      thirdImage: stateTS.trainers.trainers![0].trainers!.length >= 3 ? stateTS.trainers.trainers![0].trainers![2].photo : '',
+                                                                      fourthImage: stateTS.trainers.trainers![0].trainers!.length >= 4 ? stateTS.trainers.trainers![0].trainers![3].photo : '',
+                                                                      fifthImage: stateTS.trainers.trainers![0].trainers!.length >= 5 ? stateTS.trainers.trainers![0].trainers![4].photo : '',
+                                                                      avatarCount: stateTS.trainers.trainers![0].trainers!.length,
+                                                                      onTap: () {
+                                                                        context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.sectionTrainers}/${stateSec.section.id}');
+                                                                      },
+                                                                    ),
                                                                   );
                                                                 } else if(stateTS is TrainersSectionFailure) {
                                                                   return CustomOverloadingAvatar(
@@ -672,23 +322,61 @@ class _CourseDetailsViewBodyState extends State<CourseDetailsViewBody> {
                                                                 ),
                                                               ),
                                                               SizedBox(
-                                                                height: 470.23.h,
+                                                                height: 570.23.h,
                                                                 child: TabBarView(
                                                                   children: [
-                                                                    Column(
-                                                                      children: [
-                                                                        GridViewFiles(
-                                                                          fileName: 'hgjhv',
-                                                                          cardCount: 5,
-                                                                        ),
-                                                                        NumberPaginator(
-                                                                          numberPages: 2,
-                                                                          onPageChange: (
-                                                                              int index) {},
-                                                                        ),
-                                                                      ],
+                                                                    BlocBuilder<FilesCubit, FilesState>(
+                                                                        builder: (contextF, stateF) {
+                                                                          return BlocConsumer<GetFileCubit, GetFileState>(
+                                                                              listener: (context, state) {
+                                                                                if (state is GetFileLoading) {
+                                                                                  CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('GetFileLoading'),color: AppColors.darkLightPurple, textColor: AppColors.black);
+                                                                                } else if (state is GetFileSuccess) {
+                                                                                  CustomSnackBar.showSnackBar(context, msg: AppLocalizations.of(context).translate('GetFileSuccess'),);
+                                                                                }
+                                                                              },
+                                                                              builder: (contextGF, stateGF) {
+                                                                                if(stateF is FilesSuccess) {
+                                                                                  return Column(
+                                                                                    children: [
+                                                                                      GridView.builder(
+                                                                                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 10.w, mainAxisExtent: 100.h),
+                                                                                        itemBuilder: (BuildContext context, int index) {
+                                                                                          return Align(
+                                                                                            child: FileItem(
+                                                                                              fileName: stateF.files.files.data![index].fileName,
+                                                                                              color: index%2 != 0 ? AppColors.white : AppColors.darkHighlightPurple,
+                                                                                              onTap: () {
+                                                                                                GetFileCubit.get(context).fetchFile(filePath: stateF.files.files.data![index].filePath);
+                                                                                              },
+                                                                                            ),
+                                                                                          );
+                                                                                        },
+                                                                                        itemCount: stateF.files.files.data!.length,
+                                                                                        shrinkWrap: true,
+                                                                                        physics: NeverScrollableScrollPhysics(),
+                                                                                      ),
+                                                                                      CustomNumberPagination(
+                                                                                        numberPages: stateF.files.files.lastPage,
+                                                                                        initialPage: stateF.files.files.currentPage,
+                                                                                        onPageChange: (int index) {
+                                                                                          FilesCubit.get(context).fetchFiles(sectionId: stateSec.section.id, page: index+1);
+                                                                                        },
+                                                                                      ),
+                                                                                    ],
+                                                                                  );
+                                                                                } else if(stateF is FilesFailure) {
+                                                                                  return CustomErrorWidget(
+                                                                                      errorMessage: stateF.errorMessage);
+                                                                                } else {
+                                                                                  return CustomCircularProgressIndicator();
+                                                                                }
+                                                                              }
+                                                                          );
+                                                                        }
                                                                     ),
-                                                                    CustomOverLoadingCard(
+                                                                    Container(),
+                                                                    /*CustomOverLoadingCard(
                                                                       cardCount: count,
                                                                       onTapSeeMore: () {
                                                                         context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.announcementsA}/1');
@@ -703,368 +391,8 @@ class _CourseDetailsViewBodyState extends State<CourseDetailsViewBody> {
                                                                                 context.go('${GoRouterPath.courses}/1${GoRouterPath.courseDetails}/1${GoRouterPath.announcementsA}/1${GoRouterPath.announcementADetails}/1');
                                                                                 //context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.announcements}/1');
                                                                               },
-                                                                              onTapFirstIcon: () {
-                                                                                showDialog(
-                                                                                  context: context,
-                                                                                  builder: (BuildContext dialogContext) {
-                                                                                    return StatefulBuilder(
-                                                                                        builder: (BuildContext context,
-                                                                                            void Function(void Function()) setStateDialog) {
-                                                                                          return Form(
-                                                                                            key: _formKey,
-                                                                                            child: Align(
-                                                                                              alignment: Alignment.topRight,
-                                                                                              child: Material(
-                                                                                                color: Colors.transparent,
-                                                                                                child: Container(
-                                                                                                  width: 871.w,
-                                                                                                  height: 788.h,
-                                                                                                  margin: EdgeInsets.symmetric(
-                                                                                                      horizontal: 160.w,
-                                                                                                      vertical: 115.h),
-                                                                                                  padding: EdgeInsets.all(22.r),
-                                                                                                  decoration: BoxDecoration(
-                                                                                                    color: AppColors.white,
-                                                                                                    borderRadius: BorderRadius.circular(
-                                                                                                        6.r),
-                                                                                                  ),
-                                                                                                  child: SingleChildScrollView(
-                                                                                                    physics: BouncingScrollPhysics(),
-                                                                                                    child: Column(
-                                                                                                      crossAxisAlignment: CrossAxisAlignment
-                                                                                                          .start,
-                                                                                                      children: [
-                                                                                                        Padding(
-                                                                                                          padding: EdgeInsets.only(
-                                                                                                              top: 65.h,
-                                                                                                              left: 60.w,
-                                                                                                              right: 155.w),
-                                                                                                          child: Text(
-                                                                                                            AppLocalizations.of(context).translate('Edit announcement'),
-                                                                                                            style: Styles.h3Bold(
-                                                                                                                color: AppColors.t3),
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                        Padding(
-                                                                                                          padding: EdgeInsets.only(
-                                                                                                              left: 60.w),
-                                                                                                          child: Column(
-                                                                                                            children: [
-                                                                                                              Row(
-                                                                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                                                children: [
-                                                                                                                  Expanded(
-                                                                                                                    child: Column(
-                                                                                                                      crossAxisAlignment: CrossAxisAlignment
-                                                                                                                          .start,
-                                                                                                                      children: [
-                                                                                                                        Stack(
-                                                                                                                          children: [
-                                                                                                                            selectedImage !=
-                                                                                                                                null
-                                                                                                                                ? CustomMemoryImage(
-                                                                                                                              image: selectedImage,
-                                                                                                                              imageWidth: 186
-                                                                                                                                  .w,
-                                                                                                                              imageHeight: 186
-                                                                                                                                  .w,
-                                                                                                                              borderRadius: 150
-                                                                                                                                  .r,
-                                                                                                                            )
-                                                                                                                                : CustomImageAsset(
-                                                                                                                              imageWidth: 186
-                                                                                                                                  .w,
-                                                                                                                              imageHeight: 186
-                                                                                                                                  .w,
-                                                                                                                              borderRadius: 150
-                                                                                                                                  .r,
-                                                                                                                            ),
-                                                                                                                            Positioned(
-                                                                                                                              top: 140.w,
-                                                                                                                              left: 150.w,
-                                                                                                                              child: CustomIconButton(
-                                                                                                                                icon: Icons
-                                                                                                                                    .add,
-                                                                                                                                onTap: () async {
-                                                                                                                                  await pickImage();
-                                                                                                                                  setStateDialog(() {});
-                                                                                                                                },
-                                                                                                                              ),
-                                                                                                                            ),
-                                                                                                                          ],
-                                                                                                                        ),
-                                                                                                                        Padding(
-                                                                                                                          padding: EdgeInsets.only(right: 65.w),
-                                                                                                                          child: Row(
-                                                                                                                            children: [
-                                                                                                                              Expanded(
-                                                                                                                                flex: 1,
-                                                                                                                                child: CustomLabelTextFormField(
-                                                                                                                                  hintText: AppLocalizations.of(context).translate('Start date'),
-                                                                                                                                  readOnly: true,
-                                                                                                                                  controller: startDateController,
-                                                                                                                                  topPadding: 65.h,
-                                                                                                                                  leftPadding: 0.w,
-                                                                                                                                  rightPadding: 0.w,
-                                                                                                                                  bottomPadding: 33.h,
-                                                                                                                                  onTap: () async {
-                                                                                                                                    DateTime? pickedDate = await showDatePicker(
-                                                                                                                                      context: context,
-                                                                                                                                      initialDate: startDateController.text.isEmpty ? DateTime.now() : DateTime.parse(startDateController.text),
-                                                                                                                                      firstDate: DateTime(2000),
-                                                                                                                                      lastDate: DateTime(2100),
-                                                                                                                                    );
-                                                                                                                                    if (pickedDate != null) {
-                                                                                                                                      startDateController.text = DateFormat('yyyy-MM-dd').format(pickedDate).toString();
-                                                                                                                                      endDateController.clear();
-                                                                                                                                    }
-                                                                                                                                  },
-                                                                                                                                ),
-                                                                                                                              ),
-                                                                                                                              SizedBox(width: 19.w,),
-                                                                                                                              Expanded(
-                                                                                                                                flex: 1,
-                                                                                                                                child: CustomLabelTextFormField(
-                                                                                                                                  hintText: AppLocalizations.of(context).translate('End date'),
-                                                                                                                                  readOnly: true,
-                                                                                                                                  controller: endDateController,
-                                                                                                                                  topPadding: 65.h,
-                                                                                                                                  leftPadding: 0.w,
-                                                                                                                                  rightPadding: 0.w,
-                                                                                                                                  bottomPadding: 38.h,
-                                                                                                                                  onTap: () async {
-                                                                                                                                    if (startDateController.text.isEmpty) {
-                                                                                                                                      CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('SelectEndDateFailure'),);
-                                                                                                                                      return;
-                                                                                                                                    }
-
-                                                                                                                                    DateTime parsedStartDate = DateTime.parse(startDateController.text);
-                                                                                                                                    DateTime initialEndDate = parsedStartDate.add(Duration(days: 1));
-
-                                                                                                                                    DateTime? pickedDate = await showDatePicker(
-                                                                                                                                      context: context,
-                                                                                                                                      initialDate: endDateController.text.isEmpty
-                                                                                                                                          ? initialEndDate
-                                                                                                                                          : DateTime.parse(endDateController.text),
-                                                                                                                                      firstDate: initialEndDate,
-                                                                                                                                      lastDate: DateTime(2100),
-                                                                                                                                    );
-
-                                                                                                                                    if (pickedDate != null) {
-                                                                                                                                      endDateController.text = DateFormat('yyyy-MM-dd').format(pickedDate).toString();
-                                                                                                                                    }
-                                                                                                                                  },
-                                                                                                                                ),
-                                                                                                                              ),
-                                                                                                                            ],
-                                                                                                                          ),
-                                                                                                                        ),
-                                                                                                                      ],
-                                                                                                                    ),
-                                                                                                                  ),
-                                                                                                                  Expanded(
-                                                                                                                    child: Column(
-                                                                                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                                                                                      children: [
-                                                                                                                        CustomLabelTextFormField(
-                                                                                                                          labelText: AppLocalizations.of(context).translate('Description'),
-                                                                                                                          showLabelText: true,
-                                                                                                                          controller: descriptionController,
-                                                                                                                          boxHeight: 327.h,
-                                                                                                                          maxLines: 11,
-                                                                                                                          topPadding: 35.h,
-                                                                                                                          bottomPadding: 0.h,
-                                                                                                                          leftPadding: 0.w,
-                                                                                                                          rightPadding: 128
-                                                                                                                              .w,
-                                                                                                                          validator: (value) => value!.isEmpty ? AppLocalizations.of(context).translate('This field required') : null,
-                                                                                                                        ),
-                                                                                                                      ],
-                                                                                                                    ),
-                                                                                                                  ),
-                                                                                                                ],
-                                                                                                              ),
-                                                                                                              CustomLabelTextFormField(
-                                                                                                                labelText: AppLocalizations.of(context).translate('Title'),
-                                                                                                                showLabelText: true,
-                                                                                                                controller: nameController,
-                                                                                                                topPadding: 0.h,
-                                                                                                                bottomPadding: 0.h,
-                                                                                                                leftPadding: 0.w,
-                                                                                                                rightPadding: 128.w,
-                                                                                                                validator: (value) => value!.isEmpty ? AppLocalizations.of(context).translate('This field required') : null,
-                                                                                                              ),
-                                                                                                            ],
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                        Padding(
-                                                                                                          padding: EdgeInsets.only(
-                                                                                                              top: 60.h,
-                                                                                                              bottom: 65.h,
-                                                                                                              left: 47.w,
-                                                                                                              right: 155.w),
-                                                                                                          child: Row(
-                                                                                                            mainAxisAlignment: MainAxisAlignment
-                                                                                                                .start,
-                                                                                                            children: [
-                                                                                                              TextIconButton(
-                                                                                                                textButton: AppLocalizations.of(context).translate('Edit announcement'),
-                                                                                                                bigText: true,
-                                                                                                                textColor: AppColors.t3,
-                                                                                                                icon: Icons.add,
-                                                                                                                iconSize: 40.01.r,
-                                                                                                                iconColor: AppColors.t2,
-                                                                                                                iconLast: false,
-                                                                                                                firstSpaceBetween: 3.w,
-                                                                                                                buttonHeight: 53.h,
-                                                                                                                borderWidth: 0.w,
-                                                                                                                buttonColor: AppColors
-                                                                                                                    .white,
-                                                                                                                borderColor: Colors
-                                                                                                                    .transparent,
-                                                                                                                onPressed: () {
-                                                                                                                  //register();
-                                                                                                                  nameController
-                                                                                                                      .clear();
-                                                                                                                  descriptionController
-                                                                                                                      .clear();
-                                                                                                                  Navigator.pop(
-                                                                                                                      dialogContext);
-                                                                                                                },
-                                                                                                              ),
-                                                                                                              SizedBox(width: 42.w,),
-                                                                                                              TextIconButton(
-                                                                                                                textButton: AppLocalizations.of(context).translate('       Cancel       '),
-                                                                                                                textColor: AppColors.t3,
-                                                                                                                iconLast: false,
-                                                                                                                buttonHeight: 53.h,
-                                                                                                                borderWidth: 0.w,
-                                                                                                                borderRadius: 4.r,
-                                                                                                                buttonColor: AppColors
-                                                                                                                    .w1,
-                                                                                                                borderColor: AppColors
-                                                                                                                    .w1,
-                                                                                                                onPressed: () {
-                                                                                                                  nameController
-                                                                                                                      .clear();
-                                                                                                                  descriptionController
-                                                                                                                      .clear();
-                                                                                                                  Navigator.pop(
-                                                                                                                      dialogContext);
-                                                                                                                },
-                                                                                                              ),
-                                                                                                            ],
-                                                                                                          ),
-                                                                                                        )
-                                                                                                      ],
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ),
-                                                                                            ),
-                                                                                          );
-                                                                                        }
-                                                                                    );
-                                                                                  },
-                                                                                );
-                                                                              },
-                                                                              onTapSecondIcon: () {
-                                                                                showDialog(
-                                                                                  context: context,
-                                                                                  builder: (BuildContext dialogContext) {
-                                                                                    return Align(
-                                                                                      alignment: Alignment.topRight,
-                                                                                      child: Material(
-                                                                                        color: Colors.transparent,
-                                                                                        child: Container(
-                                                                                          width: 638.w,
-                                                                                          height: 478.h,
-                                                                                          margin: EdgeInsets.symmetric(horizontal: 280.w, vertical: 255.h),
-                                                                                          padding:  EdgeInsets.all(22.r),
-                                                                                          decoration: BoxDecoration(
-                                                                                            color: AppColors.white,
-                                                                                            borderRadius: BorderRadius.circular(6.r),
-                                                                                          ),
-                                                                                          child: SingleChildScrollView(
-                                                                                            physics: BouncingScrollPhysics(),
-                                                                                            child: Column(
-                                                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                              children: [
-                                                                                                Padding(
-                                                                                                  padding: EdgeInsets.only(top: 65.h, left: 30.w, right: 155.w),
-                                                                                                  child: Row(
-                                                                                                    children: [
-                                                                                                      Icon(
-                                                                                                        Icons.error_outline,
-                                                                                                        color: AppColors.orange,
-                                                                                                        size: 55.r,
-                                                                                                      ),
-                                                                                                      SizedBox(width: 10.w,),
-                                                                                                      Text(
-                                                                                                        AppLocalizations.of(context).translate('Warning'),
-                                                                                                        style: Styles.h3Bold(color: AppColors.t3),
-                                                                                                      ),
-                                                                                                    ],
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Padding(
-                                                                                                  padding: EdgeInsets.only(top: 75.h, left: 65.w, right: 155.w),
-                                                                                                  child: Text(
-                                                                                                    AppLocalizations.of(context).translate('Are you sure you want to delete this announcement?'),
-                                                                                                    style: Styles.b2Normal(color: AppColors.t3),
-                                                                                                    maxLines: 1,
-                                                                                                    overflow: TextOverflow.ellipsis,
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Padding(
-                                                                                                  padding: EdgeInsets.only(top: 90.h, bottom: 65.h, left: 47.w, right: 155.w),
-                                                                                                  child: Row(
-                                                                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                                                                    children: [
-                                                                                                      TextIconButton(
-                                                                                                        textButton: AppLocalizations.of(context).translate('Confirm'),
-                                                                                                        bigText: true,
-                                                                                                        textColor: AppColors.t3,
-                                                                                                        icon: Icons.check_circle_outline,
-                                                                                                        iconSize: 40.01.r,
-                                                                                                        iconColor: AppColors.t2,
-                                                                                                        iconLast: false,
-                                                                                                        firstSpaceBetween: 3.w,
-                                                                                                        buttonHeight: 53.h,
-                                                                                                        borderWidth: 0.w,
-                                                                                                        buttonColor: AppColors.white,
-                                                                                                        borderColor: Colors.transparent,
-                                                                                                        onPressed: (){
-                                                                                                          //context.read<DeleteStudentCubit>().fetchDeleteStudent(id: state.showResult.students.data![index].id);
-                                                                                                          Navigator.pop(dialogContext);
-                                                                                                        },
-                                                                                                      ),
-                                                                                                      SizedBox(width: 42.w,),
-                                                                                                      TextIconButton(
-                                                                                                        textButton: AppLocalizations.of(context).translate('       Cancel       '),
-                                                                                                        textColor: AppColors.t3,
-                                                                                                        iconLast: false,
-                                                                                                        buttonHeight: 53.h,
-                                                                                                        borderWidth: 0.w,
-                                                                                                        borderRadius: 4.r,
-                                                                                                        buttonColor: AppColors.w1,
-                                                                                                        borderColor: AppColors.w1,
-                                                                                                        onPressed: (){
-                                                                                                          Navigator.pop(dialogContext);
-                                                                                                        },
-                                                                                                      ),
-                                                                                                    ],
-                                                                                                  ),
-                                                                                                )
-                                                                                              ],
-                                                                                            ),
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    );
-                                                                                  },
-                                                                                );
-                                                                              },
+                                                                              onTapFirstIcon: () {},
+                                                                              onTapSecondIcon: () {},
                                                                             ),
                                                                           );
                                                                         },
@@ -1072,7 +400,7 @@ class _CourseDetailsViewBodyState extends State<CourseDetailsViewBody> {
                                                                         shrinkWrap: true,
                                                                         physics: NeverScrollableScrollPhysics(),
                                                                       ),
-                                                                    ),
+                                                                    ),*/
                                                                   ],
                                                                 ),
                                                               ),
@@ -1087,48 +415,48 @@ class _CourseDetailsViewBodyState extends State<CourseDetailsViewBody> {
                                             ),
                                           );
                                         }
-                                      );
-                                    }
-                                );
-                              } else {
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 238.0.h,
-                                      left: 77.0.w,
-                                      bottom: 27.0.h),
-                                  child: SingleChildScrollView(
-                                    physics: BouncingScrollPhysics(),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
-                                      children: [
-                                        Column(
-                                          children: [
-                                            CustomCourseInformation(
-                                              image: stateDC.course.course.photo,
-                                              bodyText: stateDC.course.course.description,
-                                              onTap: () {},
-                                              onTapDate: () {},
-                                              onTapFirstIcon: (){},
-                                              onTapSecondIcon: (){},
+                                    );
+                                  }
+                              );
+                            } else {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                    top: 238.0.h,
+                                    left: 77.0.w,
+                                    bottom: 27.0.h),
+                                child: SingleChildScrollView(
+                                  physics: BouncingScrollPhysics(),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          CustomCourseInformation(
+                                            image: stateDC.course.course.photo,
+                                            bodyText: stateDC.course.course.description,
+                                            onTap: () {},
+                                            onTapDate: () {},
+                                            onTapFirstIcon: (){},
+                                            onTapSecondIcon: (){},
+                                          ),
+                                          //SizedBox(height: 22.h),
+                                          Padding(
+                                            padding: EdgeInsets.only(right: 87.w),
+                                            child: CustomEmptyWidget(
+                                              firstText: AppLocalizations.of(context).translate('No more at this time'),
+                                              secondText: AppLocalizations.of(context).translate('Add a section to see more options.'),
                                             ),
-                                            //SizedBox(height: 22.h),
-                                            Padding(
-                                              padding: EdgeInsets.only(right: 87.w),
-                                              child: CustomEmptyWidget(
-                                                firstText: AppLocalizations.of(context).translate('No more at this time'),
-                                                secondText: AppLocalizations.of(context).translate('Add a section to see more options.'),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                );
-                              }
+                                ),
+                              );
                             }
+                          }
                         ),
                       ),
                     );
@@ -1150,6 +478,7 @@ class _CourseDetailsViewBodyState extends State<CourseDetailsViewBody> {
     );
   }
 }
+
 
 String formatTimeOfDay(TimeOfDay time) {
   return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
@@ -1250,25 +579,23 @@ class CustomStartEndTimePicker extends StatelessWidget {
   }
 }
 
-double calculateWidthBetweenAvatars({
-  required int avatarCount
-})
-{
-  double width = 8.6;
+double calculateWidthBetweenAvatars({required int avatarCount}) {
+  double width = 495.w;
   if(avatarCount >= 1) {
     width = 496.w;
   }
   if(avatarCount >= 2) {
-    width = 442.w;
+    width = 495.w;
   }
   if(avatarCount >= 3) {
-    width = 386.w;
+    width = 498.w;
   }
   if(avatarCount >= 4) {
-    width = 328.w;
+    width = 478.w;
   }
   if(avatarCount >= 5) {
-    width = 270.w;
+    width = 445.w;
+    //width = 270.w;
   }
   return width;
 }

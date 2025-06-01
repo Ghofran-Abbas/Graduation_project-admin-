@@ -162,8 +162,8 @@ class _CoursesViewBodyState extends State<CoursesViewBody> {
                                 onPressedFirst: () {},
                                 onPressedSecond: () {},
                                 onTapSearch: () {
-                                  if(state.courses.courses!.isNotEmpty) {
-                                    context.go('${GoRouterPath.courses}/${state.courses.courses![0].departmentId}${GoRouterPath.searchCourse}');
+                                  if(state.courses.courses.data!.isNotEmpty) {
+                                    context.go('${GoRouterPath.courses}/${state.courses.courses.data![0].departmentId}${GoRouterPath.searchCourse}');
                                   }
                                 },
                                 body: Padding(
@@ -222,33 +222,33 @@ class _CoursesViewBodyState extends State<CoursesViewBody> {
                                                     mainAxisSize: MainAxisSize.max,
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      state.courses.courses!.isNotEmpty ? GridView.builder(
+                                                      state.courses.courses.data!.isNotEmpty ? GridView.builder(
                                                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: crossAxisCount, crossAxisSpacing: 10.w, mainAxisExtent: 354.66.h),
                                                         itemBuilder: (BuildContext context, int index) {
                                                           return Align(child: CustomCard(
-                                                            image: state.courses.courses![index].photo,
-                                                            text: state.courses.courses![index].name,
+                                                            image: state.courses.courses.data![index].photo,
+                                                            text: state.courses.courses.data![index].name,
                                                             onTap: () {
-                                                              context.go('${GoRouterPath.courses}/${stateD.showResult.department.id}${GoRouterPath.courseDetails}/${state.courses.courses![index].id}');
+                                                              context.go('${GoRouterPath.courses}/${stateD.showResult.department.id}${GoRouterPath.courseDetails}/${state.courses.courses.data![index].id}');
                                                             },
                                                             onTapFirstIcon: () {},
                                                             onTapSecondIcon: (){},
                                                           ));
                                                         },
-                                                        itemCount: state.courses.courses!.length,
+                                                        itemCount: state.courses.courses.data!.length,
                                                         shrinkWrap: true,
                                                         physics: NeverScrollableScrollPhysics(),
                                                       ) : CustomEmptyWidget(
                                                         firstText: AppLocalizations.of(context).translate('No active courses at this time'),
                                                         secondText: AppLocalizations.of(context).translate('Courses will appear here after they enroll in your institute.'),
                                                       ),
-                                                      /*ustomNumberPagination(
+                                                      CustomNumberPagination(
                                                         numberPages: state.courses.courses.lastPage,
                                                         initialPage: state.courses.courses.currentPage,
                                                         onPageChange: (int index) {
-                                                          context.read<CoursesCubit>().fetchCourses(page: index + 1);
+                                                          context.read<CoursesCubit>().fetchCourses(departmentId: state.courses.courses.data![index].departmentId, page: index + 1);
                                                         },
-                                                      ),*/
+                                                      ),
                                                     ],
                                                   ),
                                                 ),

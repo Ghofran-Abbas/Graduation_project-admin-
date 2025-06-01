@@ -1,26 +1,26 @@
-class DepartmentsModel {
+class FilesModel {
   final String message;
-  final Departments departments;
+  final Files files;
 
-  DepartmentsModel({
+  FilesModel({
     required this.message,
-    required this.departments,
+    required this.files,
   });
 
-  factory DepartmentsModel.fromJson(Map<String, dynamic> json) => DepartmentsModel(
+  factory FilesModel.fromJson(Map<String, dynamic> json) => FilesModel(
     message: json["message"],
-    departments: Departments.fromJson(json["departments"]),
+    files: Files.fromJson(json["Files"]),
   );
 
   Map<String, dynamic> toJson() => {
     "message": message,
-    "departments": departments.toJson(),
+    "Files": files.toJson(),
   };
 }
 
-class Departments {
+class Files {
   final int currentPage;
-  final List<DepartmentDatum>? data;
+  final List<Datum>? data;
   final String firstPageUrl;
   final int? from;
   final int lastPage;
@@ -33,7 +33,7 @@ class Departments {
   final int? to;
   final int total;
 
-  Departments({
+  Files({
     required this.currentPage,
     required this.data,
     required this.firstPageUrl,
@@ -49,9 +49,9 @@ class Departments {
     required this.total,
   });
 
-  factory Departments.fromJson(Map<String, dynamic> json) => Departments(
+  factory Files.fromJson(Map<String, dynamic> json) => Files(
     currentPage: json["current_page"],
-    data: List<DepartmentDatum>.from(json["data"].map((x) => DepartmentDatum.fromJson(x))),
+    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
     firstPageUrl: json["first_page_url"],
     from: json["from"],
     lastPage: json["last_page"],
@@ -82,33 +82,37 @@ class Departments {
   };
 }
 
-class DepartmentDatum {
+class Datum {
   final int id;
-  final String name;
-  final String photo;
+  final String fileName;
+  final String filePath;
+  final int courseSectionId;
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  DepartmentDatum({
+  Datum({
     required this.id,
-    required this.name,
-    required this.photo,
+    required this.fileName,
+    required this.filePath,
+    required this.courseSectionId,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  factory DepartmentDatum.fromJson(Map<String, dynamic> json) => DepartmentDatum(
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"],
-    name: json["name"],
-    photo: json["photo"],
+    fileName: json["file_name"],
+    filePath: json["file_path"],
+    courseSectionId: json["course_section_id"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "name": name,
-    "photo": photo,
+    "file_name": fileName,
+    "file_path": filePath,
+    "course_section_id": courseSectionId,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
   };

@@ -14,6 +14,7 @@ import '../models/delete_section_model.dart';
 import '../models/delete_section_trainer_model.dart';
 import '../models/details_course_model.dart';
 import '../models/details_section_model.dart';
+import '../models/files_model.dart';
 import '../models/reservation_students_section_model.dart';
 import '../models/search_course_model.dart';
 import '../models/sections_model.dart';
@@ -119,4 +120,6 @@ abstract class CourseRepo {
     required int sectionId,
     required int studentId,
   });
+
+  Future<Either<Failure, FilesModel>> fetchFiles({required int sectionId, required int page});
 }

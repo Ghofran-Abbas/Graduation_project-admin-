@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import '../../../../../../core/localization/app_localizations.dart';
 import '../../../../../../core/utils/app_colors.dart';
 import '../../../../../../core/widgets/custom_circular_progress_indicator.dart';
+import '../../../../../../core/widgets/custom_snack_bar.dart';
 import '../../../data/models/details_section_model.dart';
 import '../../manager/details_section_cubit/details_section_cubit.dart';
 import '../../manager/details_section_cubit/details_section_state.dart';
@@ -13,7 +15,12 @@ class CalendarViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DetailsSectionCubit, DetailsSectionState>(
+    return BlocConsumer<DetailsSectionCubit, DetailsSectionState>(
+        listener: (context, state) {
+          if (state is DetailsSectionFailure) {
+            CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('DetailsSectionFailure'),);
+          }
+        },
         builder: (context, state) {
           if(state is DetailsSectionSuccess) {
             final appointments = generateSectionAppointments(state.section.section);

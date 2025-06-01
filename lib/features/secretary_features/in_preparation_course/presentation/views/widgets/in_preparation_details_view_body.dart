@@ -32,7 +32,6 @@ class DetailsInPreparationViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TrainersSectionCubit.get(context).fetchTrainersSection(id: 1/*state.section.id*/, page: 1);//****************************
     return Padding(
       padding: EdgeInsets.only(top: 56.0.h,),
       child: CustomScreenBody(
@@ -133,19 +132,21 @@ class DetailsInPreparationViewBody extends StatelessWidget {
                         BlocBuilder<TrainersSectionCubit, TrainersSectionState>(
                             builder: (contextTS, stateTS) {
                               if(stateTS is TrainersSectionSuccess) {
-                                return CustomOverloadingAvatar(
-                                  labelText: '${AppLocalizations.of(context).translate('Look at')} ${stateTS.trainers.trainers![0].trainers!.length} ${AppLocalizations.of(context).translate('trainers in this class')}',
-                                  tailText: AppLocalizations.of(context).translate('See more'),
-                                  firstImage: stateTS.trainers.trainers![0].trainers!.isNotEmpty ? stateTS.trainers.trainers![0].trainers![0].photo : '',
-                                  secondImage: stateTS.trainers.trainers![0].trainers!.length >= 2 ? stateTS.trainers.trainers![0].trainers![1].photo : '',
-                                  thirdImage: stateTS.trainers.trainers![0].trainers!.length >= 3 ? stateTS.trainers.trainers![0].trainers![2].photo : '',
-                                  fourthImage: stateTS.trainers.trainers![0].trainers!.length >= 4 ? stateTS.trainers.trainers![0].trainers![3].photo : '',
-                                  fifthImage: stateTS.trainers.trainers![0].trainers!.length >= 5 ? stateTS.trainers.trainers![0].trainers![4].photo : '',
-                                  avatarCount: stateTS.trainers.trainers![0].trainers!.length,
-                                  onTap: () {
-                                    context.go('${GoRouterPath.courses}/1${GoRouterPath.courseDetails}/1${GoRouterPath.sectionTrainers}/${stateTS.trainers.trainers![0].id}');
-                                    //context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.sectionTrainers}/${state.section.id}');
-                                  },
+                                return Expanded(
+                                  child: CustomOverloadingAvatar(
+                                    labelText: '${AppLocalizations.of(context).translate('Look at')} ${stateTS.trainers.trainers![0].trainers!.length} ${AppLocalizations.of(context).translate('trainers in this class')}',
+                                    tailText: AppLocalizations.of(context).translate('See more'),
+                                    firstImage: stateTS.trainers.trainers![0].trainers!.isNotEmpty ? stateTS.trainers.trainers![0].trainers![0].photo : '',
+                                    secondImage: stateTS.trainers.trainers![0].trainers!.length >= 2 ? stateTS.trainers.trainers![0].trainers![1].photo : '',
+                                    thirdImage: stateTS.trainers.trainers![0].trainers!.length >= 3 ? stateTS.trainers.trainers![0].trainers![2].photo : '',
+                                    fourthImage: stateTS.trainers.trainers![0].trainers!.length >= 4 ? stateTS.trainers.trainers![0].trainers![3].photo : '',
+                                    fifthImage: stateTS.trainers.trainers![0].trainers!.length >= 5 ? stateTS.trainers.trainers![0].trainers![4].photo : '',
+                                    avatarCount: stateTS.trainers.trainers![0].trainers!.length,
+                                    onTap: () {
+                                      context.go('${GoRouterPath.courses}/1${GoRouterPath.courseDetails}/1${GoRouterPath.sectionTrainers}/${stateTS.trainers.trainers![0].id}');
+                                      //context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.sectionTrainers}/${state.section.id}');
+                                    },
+                                  ),
                                 );
                               } else if(stateTS is TrainersSectionFailure) {
                                 return Row(
@@ -205,10 +206,25 @@ class DetailsInPreparationViewBody extends StatelessWidget {
                               child: TabBarView(
                                 children: [
                                   Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      GridViewFiles(
-                                        fileName: 'hgjhv',
-                                        cardCount: 5,
+                                      //Image(image: AssetImage(Assets.empty)),
+                                      Expanded(
+                                        child: Text(
+                                          AppLocalizations.of(context).translate('No courses at this time'),
+                                          style: Styles.h3Bold(color: AppColors.t3),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          AppLocalizations.of(context).translate('Courses will appear here after they enroll in your school.'),
+                                          style: Styles.l1Normal(color: AppColors.t3),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
                                     ],
                                   ),

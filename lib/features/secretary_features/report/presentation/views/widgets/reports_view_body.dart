@@ -72,6 +72,7 @@ class _ReportsViewBodyState extends State<ReportsViewBody> {
           CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('DeleteReportFailure'),);
         } else if (state is DeleteReportSuccess) {
           CustomSnackBar.showSnackBar(context, msg: AppLocalizations.of(context).translate('DeleteReportSuccess'),);
+          ReportsCubit.get(context).fetchReports(page: 1);
         }
       },
       builder: (context, state) {

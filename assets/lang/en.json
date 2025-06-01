@@ -256,6 +256,8 @@
   "Complains will appear here after they enroll in your institute.": "Complains will appear here after they enroll in your institute.",
 
 
+  "Click to see Kristin’s awards": "Click to see Kristin’s awards",
+  "DetailsSectionFailure": "Failed to load week days. Please try again later",
 
   "SelectEndDateFailure": "Failed to select end date. Please try again later",
   "SelectEndTimeFailure": "Failed to select end time. Please try again later",

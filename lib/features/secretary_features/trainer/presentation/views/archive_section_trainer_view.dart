@@ -8,10 +8,10 @@ import '../../../course/presentation/manager/students_section_cubit/students_sec
 import '../../../course/presentation/manager/trainers_section_cubit/trainers_section_cubit.dart';
 import '../../../report/data/repos/report_repo_impl.dart';
 import '../../../report/presentation/manager/get_file_cubit/get_file_cubit.dart';
-import 'widgets/complete_details_view_body.dart';
+import 'widgets/archive_section_trainer_view_body.dart';
 
-class CompleteDetailsView extends StatelessWidget {
-  const CompleteDetailsView({super.key, required this.sectionId});
+class ArchiveSectionTrainerView extends StatelessWidget {
+  const ArchiveSectionTrainerView({super.key, required this.sectionId});
 
   final int sectionId;
 
@@ -21,16 +21,16 @@ class CompleteDetailsView extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) {
-            return TrainersSectionCubit(
+            return StudentsSectionCubit(
               getIt.get<CourseRepoImpl>(),
-            )..fetchTrainersSection(id: sectionId, page: 1);
+            )..fetchStudentsSection(id: sectionId, page: 1);
           },
         ),
         BlocProvider(
           create: (context) {
-            return StudentsSectionCubit(
+            return TrainersSectionCubit(
               getIt.get<CourseRepoImpl>(),
-            )..fetchStudentsSection(id: sectionId, page: 1);
+            )..fetchTrainersSection(id: sectionId, page: 1);
           },
         ),
         BlocProvider(
@@ -48,7 +48,7 @@ class CompleteDetailsView extends StatelessWidget {
           },
         ),
       ],
-      child: CompleteDetailsViewBody(sectionId: sectionId,),
+      child: ArchiveSectionTrainerViewBody(sectionId: sectionId,),
     );
   }
 }

@@ -17,9 +17,13 @@ class GoRouterPath {
   static const announcementADetails = '/announcementADetails';
   static const students = '/students';
   static const studentDetails = '/students/studentDetails';
+  static const studentArchiveCourseView = '/studentArchiveCourseView';
+  static const archiveSectionStudentView = '/archiveSectionStudentView';
   static const searchStudent = '/students/searchStudent';
   static const trainers = '/trainers';
   static const trainerDetails = '/trainers/trainerDetails';
+  static const trainerArchiveCourseView = '/trainerArchiveCourseView';
+  static const archiveSectionTrainerView = '/archiveSectionTrainerView';
   static const searchTrainer = '/trainers/searchTrainer';
   static const inPreparation = '/inPreparation';
   static const inPreparationDetails = '/inPreparation/inPreparationDetails';

@@ -181,7 +181,9 @@ class StudentDetailsViewBody extends StatelessWidget {
                             SizedBox(height: 10.h,),
                             CustomOverLoadingCard(
                               cardCount: count,
-                              onTapSeeMore: () {},
+                              onTapSeeMore: () {
+                                context.go('${GoRouterPath.studentDetails}/${state.showResult.student.id}${GoRouterPath.studentArchiveCourseView}/${state.showResult.student.id}');
+                              },
                               widget: GridView.builder(
                                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: crossAxisCount,
@@ -195,6 +197,7 @@ class StudentDetailsViewBody extends StatelessWidget {
                                     secondDetailsText: 'Languages',
                                     showSecondDetailsText: true,
                                     onTap: () {
+                                      context.go('${GoRouterPath.studentDetails}/${state.showResult.student.id}${GoRouterPath.studentArchiveCourseView}/${state.showResult.student.id}${GoRouterPath.archiveSectionStudentView}/1');
                                       /*context.go('${GoRouterPath.courses}/1${GoRouterPath.courseDetails}');*/
                                     },
                                     onTapFirstIcon: (){},
