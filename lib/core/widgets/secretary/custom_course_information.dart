@@ -209,9 +209,11 @@ class CustomCourseInformation extends StatelessWidget {
           ),
         ) : SizedBox(width: 200.w, height: 0.h,),
         SizedBox(width: 250.w,),
-        SizedBox(
-          width: 324.w,
-          child: CustomAbout(labelText: labelText, bodyText: bodyText, bigText: bigText,),
+        Expanded(
+          child: SizedBox(
+            width: 324.w,
+            child: CustomAbout(labelText: labelText, bodyText: bodyText, bigText: bigText,),
+          ),
         ),
       ],
     );

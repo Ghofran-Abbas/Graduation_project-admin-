@@ -29,9 +29,13 @@ import '../../features/secretary_features/in_preparation_course/presentation/vie
 import '../../features/secretary_features/in_preparation_course/presentation/views/in_preparation_view.dart';
 import '../../features/secretary_features/report/presentation/views/details_report_view.dart';
 import '../../features/secretary_features/report/presentation/views/reports_view.dart';
+import '../../features/secretary_features/student/presentation/views/archive_section_student_view.dart';
 import '../../features/secretary_features/student/presentation/views/search_student_view.dart';
+import '../../features/secretary_features/student/presentation/views/student_archive_course_view.dart';
 import '../../features/secretary_features/student/presentation/views/student_details_view.dart';
+import '../../features/secretary_features/trainer/presentation/views/archive_section_trainer_view.dart';
 import '../../features/secretary_features/trainer/presentation/views/search_trainer_view.dart';
+import '../../features/secretary_features/trainer/presentation/views/trainer_archive_course_view.dart';
 import '../../features/secretary_features/trainer/presentation/views/trainer_details_view.dart';
 import '../../features/secretary_features/trainer/presentation/views/trainers_view.dart';
 import '../../features/secretary_features/verification/presentation/views/verification_view.dart';
@@ -144,6 +148,47 @@ class AppRouter {
                       final id = state.pathParameters['id']!;
                       return StudentDetailsView(id: int.parse(id),);
                     },
+                      routes: [
+                        GoRoute(
+                            path: '/studentArchiveCourseView/:studentId',
+                            builder: (context, state) {
+                              final id = state.pathParameters['studentId']!;
+                              return StudentArchiveCourseView(studentId: int.parse(id),);
+                            },
+                            routes: [
+                              GoRoute(
+                                  path: '/archiveSectionStudentView/:sectionId',
+                                  builder: (context, state) {
+                                    final id = state.pathParameters['sectionId']!;
+                                    return ArchiveSectionStudentView(sectionId: int.parse(id),);
+                                  },
+                                  routes: [
+                                    GoRoute(
+                                      path: '/completeCalendar/:sectionCCalId',
+                                      builder: (context, state) {
+                                        final id = state.pathParameters['sectionCCalId']!;
+                                        return CompleteCalendarView(sectionId: int.parse(id),);
+                                      },
+                                    ),
+                                    GoRoute(
+                                      path: '/completeStudents/:sectionCStudentsId',
+                                      builder: (context, state) {
+                                        final id = state.pathParameters['sectionCStudentsId']!;
+                                        return CompleteStudentsView(sectionId: int.parse(id),);
+                                      },
+                                    ),
+                                    GoRoute(
+                                      path: '/completeTrainers/:sectionCId',
+                                      builder: (context, state) {
+                                        final id = state.pathParameters['sectionCId']!;
+                                        return CompleteTrainersView(sectionId: int.parse(id),);
+                                      },
+                                    ),
+                                  ]
+                              ),
+                            ]
+                        ),
+                      ]
                   ),
                   GoRoute(
                     path: '/searchStudent',
@@ -164,6 +209,47 @@ class AppRouter {
                       final id = state.pathParameters['id']!;
                       return TrainerDetailsView(id: int.parse(id),);
                     },
+                      routes: [
+                        GoRoute(
+                            path: '/trainerArchiveCourseView/:trainerId',
+                            builder: (context, state) {
+                              final id = state.pathParameters['trainerId']!;
+                              return TrainerArchiveCourseView(trainerId: int.parse(id),);
+                            },
+                            routes: [
+                              GoRoute(
+                                  path: '/archiveSectionTrainerView/:sectionId',
+                                  builder: (context, state) {
+                                    final id = state.pathParameters['sectionId']!;
+                                    return ArchiveSectionTrainerView(sectionId: int.parse(id),);
+                                  },
+                                  routes: [
+                                    GoRoute(
+                                      path: '/completeCalendar/:sectionCCalId',
+                                      builder: (context, state) {
+                                        final id = state.pathParameters['sectionCCalId']!;
+                                        return CompleteCalendarView(sectionId: int.parse(id),);
+                                      },
+                                    ),
+                                    GoRoute(
+                                      path: '/completeStudents/:sectionCStudentsId',
+                                      builder: (context, state) {
+                                        final id = state.pathParameters['sectionCStudentsId']!;
+                                        return CompleteStudentsView(sectionId: int.parse(id),);
+                                      },
+                                    ),
+                                    GoRoute(
+                                      path: '/completeTrainers/:sectionCId',
+                                      builder: (context, state) {
+                                        final id = state.pathParameters['sectionCId']!;
+                                        return CompleteTrainersView(sectionId: int.parse(id),);
+                                      },
+                                    ),
+                                  ]
+                              ),
+                            ]
+                        ),
+                      ]
                   ),
                   GoRoute(
                     path: '/searchTrainer',

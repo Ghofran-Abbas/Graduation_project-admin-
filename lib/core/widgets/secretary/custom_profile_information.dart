@@ -100,71 +100,82 @@ class CustomProfileInformation extends StatelessWidget {
             ],
           ),
           SizedBox(width: 186.w,),
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              showGifts ?? false ? GestureDetector(
-                onTap: (){onTapGifts();},
-                child: Row(
-                  children: [
-                    Container(
-                      height: 75.w,
-                      width: 60.w,
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(0),
-                        image: const DecorationImage(
-                          image: AssetImage(Assets.rewards),
-                        )
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                showGifts ?? false ? GestureDetector(
+                  onTap: (){onTapGifts();},
+                  child: Row(
+                    children: [
+                      Container(
+                        height: 75.w,
+                        width: 60.w,
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(0),
+                          image: const DecorationImage(
+                            image: AssetImage(Assets.rewards),
+                          )
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 10.w,),
-                    Text(
-                      textGifts ?? 'Click to see Kristin’s awards',
-                      style: Styles.l1Bold(),
-                    ),
-                  ],
+                      SizedBox(width: 10.w,),
+                      Text(
+                        textGifts ?? AppLocalizations.of(context).translate('Click to see Kristin’s awards'),
+                        style: Styles.l1Bold(),
+                      ),
+                    ],
+                  ),
+                ) : SizedBox(width: 0.w, height: 0.w,),
+                showAboutText ?? false ? SizedBox(
+                  width: 380.w,
+                  child: CustomAbout(
+                    labelText: AppLocalizations.of(context).translate('About'),
+                    bodyText: aboutText ?? '',
+                  ),
+                ) : SizedBox(width: 0.w, height: 0.w,),
+                //showAboutText ?? false ? SizedBox(height: 75.h) : SizedBox(width: 0.w, height: 0.w,),
+                SizedBox(height: (showAboutText ?? false) || (showGifts ?? false)  ? 75.h : 405.h),
+                SizedBox(
+                  width: 395.w.clamp(350, 425),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      CustomInformationField(title: firstFieldInfoTitle ?? AppLocalizations.of(context).translate('Birth date'), textBody: firstFieldInfoText),
+                      SizedBox(width: 73.w,),
+                      CustomInformationField(title: secondFieldInfoTitle ?? AppLocalizations.of(context).translate('Gender'), textBody: secondFieldInfoText),
+                      SizedBox(width: 73.w,),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            showThirdFieldInfo ?? false ? CustomInformationField(title: thirdFieldInfoTitle ?? AppLocalizations.of(context).translate('Points'), textBody: thirdFieldInfoText ?? '') : SizedBox(width: 0.w, height: 0.w,),
+                            showThirdFieldInfoIcon ?? false ? SizedBox(width: 15.w,) : SizedBox(width: 0.w, height: 0.w,),
+                            showThirdFieldInfoIcon ?? false ? CustomIconButton(
+                              icon: Icons.edit,
+                              onTap: (){onTap();},
+                            ) : SizedBox(width: 0.w, height: 0.w,),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ) : SizedBox(width: 0.w, height: 0.w,),
-              showAboutText ?? false ? SizedBox(
-                width: 380.w,
-                child: CustomAbout(
-                  labelText: AppLocalizations.of(context).translate('About'),
-                  bodyText: aboutText ?? '',
-                ),
-              ) : SizedBox(width: 0.w, height: 0.w,),
-              //showAboutText ?? false ? SizedBox(height: 75.h) : SizedBox(width: 0.w, height: 0.w,),
-              SizedBox(height: (showAboutText ?? false) || (showGifts ?? false)  ? 75.h : 405.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  CustomInformationField(title: firstFieldInfoTitle ?? AppLocalizations.of(context).translate('Birth date'), textBody: firstFieldInfoText),
-                  SizedBox(width: 73.w,),
-                  CustomInformationField(title: secondFieldInfoTitle ?? AppLocalizations.of(context).translate('Gender'), textBody: secondFieldInfoText),
-                  SizedBox(width: 73.w,),
-                  showThirdFieldInfo ?? false ? CustomInformationField(title: thirdFieldInfoTitle ?? AppLocalizations.of(context).translate('Points'), textBody: thirdFieldInfoText ?? '') : SizedBox(width: 0.w, height: 0.w,),
-                  showThirdFieldInfoIcon ?? false ? SizedBox(width: 15.w,) : SizedBox(width: 0.w, height: 0.w,),
-                  showThirdFieldInfoIcon ?? false ? CustomIconButton(
-                    icon: Icons.edit,
-                    onTap: (){onTap();},
-                  ) : SizedBox(width: 0.w, height: 0.w,),
-                ],
-              ),
-              SizedBox(height: 52.h,),
-              showOverloadingAvatar ?? false ? CustomOverloadingAvatar(
-                labelText: labelText,
-                firstImage: firstImage,
-                secondImage: secondImage,
-                thirdImage: thirdImage,
-                fourthImage: fourthImage,
-                fifthImage: fifthImage,
-                tailText: tailText,
-                avatarCount: avatarCount,
-                onTap: (){},
-              ) : SizedBox(width: 0.w, height: 0.w,),
-            ],
+                SizedBox(height: 52.h,),
+                showOverloadingAvatar ?? false ? CustomOverloadingAvatar(
+                  labelText: labelText,
+                  firstImage: firstImage,
+                  secondImage: secondImage,
+                  thirdImage: thirdImage,
+                  fourthImage: fourthImage,
+                  fifthImage: fifthImage,
+                  tailText: tailText,
+                  avatarCount: avatarCount,
+                  onTap: (){},
+                ) : SizedBox(width: 0.w, height: 0.w,),
+              ],
+            ),
           ),
         ],
       ),

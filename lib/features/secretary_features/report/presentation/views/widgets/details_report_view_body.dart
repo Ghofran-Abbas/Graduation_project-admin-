@@ -25,7 +25,7 @@ class DetailsReportViewBody extends StatelessWidget {
           return BlocConsumer<GetFileCubit, GetFileState>(
               listener: (context, state) {
                 if (state is GetFileLoading) {
-                  CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('GetFileLoading'),color: AppColors.darkLightPurple);
+                  CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('GetFileLoading'),color: AppColors.darkLightPurple, textColor: AppColors.black);
                 } else if (state is GetFileSuccess) {
                   CustomSnackBar.showSnackBar(context, msg: AppLocalizations.of(context).translate('GetFileSuccess'),);
                 }
@@ -56,7 +56,6 @@ class DetailsReportViewBody extends StatelessWidget {
                         aboutText: state.report.report.description,
                         onTap: () {
                           GetFileCubit.get(context).fetchFile(
-                            id: 1,
                             filePath: state.report.report.file,
                           );
                         },

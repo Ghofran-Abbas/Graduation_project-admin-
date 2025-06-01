@@ -27,6 +27,7 @@ import '../../../../../../core/widgets/secretary/custom_label_text_form_field.da
 import '../../../../../../core/widgets/secretary/custom_screen_body.dart';
 import '../../../../../../core/widgets/secretary/grid_view_cards.dart';
 import '../../../../../../core/widgets/text_icon_button.dart';
+import '../../../data/models/departments_model.dart';
 import '../../manager/departments_cubit/departments_cubit.dart';
 import '../../manager/departments_cubit/departments_state.dart';
 
@@ -108,6 +109,7 @@ class _DepartmentsViewBodyState extends State<DepartmentsViewBody> {
             CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('CreateDepartmentFailure'),);
           } else if (state is CreateDepartmentSuccess) {
             CustomSnackBar.showSnackBar(context, msg: AppLocalizations.of(context).translate('CreateDepartmentSuccess'),);
+            DepartmentsCubit.get(context).fetchDepartments(page: 1);
           }
         },
         builder: (context, state) {
@@ -117,6 +119,7 @@ class _DepartmentsViewBodyState extends State<DepartmentsViewBody> {
                   CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('UpdateDepartmentFailure'),);
                 } else if (state is UpdateDepartmentSuccess) {
                   CustomSnackBar.showSnackBar(context, msg: AppLocalizations.of(context).translate('UpdateDepartmentSuccess'),);
+                  DepartmentsCubit.get(context).fetchDepartments(page: 1);
                 }
               },
               builder: (context, state) {
@@ -126,6 +129,7 @@ class _DepartmentsViewBodyState extends State<DepartmentsViewBody> {
                         CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('DeleteDepartmentFailure'),);
                       } else if (state is DeleteDepartmentSuccess) {
                         CustomSnackBar.showSnackBar(context, msg: AppLocalizations.of(context).translate('DeleteDepartmentSuccess'),);
+                        DepartmentsCubit.get(context).fetchDepartments(page: 1);
                       }
                     },
                     builder: (context, state) {
@@ -266,11 +270,10 @@ class _DepartmentsViewBodyState extends State<DepartmentsViewBody> {
                                                                     borderColor: Colors
                                                                         .transparent,
                                                                     onPressed: () {
+                                                                      Navigator.pop(dialogContext);
                                                                       register();
                                                                       nameController
                                                                           .clear();
-                                                                      /*Navigator.pop(
-                                                                  dialogContext);*/
                                                                     },
                                                                   ),
                                                                   SizedBox(width: 42.w,),
@@ -333,167 +336,7 @@ class _DepartmentsViewBodyState extends State<DepartmentsViewBody> {
                                                   showDialog(
                                                     context: context,
                                                     builder: (BuildContext dialogContext) {
-                                                      return StatefulBuilder(
-                                                          builder: (BuildContext context,
-                                                              void Function(void Function()) setStateDialog) {
-                                                            return Form(
-                                                              key: _formKey,
-                                                              child: Align(
-                                                                alignment: Alignment.topRight,
-                                                                child: Material(
-                                                                  color: Colors.transparent,
-                                                                  child: Container(
-                                                                    width: 871.w,
-                                                                    height: 788.h,
-                                                                    margin: EdgeInsets.symmetric(
-                                                                        horizontal: 160.w,
-                                                                        vertical: 115.h),
-                                                                    padding: EdgeInsets.all(22.r),
-                                                                    decoration: BoxDecoration(
-                                                                      color: AppColors.white,
-                                                                      borderRadius: BorderRadius.circular(
-                                                                          6.r),
-                                                                    ),
-                                                                    child: SingleChildScrollView(
-                                                                      physics: BouncingScrollPhysics(),
-                                                                      child: Column(
-                                                                        crossAxisAlignment: CrossAxisAlignment
-                                                                            .start,
-                                                                        children: [
-                                                                          Padding(
-                                                                            padding: EdgeInsets.only(
-                                                                                top: 65.h,
-                                                                                left: 60.w,
-                                                                                right: 155.w, bottom: 35.h),
-                                                                            child: Text(
-                                                                              AppLocalizations.of(context).translate('Edit department'),
-                                                                              style: Styles.h3Bold(
-                                                                                  color: AppColors.t3),
-                                                                            ),
-                                                                          ),
-                                                                          Padding(
-                                                                            padding: EdgeInsets.only(
-                                                                                left: 60.w),
-                                                                            child: Row(
-                                                                              children: [
-                                                                                Expanded(
-                                                                                  child: Column(
-                                                                                    crossAxisAlignment: CrossAxisAlignment
-                                                                                        .start,
-                                                                                    children: [
-                                                                                      Stack(
-                                                                                        children: [
-                                                                                          selectedImage !=
-                                                                                              null
-                                                                                              ? CustomMemoryImage(
-                                                                                            image: selectedImage,
-                                                                                            imageWidth: 186
-                                                                                                .w,
-                                                                                            imageHeight: 186
-                                                                                                .w,
-                                                                                            borderRadius: 150
-                                                                                                .r,
-                                                                                          )
-                                                                                              : CustomImageAsset(
-                                                                                            imageWidth: 186
-                                                                                                .w,
-                                                                                            imageHeight: 186
-                                                                                                .w,
-                                                                                            borderRadius: 150
-                                                                                                .r,
-                                                                                          ),
-                                                                                          Positioned(
-                                                                                            top: 140.w,
-                                                                                            left: 150.w,
-                                                                                            child: CustomIconButton(
-                                                                                              icon: Icons
-                                                                                                  .add,
-                                                                                              onTap: () async {
-                                                                                                await pickImage();
-                                                                                                setStateDialog(() {});
-                                                                                              },
-                                                                                            ),
-                                                                                          ),
-                                                                                        ],
-                                                                                      ),
-                                                                                      CustomLabelTextFormField(
-                                                                                        labelText: AppLocalizations.of(context).translate('Name'),
-                                                                                        showLabelText: true,
-                                                                                        controller: nameController,
-                                                                                        topPadding: 68.h,
-                                                                                        bottomPadding: 0
-                                                                                            .h,
-                                                                                        leftPadding: 0.w,
-                                                                                        rightPadding: 65
-                                                                                            .w,
-                                                                                        validator: (value) => value!.isEmpty ? AppLocalizations.of(context).translate('This field required') : null,
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                          Padding(
-                                                                            padding: EdgeInsets.only(
-                                                                                top: 60.h,
-                                                                                bottom: 65.h,
-                                                                                left: 47.w,
-                                                                                right: 155.w),
-                                                                            child: Row(
-                                                                              mainAxisAlignment: MainAxisAlignment
-                                                                                  .start,
-                                                                              children: [
-                                                                                TextIconButton(
-                                                                                  textButton: AppLocalizations.of(context).translate('Edit department'),
-                                                                                  bigText: true,
-                                                                                  textColor: AppColors.t3,
-                                                                                  icon: Icons.edit_outlined,
-                                                                                  iconSize: 40.01.r,
-                                                                                  iconColor: AppColors.t2,
-                                                                                  iconLast: false,
-                                                                                  firstSpaceBetween: 3.w,
-                                                                                  buttonHeight: 53.h,
-                                                                                  borderWidth: 0.w,
-                                                                                  buttonColor: AppColors.white,
-                                                                                  borderColor: Colors.transparent,
-                                                                                  onPressed: () {
-                                                                                    Navigator.pop(dialogContext);
-                                                                                    update(state.showResult.departments.data![index].id);
-                                                                                    nameController.clear();
-                                                                                  },
-                                                                                ),
-                                                                                SizedBox(width: 42.w,),
-                                                                                TextIconButton(
-                                                                                  textButton: AppLocalizations.of(context).translate('       Cancel       '),
-                                                                                  textColor: AppColors.t3,
-                                                                                  iconLast: false,
-                                                                                  buttonHeight: 53.h,
-                                                                                  borderWidth: 0.w,
-                                                                                  borderRadius: 4.r,
-                                                                                  buttonColor: AppColors
-                                                                                      .w1,
-                                                                                  borderColor: AppColors
-                                                                                      .w1,
-                                                                                  onPressed: () {
-                                                                                    nameController
-                                                                                        .clear();
-                                                                                    Navigator.pop(
-                                                                                        dialogContext);
-                                                                                  },
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            );
-                                                          }
-                                                      );
+                                                      return UpdateDepartmentDialog(department: state.showResult.departments.data![index], updateCubit: context.read<UpdateDepartmentCubit>());
                                                     },
                                                   );
                                                 },
@@ -626,6 +469,242 @@ class _DepartmentsViewBodyState extends State<DepartmentsViewBody> {
                     }
                 );
               }
+          );
+        }
+    );
+  }
+}
+
+class UpdateDepartmentDialog extends StatefulWidget {
+  const UpdateDepartmentDialog({super.key, required this.department, required this.updateCubit});
+
+  final DepartmentDatum department;
+  final UpdateDepartmentCubit updateCubit;
+
+  @override
+  State<UpdateDepartmentDialog> createState() => _UpdateDepartmentDialogState();
+}
+
+class _UpdateDepartmentDialogState extends State<UpdateDepartmentDialog> {
+
+  final _formKey = GlobalKey<FormState>();
+  late final TextEditingController nameController;
+  Uint8List? selectedImage;
+
+  late final String originalName;
+  late final String? originalImage;
+
+  @override
+  void initState() {
+    super.initState();
+    _initControllers();
+  }
+
+  void _initControllers() {
+    originalName = widget.department.name;
+    originalImage = widget.department.photo;
+
+    nameController = TextEditingController(text: originalName);
+
+  }
+
+  Future<void> pickImage() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+          type: FileType.image,
+          withData: true
+      );
+      if (result != null && result.files.single.bytes != null) {
+        setState(() {
+          selectedImage = result.files.single.bytes!;
+        });
+      } else {
+        CustomSnackBar.showErrorSnackBar(context, msg: AppLocalizations.of(context).translate('No image selected or image data is unavailable.'),);
+      }
+    } catch (e) {
+      CustomSnackBar.showErrorSnackBar(context, msg: '${AppLocalizations.of(context).translate('Failed to pick image:')} $e',);
+    }
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
+
+  void update(int id) {
+    widget.updateCubit.fetchUpdateDepartment(
+      departmentId: id,
+      name: nameController.text,
+      photo: selectedImage,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StatefulBuilder(
+        builder: (BuildContext context,
+            void Function(void Function()) setStateDialog) {
+          return Form(
+            key: _formKey,
+            child: Align(
+              alignment: Alignment.topRight,
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  width: 871.w,
+                  height: 788.h,
+                  margin: EdgeInsets.symmetric(
+                      horizontal: 160.w,
+                      vertical: 115.h),
+                  padding: EdgeInsets.all(22.r),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(
+                        6.r),
+                  ),
+                  child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment
+                          .start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: 65.h,
+                              left: 60.w,
+                              right: 155.w, bottom: 35.h),
+                          child: Text(
+                            AppLocalizations.of(context).translate('Edit department'),
+                            style: Styles.h3Bold(
+                                color: AppColors.t3),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: 60.w),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment
+                                      .start,
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        originalImage != null ? selectedImage != null ? CustomMemoryImage(
+                                          image: selectedImage,
+                                          imageWidth: 186.w,
+                                          imageHeight: 186.w,
+                                          borderRadius: 150.r,
+                                        ) : SizedBox(
+                                          width: 186.w,
+                                          height: 186.w,
+                                          child: CustomImageNetwork(
+                                            imageWidth: 186.w,
+                                            imageHeight: 186.w,
+                                            borderRadius: 150.r,
+                                            image: widget.department.photo,
+                                          ),
+                                        ) : selectedImage != null ? CustomMemoryImage(
+                                          image: selectedImage,
+                                          imageWidth: 186.w,
+                                          imageHeight: 186.w,
+                                          borderRadius: 150.r,
+                                        ) : CustomImageAsset(
+                                          imageWidth: 186.w,
+                                          imageHeight: 186.w,
+                                          borderRadius: 150.r,
+                                        ),
+                                        Positioned(
+                                          top: 140.w,
+                                          left: 150.w,
+                                          child: CustomIconButton(
+                                            icon: Icons
+                                                .add,
+                                            onTap: () async {
+                                              await pickImage();
+                                              setStateDialog(() {});
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    CustomLabelTextFormField(
+                                      labelText: AppLocalizations.of(context).translate('Name'),
+                                      showLabelText: true,
+                                      controller: nameController,
+                                      topPadding: 68.h,
+                                      bottomPadding: 0
+                                          .h,
+                                      leftPadding: 0.w,
+                                      rightPadding: 65
+                                          .w,
+                                      validator: (value) => value!.isEmpty ? AppLocalizations.of(context).translate('This field required') : null,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: 60.h,
+                              bottom: 65.h,
+                              left: 47.w,
+                              right: 155.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment
+                                .start,
+                            children: [
+                              TextIconButton(
+                                textButton: AppLocalizations.of(context).translate('Edit department'),
+                                bigText: true,
+                                textColor: AppColors.t3,
+                                icon: Icons.edit_outlined,
+                                iconSize: 40.01.r,
+                                iconColor: AppColors.t2,
+                                iconLast: false,
+                                firstSpaceBetween: 3.w,
+                                buttonHeight: 53.h,
+                                borderWidth: 0.w,
+                                buttonColor: AppColors.white,
+                                borderColor: Colors.transparent,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  update(widget.department.id);
+                                  nameController.clear();
+                                },
+                              ),
+                              SizedBox(width: 42.w,),
+                              TextIconButton(
+                                textButton: AppLocalizations.of(context).translate('       Cancel       '),
+                                textColor: AppColors.t3,
+                                iconLast: false,
+                                buttonHeight: 53.h,
+                                borderWidth: 0.w,
+                                borderRadius: 4.r,
+                                buttonColor: AppColors
+                                    .w1,
+                                borderColor: AppColors
+                                    .w1,
+                                onPressed: () {
+                                  nameController
+                                      .clear();
+                                  Navigator.pop(
+                                      context);
+                                },
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
           );
         }
     );

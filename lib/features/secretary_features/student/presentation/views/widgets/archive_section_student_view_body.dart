@@ -7,7 +7,6 @@ import 'package:number_paginator/number_paginator.dart';
 import '../../../../../../core/localization/app_localizations.dart';
 import '../../../../../../core/utils/app_colors.dart';
 import '../../../../../../core/utils/go_router_path.dart';
-import '../../../../../../core/utils/styles.dart';
 import '../../../../../../core/widgets/custom_circular_progress_indicator.dart';
 import '../../../../../../core/widgets/custom_error_widget.dart';
 import '../../../../../../core/widgets/custom_number_pagination.dart';
@@ -28,8 +27,8 @@ import '../../../../course/presentation/views/widgets/course_details_view_body.d
 import '../../../../report/presentation/manager/get_file_cubit/get_file_cubit.dart';
 import '../../../../report/presentation/manager/get_file_cubit/get_file_state.dart';
 
-class CompleteDetailsViewBody extends StatelessWidget {
-  const CompleteDetailsViewBody({super.key, required this.sectionId});
+class ArchiveSectionStudentViewBody extends StatelessWidget {
+  const ArchiveSectionStudentViewBody({super.key, required this.sectionId});
 
   final int sectionId;
 
@@ -43,7 +42,8 @@ class CompleteDetailsViewBody extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(top: 56.0.h,),
       child: CustomScreenBody(
-        title: 'Video Editing',
+        title: 'Archive Video Editing',
+        showSearchField: true,
         textFirstButton: 'Section 2',
         showFirstButton: true,
         onPressedFirst: (){},
@@ -64,7 +64,7 @@ class CompleteDetailsViewBody extends StatelessWidget {
                       ratingPercent: 1,
                       ratingPercentText: '100%',
                       circleStatusColor: AppColors.mintGreen,
-                      courseStatusText: 'Finished',
+                      courseStatusText: 'Complete',
                       startDateText: '2025-09-02',
                       showCourseCalenderIcon: true,
                       endDateText: '2025-12-02',
@@ -79,7 +79,7 @@ class CompleteDetailsViewBody extends StatelessWidget {
                           'deserunt reprehenderit elit laborum. ',
                       onTap: (){},
                       onTapDate: (){
-                        context.go('${GoRouterPath.completeDetails}/1${GoRouterPath.completeCalendar}/1');
+                        context.go('${GoRouterPath.studentDetails}/1${GoRouterPath.studentArchiveCourseView}/1${GoRouterPath.archiveSectionStudentView}/1${GoRouterPath.completeCalendar}/1');
                       },
                       onTapFirstIcon: (){},
                       onTapSecondIcon: (){},
@@ -103,8 +103,9 @@ class CompleteDetailsViewBody extends StatelessWidget {
                                       fifthImage: stateSS.students.students.data![0].students!.length >= 5 ? stateSS.students.students.data![0].students![4].photo : '',
                                       avatarCount: stateSS.students.students.data![0].students!.length,
                                       onTap: () {
-                                        context.go('${GoRouterPath.completeDetails}/1${GoRouterPath.completeStudents}/${stateSS.students.students.data![0].id}');
-                                        //onTap: () {context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.sectionStudents}/${stateSec.section.id}');
+                                        if(stateSS.students.students.data![0].students!.isNotEmpty) {
+                                          context.go('${GoRouterPath.studentDetails}/${stateSS.students.students.data![0].students![0].id}${GoRouterPath.studentArchiveCourseView}/${stateSS.students.students.data![0].students![0].id}${GoRouterPath.archiveSectionStudentView}/${stateSS.students.students.data![0].id}${GoRouterPath.completeStudents}/${stateSS.students.students.data![0].id}');
+                                        }
                                       },
                                     ),
                                     SizedBox(
@@ -123,10 +124,7 @@ class CompleteDetailsViewBody extends StatelessWidget {
                                       fourthImage: '',
                                       fifthImage: '',
                                       avatarCount: 5,
-                                      onTap: () {
-
-                                        //onTap: () {context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.sectionStudents}/${stateSec.section.id}');
-                                      },
+                                      onTap: () {},
                                     ),
                                     SizedBox(
                                       width: calculateWidthBetweenAvatars(avatarCount: 5) /*270.w*/,),
@@ -151,8 +149,11 @@ class CompleteDetailsViewBody extends StatelessWidget {
                                     fifthImage: stateTS.trainers.trainers![0].trainers!.length >= 5 ? stateTS.trainers.trainers![0].trainers![4].photo : '',
                                     avatarCount: stateTS.trainers.trainers![0].trainers!.length,
                                     onTap: () {
-                                      context.go('${GoRouterPath.completeDetails}/1${GoRouterPath.completeTrainers}/${stateTS.trainers.trainers![0].id}');
-                                      //context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.sectionTrainers}/${state.section.id}');
+                                      if(stateTS.trainers.trainers![0].trainers!.isNotEmpty) {
+                                        context.go('${GoRouterPath.studentDetails}/${stateTS.trainers.trainers![0].trainers![0].id}${GoRouterPath.studentArchiveCourseView}/${stateTS.trainers.trainers![0].trainers![0].id}${GoRouterPath.archiveSectionStudentView}/${stateTS.trainers.trainers![0].id}${GoRouterPath.completeTrainers}/${stateTS.trainers.trainers![0].id}');
+                                      } /*else {
+                                        context.go('${GoRouterPath.studentDetails}/1${GoRouterPath.studentArchiveCourseView}/1${GoRouterPath.archiveSectionCourseView}/1${GoRouterPath.completeStudents}/1');
+                                      }*/
                                     },
                                   ),
                                 );
@@ -160,7 +161,7 @@ class CompleteDetailsViewBody extends StatelessWidget {
                                 return Row(
                                   children: [
                                     CustomOverloadingAvatar(
-                                      labelText: '${AppLocalizations.of(context).translate('Look at')} ${AppLocalizations.of(context).translate('students in this class')}',
+                                      labelText: '${AppLocalizations.of(context).translate('Look at')} ${AppLocalizations.of(context).translate('trainers in this class')}',
                                       tailText: AppLocalizations.of(context).translate('See more'),
                                       firstImage: '',
                                       secondImage: '',
@@ -168,10 +169,7 @@ class CompleteDetailsViewBody extends StatelessWidget {
                                       fourthImage: '',
                                       fifthImage: '',
                                       avatarCount: 5,
-                                      onTap: () {
-                                        //context.go('${GoRouterPath.courses}/1${GoRouterPath.courseDetails}/2${GoRouterPath.sectionTrainers}/1');
-                                        //onTap: () {context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.sectionStudents}/${stateSec.section.id}');
-                                      },
+                                      onTap: () {},
                                     ),
                                     SizedBox(
                                       width: calculateWidthBetweenAvatars(avatarCount: 5) /*270.w*/,),
@@ -264,44 +262,6 @@ class CompleteDetailsViewBody extends StatelessWidget {
                                       }
                                   ),
                                   Container(),
-                                  /*CustomOverLoadingCard(
-                                    cardCount: count,
-                                    onTapSeeMore: () {
-                                      context.go('${GoRouterPath.completeDetails}/1${GoRouterPath.announcementsC}/1');
-                                      //context.go('${GoRouterPath.courses}/1${GoRouterPath.courseDetails}/1${GoRouterPath.announcementsC}/1');
-                                      //context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.announcementsA}/1');
-                                    },
-                                    widget: GridView
-                                        .builder(
-                                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: crossAxisCount,
-                                          crossAxisSpacing: 10
-                                              .w,
-                                          mainAxisExtent: 354.66
-                                              .h),
-                                      itemBuilder: (
-                                          BuildContext context,
-                                          int index) {
-                                        return Align(
-                                            child: CustomCard(
-                                              text: 'Discount 30%',
-                                              onTap: () {
-                                                context.go('${GoRouterPath.completeDetails}/1${GoRouterPath.announcementsC}/1${GoRouterPath.announcementCDetails}/1');
-                                                //context.go('${GoRouterPath.courses}/1${GoRouterPath.courseDetails}/1${GoRouterPath.announcementsC}/1${GoRouterPath.announcementCDetails}/1');
-                                                //context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.announcements}/1');
-                                              },
-                                              onTapFirstIcon: () {},
-                                              onTapSecondIcon: () {},
-                                            ));
-                                      },
-                                      itemCount: count >
-                                          4
-                                          ? 4
-                                          : count,
-                                      shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(),
-                                    ),
-                                  ),*/
                                 ],
                               ),
                             ),

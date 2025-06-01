@@ -1,3 +1,4 @@
+import 'package:admin_alhadara_dashboard/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
 abstract class CustomSnackBar {
@@ -43,6 +44,7 @@ abstract class CustomSnackBar {
         required String msg,
         Duration? duration,
         Color? color = Colors.red,
+        Color? textColor = AppColors.white,
         double? fontSize,
       }) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -74,10 +76,9 @@ abstract class CustomSnackBar {
                 child: Text(
                   msg,
                   textAlign: TextAlign.start,
-                  /*style: TextStyles.textStyle18.copyWith(
-                    color: Colors.white,
-                    fontSize: fontSize ?? 18.sp,
-                  ),*/
+                  style: TextStyle(
+                    color: textColor,
+                  ),
                 ),
               ),
             ),

@@ -20,6 +20,7 @@ import '../models/delete_section_model.dart';
 import '../models/delete_section_trainer_model.dart';
 import '../models/details_course_model.dart';
 import '../models/details_section_model.dart';
+import '../models/files_model.dart';
 import '../models/reservation_students_section_model.dart';
 import '../models/search_course_model.dart';
 import '../models/sections_model.dart';
@@ -411,7 +412,7 @@ class CourseRepoImpl implements CourseRepo {
   }) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/secretary/section/ShowByIdCourseSection/$id',
+        endPoint: '/secretary/section/ShowByIdCourseSectionn/$id',
         token: Constants.adminToken,
       ));
       log(data.toString());
@@ -585,5 +586,23 @@ class CourseRepoImpl implements CourseRepo {
     }
   }
 
+  @override
+  Future<Either<Failure, FilesModel>> fetchFiles({required int sectionId, required int page}) async {
+    try {
+      var data = await (dioApiService.get(
+        endPoint: '/file/showAllFileInSection/$sectionId?page=$page',
+        token: await SharedPreferencesHelper.getJwtToken(),
+      ));
+      log(data.toString());
+      FilesModel filesModel;
+      filesModel = FilesModel.fromJson(data);
 
+      return right(filesModel);
+    } catch (e) {
+      if (e is DioException){
+        return left(ServerFailure.fromDioError(e),);
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
 }
