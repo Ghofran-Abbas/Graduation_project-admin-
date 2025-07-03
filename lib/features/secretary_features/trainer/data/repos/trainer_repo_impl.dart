@@ -70,7 +70,7 @@ class TrainerRepoImpl extends TrainerRepo{
   Future<Either<Failure, TrainersModel>> fetchTrainers({required int page}) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/secretary/trainer/showAllTrainer?page=$page',
+        endPoint: '/admin/trainer/showAllTrainer?page=$page',
         token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
       ));
       log(data.toString());
@@ -166,7 +166,7 @@ class TrainerRepoImpl extends TrainerRepo{
   Future<Either<Failure, DetailsTrainerModel>> fetchDetailsTrainer({required int id}) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/secretary/trainer/showTrainerById/$id',
+        endPoint: '/admin/trainer/showTrainerById/$id',
         token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
       ));
       log(data.toString());
@@ -187,7 +187,7 @@ class TrainerRepoImpl extends TrainerRepo{
   Future<Either<Failure, SearchTrainerModel>> fetchSearchTrainer({required String querySearch, required int page}) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/secretary/trainer/searchTrainer/$querySearch?page=$page',
+        endPoint: '/admin/trainer/searchTrainer/$querySearch?page=$page',
         token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
       ));
       log(data.toString());

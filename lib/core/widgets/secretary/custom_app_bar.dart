@@ -17,7 +17,25 @@ import '../text_icon_button.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({
-    super.key, required this.title, this.showSearchField, this.textFirstButton, this.showFirstButton, this.showButtonIcon, this.textSecondButton, this.showSecondButton, required this.onPressedFirst, required this.onPressedSecond, this.widget, this.turnSearch, this.onFieldSubmitted, this.searchController, this.onTapSearch, this.showProfileAvatar,
+    super.key,
+    required this.title,
+    this.showSearchField,
+    this.textFirstButton,
+    this.showFirstButton,
+    this.showButtonIcon,
+    this.textSecondButton,
+    this.showSecondButton,
+    this.showThirdButton,
+    this.textThirdButton,
+    required this.onPressedFirst,
+    required this.onPressedSecond,
+    this.onPressedThird,
+    this.widget,
+    this.turnSearch,
+    this.onFieldSubmitted,
+    this.searchController,
+    this.onTapSearch,
+    this.showProfileAvatar,
   });
 
   final String title;
@@ -28,9 +46,12 @@ class CustomAppBar extends StatelessWidget {
   final bool? showButtonIcon;
   final String? textSecondButton;
   final bool? showSecondButton;
-  final bool? turnSearch;
+  final String? textThirdButton;
+  final bool? showThirdButton;
   final Function onPressedFirst;
   final Function onPressedSecond;
+  final Function? onPressedThird;
+  final bool? turnSearch;
   final Function? onTapSearch;
   final Function? onFieldSubmitted;
   final TextEditingController? searchController;
@@ -38,35 +59,17 @@ class CustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Top title & translate icon row
         Padding(
-          padding: EdgeInsets.only(left: 50.0.w, right: 50.w),
+          padding: EdgeInsets.symmetric(horizontal: 50.w),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                title,
-                style: Styles.h2Bold(color: AppColors.blue),
-              ),
-              /*showProfileAvatar ?? true ? BlocBuilder<UserCubit, UserState>(
-                builder: (context, state) {
-                  if (state is UserLoaded) {
-                    return CustomImageNetwork(
-                      imageWidth: 44.w,
-                      imageHeight: 44.w,
-                      borderRadius: 50.67.r,
-                      image: state.user.photo, // ✅ عرض الصورة هنا
-                      onTap: () {
-                        context.go(GoRouterPath.profile);
-                      },
-                    );
-                  } else {
-                    return CustomCircularProgressIndicator(); // يمكن عرض صورة افتراضية أثناء التحميل
-                  }
-                },
-              ) : SizedBox(width: 0.w, height: 0.h),*/
+              Text(title, style: Styles.h2Bold(color: AppColors.blue)),
               GestureDetector(
                 child: Icon(
                   Icons.translate_outlined,
@@ -85,92 +88,114 @@ class CustomAppBar extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 47.h,),
+
+        SizedBox(height: 47.h),
+
+        // Search field & buttons row
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 25.0.w),
+          padding: EdgeInsets.symmetric(horizontal: 25.w),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              showSearchField ?? false ? GestureDetector(
-                onTap: () {onTapSearch!() ?? () {};},
-                child: CustomTextInfo(
-                  textAddress: AppLocalizations.of(context).translate('Search here...'),
-                  text: '',
-                  width: 199.96.w,
-                  height: 53.h,
-                  borderRadius: 24.67,
-                  borderColor: Colors.transparent,
-                  color: AppColors.highlightPurple,
-                ),
-              ) : SizedBox(width: 0.0,),
-              turnSearch ?? false ? Flexible(
-                child: SizedBox(
-                  width: 1108.96.w,
-                  height: 53.h,
-                  child: CustomTextFormField(
-                    hintText: AppLocalizations.of(context).translate('Search here...'),
-                    hintTextStyle: Styles.l2Medium(color: AppColors.t1),
-                    borderRadius: 4.r,
+              // Optional placeholder search info
+              if (showSearchField ?? false)
+                GestureDetector(
+                  onTap: () => onTapSearch?.call(),
+                  child: CustomTextInfo(
+                    textAddress: loc.translate('Search here...'),
+                    text: '',
+                    width: 199.96.w,
+                    height: 53.h,
+                    borderRadius: 24.67,
                     borderColor: Colors.transparent,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 19.73.w),
-                    filled: true,
-                    fillColor: AppColors.highlightPurple,
-                    prefixIcon: Icons.search_outlined,
-                    prefixSize: 19.73.r,
-                    controller: searchController,
-                    onTap: () {},
-                    onPressed: () {},
-                    onFieldSubmitted: (value) {onFieldSubmitted!(value) ?? (value) {};},
+                    color: AppColors.highlightPurple,
                   ),
                 ),
-              ) : SizedBox(width: 0.0,),
+
+              // Actual text field when in search mode
+              if (turnSearch ?? false)
+                Flexible(
+                  child: SizedBox(
+                    width: 1108.96.w,
+                    height: 53.h,
+                    child: CustomTextFormField(
+                      hintText: loc.translate('Search here...'),
+                      hintTextStyle: Styles.l2Medium(color: AppColors.t1),
+                      borderRadius: 4.r,
+                      borderColor: Colors.transparent,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 19.73.w),
+                      filled: true,
+                      fillColor: AppColors.highlightPurple,
+                      prefixIcon: Icons.search_outlined,
+                      prefixSize: 19.73.r,
+                      controller: searchController,
+                      onTap: () {},
+                      onPressed: () {},
+                      onFieldSubmitted:
+                          (value) => onFieldSubmitted?.call(value),
+                    ),
+                  ),
+                ),
+
+              // Buttons
               Row(
                 children: [
-                  showFirstButton ?? false ? widget ?? TextIconButton(
-                    textButton: textFirstButton ?? '',
-                    textColor: AppColors.purple,
-                    //buttonMinWidth: 125.36,
-                    buttonHeight: 53.h,
-                    icon: Icons.keyboard_arrow_down,
-                    iconSize: 30.01.r,
-                    iconColor: AppColors.purple,
-                    borderRadius: 24.67,
-                    buttonColor: AppColors.white,
-                    iconLast: true,
-                    showButtonIcon: showButtonIcon,
-                    onPressed: (){
-                      onPressedFirst();
-                    },
-                  ) : SizedBox(width: 0.0,),
-                  SizedBox(width: 14.0.w,),
-                  showSecondButton ?? false ? TextIconButton(
-                    textButton: textSecondButton ?? '',
-                    buttonHeight: 53.h,
-                    icon: Icons.add,
-                    iconSize: 30.01.r,
-                    borderRadius: 24.67,
-                    iconLast: false,
-                    showButtonIcon: showButtonIcon,
-                    onPressed: (){
-                      onPressedSecond();
-                    },
-                  ) : SizedBox(width: 0.0,),
+                  // Third button (Most Points Secretary)
+                  if (showThirdButton ?? false) ...[
+                    TextIconButton(
+                      textButton:
+                          textThirdButton ??
+                          loc.translate('Most Points Secretary'),
+                      buttonHeight: 53.h,
+                      buttonColor: AppColors.white,
+                      borderRadius: 24.67,
+                      iconLast: false,
+                      textColor: AppColors.purple,
+                      showButtonIcon: true,
+                      onPressed: () => onPressedThird?.call(),
+                    ),
+                    SizedBox(width: 14.w),
+                  ],
+
+                  // First button (e.g. dropdown or custom widget)
+                  if (showFirstButton ?? false) ...[
+                    widget ??
+                        TextIconButton(
+                          textButton: textFirstButton ?? '',
+                          textColor: AppColors.purple,
+                          buttonHeight: 53.h,
+                          icon: Icons.keyboard_arrow_down,
+                          iconSize: 30.01.r,
+                          iconColor: AppColors.purple,
+                          borderRadius: 24.67,
+                          buttonColor: AppColors.white,
+                          iconLast: true,
+                          showButtonIcon: showButtonIcon,
+                          onPressed: () => onPressedFirst(),
+                        ),
+                    SizedBox(width: 14.w),
+                  ],
+
+                  // Second button (Add / New)
+                  if (showSecondButton ?? false)
+                    TextIconButton(
+                      textButton: textSecondButton ?? '',
+                      buttonHeight: 53.h,
+                      icon: Icons.add,
+                      iconSize: 30.01.r,
+                      borderRadius: 24.67,
+                      iconLast: false,
+                      showButtonIcon: showButtonIcon,
+                      onPressed: () => onPressedSecond(),
+                    ),
                 ],
               ),
             ],
           ),
         ),
-        SizedBox(height: 171.h,),
+
+        SizedBox(height: 171.h),
       ],
     );
   }
 }
-
-/*
-final localeCubit = BlocProvider.of<LocaleCubit>(context);
-                  if (localeCubit.state.languageCode == 'en') {
-                    localeCubit.toArabic();
-                  } else {
-                    localeCubit.toEnglish();
-                  }
-* */

@@ -1,7 +1,11 @@
+// lib/features/points/presentation/views/student_details_view.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/utils/service_locator.dart';
+import '../../../../points/data/repos/points_repo_impl.dart';
+import '../../../../points/presentation/manager/update_points_cubit/update_points_cubit.dart';
 import '../../data/repos/student_repo_impl.dart';
 import '../manager/details_student_cubit/details_student_cubit.dart';
 import 'widgets/student_details_view_body.dart';
@@ -16,15 +20,17 @@ class StudentDetailsView extends StatefulWidget {
 }
 
 class _StudentDetailsViewState extends State<StudentDetailsView> {
-  late final DetailsStudentCubit _cubit;
+  late final DetailsStudentCubit _detailsCubit;
+  late final UpdatePointsCubit   _updateCubit;
   late int _currentId;
 
   @override
   void initState() {
     super.initState();
-    _cubit = DetailsStudentCubit(getIt.get<StudentRepoImpl>());
-    _currentId = widget.id;
-    _cubit.fetchDetailsStudent(id: _currentId);
+    _detailsCubit = DetailsStudentCubit(getIt.get<StudentRepoImpl>());
+    _updateCubit  = UpdatePointsCubit(getIt.get<PointsRepoImpl>());
+    _currentId    = widget.id;
+    _detailsCubit.fetchDetailsStudent(id: _currentId);
   }
 
   @override
@@ -32,21 +38,25 @@ class _StudentDetailsViewState extends State<StudentDetailsView> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.id != widget.id) {
       _currentId = widget.id;
-      _cubit.fetchDetailsStudent(id: _currentId);
+      _detailsCubit.fetchDetailsStudent(id: _currentId);
     }
   }
 
   @override
   void dispose() {
-    _cubit.close();
+    _detailsCubit.close();
+    _updateCubit.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _cubit,
-      child: StudentDetailsViewBody(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: _detailsCubit),
+        BlocProvider.value(value: _updateCubit),
+      ],
+      child:  StudentDetailsViewBody(),
     );
   }
 }

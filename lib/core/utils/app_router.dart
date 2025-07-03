@@ -1,6 +1,23 @@
+import 'package:admin_alhadara_dashboard/core/utils/service_locator.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/employee/presentation/views/employee_details_view.dart';
+import '../../features/employee/presentation/views/employees_view.dart';
+import '../../features/employee/presentation/views/search_employee_view.dart';
+import '../../features/gifts/presentation/manager/gifts_cubit/gifts_cubit.dart';
+import '../../features/gifts/presentation/views/secretary_gifts_view.dart';
+import '../../features/gifts/presentation/views/student_gifts_view.dart';
 import '../../features/login/presentation/views/login_secretary_view.dart';
+import '../../features/points/data/repos/points_repo.dart';
+import '../../features/points/data/repos/points_repo_impl.dart';
+import '../../features/points/presentation/manager/top_secretaries_cubit/top_secretaries_cubit.dart';
+import '../../features/points/presentation/manager/top_students_cubit/top_students_cubit.dart';
+import '../../features/points/presentation/manager/update_points_cubit/update_points_cubit.dart';
+import '../../features/points/presentation/manager/update_secretary_points_cubit/update_secretary_points_cubit.dart';
+import '../../features/points/presentation/views/top_secretaries_view.dart';
+import '../../features/points/presentation/views/top_students_view.dart';
 import '../../features/profile/presentaion/views/profile_view.dart';
 import '../../features/secretary_features/complain/presentation/views/complain_details_view.dart';
 import '../../features/secretary_features/complain/presentation/views/complains_view.dart';
@@ -41,6 +58,7 @@ import '../../features/secretary_features/trainer/presentation/views/trainers_vi
 import '../../features/secretary_features/verification/presentation/views/verification_view.dart';
 import '../widgets/secretary/main_scaffold.dart';
 import '../../features/secretary_features/student/presentation/views/students_view.dart';
+import 'go_router_path.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -50,92 +68,107 @@ class AppRouter {
         builder: (context, state) => const LoginView(),
         routes: [
           ShellRoute(
-            builder: (context, state, child) => MainScaffold(child: child,),
+            builder: (context, state, child) => MainScaffold(child: child),
             routes: [
               GoRoute(
                 path: '/dashboard',
                 builder: (context, state) => const DepartmentsView(),
                 routes: [
                   GoRoute(
-                      path: '/courses/:departmentId',
-                      builder: (context, state) {
-                        final id = state.pathParameters['departmentId']!;
-                        return CoursesView(departmentId: int.parse(id),);
-                      },
-                      routes: [
-                        GoRoute(
-                            path: '/details/:courseId',
+                    path: '/courses/:departmentId',
+                    builder: (context, state) {
+                      final id = state.pathParameters['departmentId']!;
+                      return CoursesView(departmentId: int.parse(id));
+                    },
+                    routes: [
+                      GoRoute(
+                        path: '/details/:courseId',
+                        builder: (context, state) {
+                          final id = state.pathParameters['courseId']!;
+                          return CourseDetailsView(courseId: int.parse(id));
+                        },
+                        routes: [
+                          GoRoute(
+                            path: '/calendar/:sectionCalId',
                             builder: (context, state) {
-                              final id = state.pathParameters['courseId']!;
-                              return CourseDetailsView(courseId: int.parse(id),);
+                              final id = state.pathParameters['sectionCalId']!;
+                              return CalendarView(sectionId: int.parse(id));
+                            },
+                          ),
+                          GoRoute(
+                            path: '/sectionStudents/:sectionStudentId',
+                            builder: (context, state) {
+                              final id =
+                                  state.pathParameters['sectionStudentId']!;
+                              return SectionStudentsView(
+                                sectionId: int.parse(id),
+                              );
                             },
                             routes: [
                               GoRoute(
-                                path: '/calendar/:sectionCalId',
+                                path: '/searchStudentSection/:sectionStudentId',
                                 builder: (context, state) {
-                                  final id = state.pathParameters['sectionCalId']!;
-                                  return CalendarView(sectionId: int.parse(id),);
+                                  final id =
+                                      state.pathParameters['sectionStudentId']!;
+                                  return SearchStudentSectionView(
+                                    sectionId: int.parse(id),
+                                  );
                                 },
                               ),
+                            ],
+                          ),
+                          GoRoute(
+                            path: '/sectionTrainers/:sectionId',
+                            builder: (context, state) {
+                              final id = state.pathParameters['sectionId']!;
+                              return SectionTrainerView(
+                                sectionId: int.parse(id),
+                              );
+                            },
+                            routes: [
                               GoRoute(
-                                path: '/sectionStudents/:sectionStudentId',
-                                builder: (context, state) {
-                                  final id = state.pathParameters['sectionStudentId']!;
-                                  return SectionStudentsView(sectionId: int.parse(id),);
-                                },
-                                routes: [
-                                  GoRoute(
-                                    path: '/searchStudentSection/:sectionStudentId',
-                                    builder: (context, state) {
-                                      final id = state.pathParameters['sectionStudentId']!;
-                                      return SearchStudentSectionView(sectionId: int.parse(id),);
-                                    },
-                                  ),
-                                ]
-                              ),
-                              GoRoute(
-                                path: '/sectionTrainers/:sectionId',
+                                path: '/searchTrainerSection/:sectionId',
                                 builder: (context, state) {
                                   final id = state.pathParameters['sectionId']!;
-                                  return SectionTrainerView(sectionId: int.parse(id),);
+                                  return SearchTrainerSectionView(
+                                    sectionId: int.parse(id),
+                                  );
                                 },
-                                routes: [
-                                  GoRoute(
-                                    path: '/searchTrainerSection/:sectionId',
-                                    builder: (context, state) {
-                                      final id = state.pathParameters['sectionId']!;
-                                      return SearchTrainerSectionView(sectionId: int.parse(id),);
-                                    },
-                                  ),
-                                ]
                               ),
+                            ],
+                          ),
+                          GoRoute(
+                            path: '/announcementsA/:sectionAnnAId',
+                            builder: (context, state) {
+                              final id = state.pathParameters['sectionAnnAId']!;
+                              return AnnouncementAView(
+                                sectionId: int.parse(id),
+                              );
+                            },
+                            routes: [
                               GoRoute(
-                                  path: '/announcementsA/:sectionAnnAId',
-                                  builder: (context, state) {
-                                    final id = state.pathParameters['sectionAnnAId']!;
-                                    return AnnouncementAView(sectionId: int.parse(id),);
-                                  },
-                                  routes: [
-                                    GoRoute(
-                                      path: '/announcementADetails/:announcementId',
-                                      builder: (context, state) {
-                                        final id = state.pathParameters['announcementId']!;
-                                        return AnnouncementADetailsView(id: int.parse(id),);
-                                      },
-                                    ),
-                                  ]
+                                path: '/announcementADetails/:announcementId',
+                                builder: (context, state) {
+                                  final id =
+                                      state.pathParameters['announcementId']!;
+                                  return AnnouncementADetailsView(
+                                    id: int.parse(id),
+                                  );
+                                },
                               ),
-                            ]
-                        ),
-                        GoRoute(
-                          path: '/searchCourse',
-                          builder: (context, state) {
-                            return SearchCourseView();
-                          },
-                        ),
-                      ]
+                            ],
+                          ),
+                        ],
+                      ),
+                      GoRoute(
+                        path: '/searchCourse',
+                        builder: (context, state) {
+                          return SearchCourseView();
+                        },
+                      ),
+                    ],
                   ),
-                ]
+                ],
               ),
 
               GoRoute(
@@ -146,57 +179,99 @@ class AppRouter {
                     path: '/studentDetails/:id',
                     builder: (context, state) {
                       final id = state.pathParameters['id']!;
-                      return StudentDetailsView(id: int.parse(id),);
+                      return StudentDetailsView(id: int.parse(id));
                     },
-                      routes: [
-                        GoRoute(
-                            path: '/studentArchiveCourseView/:studentId',
+                    routes: [
+
+                      GoRoute(
+                        path: 'gifts',
+                        builder: (ctx, state) {
+                          final sid = int.parse(state.pathParameters['id']!);
+                          return StudentGiftsView(studentId: sid);
+                        },
+                      ),
+
+
+                      GoRoute(
+                        path: '/studentArchiveCourseView/:studentId',
+                        builder: (context, state) {
+                          final id = state.pathParameters['studentId']!;
+                          return StudentArchiveCourseView(
+                            studentId: int.parse(id),
+                          );
+                        },
+                        routes: [
+                          GoRoute(
+                            path: '/archiveSectionStudentView/:sectionId',
                             builder: (context, state) {
-                              final id = state.pathParameters['studentId']!;
-                              return StudentArchiveCourseView(studentId: int.parse(id),);
+                              final id = state.pathParameters['sectionId']!;
+                              return ArchiveSectionStudentView(
+                                sectionId: int.parse(id),
+                              );
                             },
                             routes: [
                               GoRoute(
-                                  path: '/archiveSectionStudentView/:sectionId',
-                                  builder: (context, state) {
-                                    final id = state.pathParameters['sectionId']!;
-                                    return ArchiveSectionStudentView(sectionId: int.parse(id),);
-                                  },
-                                  routes: [
-                                    GoRoute(
-                                      path: '/completeCalendar/:sectionCCalId',
-                                      builder: (context, state) {
-                                        final id = state.pathParameters['sectionCCalId']!;
-                                        return CompleteCalendarView(sectionId: int.parse(id),);
-                                      },
-                                    ),
-                                    GoRoute(
-                                      path: '/completeStudents/:sectionCStudentsId',
-                                      builder: (context, state) {
-                                        final id = state.pathParameters['sectionCStudentsId']!;
-                                        return CompleteStudentsView(sectionId: int.parse(id),);
-                                      },
-                                    ),
-                                    GoRoute(
-                                      path: '/completeTrainers/:sectionCId',
-                                      builder: (context, state) {
-                                        final id = state.pathParameters['sectionCId']!;
-                                        return CompleteTrainersView(sectionId: int.parse(id),);
-                                      },
-                                    ),
-                                  ]
+                                path: '/completeCalendar/:sectionCCalId',
+                                builder: (context, state) {
+                                  final id =
+                                      state.pathParameters['sectionCCalId']!;
+                                  return CompleteCalendarView(
+                                    sectionId: int.parse(id),
+                                  );
+                                },
                               ),
-                            ]
-                        ),
-                      ]
+                              GoRoute(
+                                path: '/completeStudents/:sectionCStudentsId',
+                                builder: (context, state) {
+                                  final id =
+                                      state
+                                          .pathParameters['sectionCStudentsId']!;
+                                  return CompleteStudentsView(
+                                    sectionId: int.parse(id),
+                                  );
+                                },
+                              ),
+                              GoRoute(
+                                path: '/completeTrainers/:sectionCId',
+                                builder: (context, state) {
+                                  final id =
+                                      state.pathParameters['sectionCId']!;
+                                  return CompleteTrainersView(
+                                    sectionId: int.parse(id),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
+                  GoRoute(
+                    path: 'top-students',
+                    builder: (ctx, state) {
+                      return MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+                            create: (_) =>
+                            TopStudentsCubit(getIt<PointsRepo>())..fetchTopStudents(limit: 10),
+                          ),
+                          BlocProvider(
+                            create: (_) => UpdatePointsCubit(getIt<PointsRepo>()),
+                          ),
+                        ],
+                        child: const TopStudentsView(),
+                      );
+                    },
+                  ),
+
                   GoRoute(
                     path: '/searchStudent',
                     builder: (context, state) {
                       return SearchStudentView();
                     },
                   ),
-                ]
+                ],
               ),
 
               GoRoute(
@@ -207,49 +282,63 @@ class AppRouter {
                     path: '/trainerDetails/:id',
                     builder: (context, state) {
                       final id = state.pathParameters['id']!;
-                      return TrainerDetailsView(id: int.parse(id),);
+                      return TrainerDetailsView(id: int.parse(id));
                     },
-                      routes: [
-                        GoRoute(
-                            path: '/trainerArchiveCourseView/:trainerId',
+                    routes: [
+                      GoRoute(
+                        path: '/trainerArchiveCourseView/:trainerId',
+                        builder: (context, state) {
+                          final id = state.pathParameters['trainerId']!;
+                          return TrainerArchiveCourseView(
+                            trainerId: int.parse(id),
+                          );
+                        },
+                        routes: [
+                          GoRoute(
+                            path: '/archiveSectionTrainerView/:sectionId',
                             builder: (context, state) {
-                              final id = state.pathParameters['trainerId']!;
-                              return TrainerArchiveCourseView(trainerId: int.parse(id),);
+                              final id = state.pathParameters['sectionId']!;
+                              return ArchiveSectionTrainerView(
+                                sectionId: int.parse(id),
+                              );
                             },
                             routes: [
                               GoRoute(
-                                  path: '/archiveSectionTrainerView/:sectionId',
-                                  builder: (context, state) {
-                                    final id = state.pathParameters['sectionId']!;
-                                    return ArchiveSectionTrainerView(sectionId: int.parse(id),);
-                                  },
-                                  routes: [
-                                    GoRoute(
-                                      path: '/completeCalendar/:sectionCCalId',
-                                      builder: (context, state) {
-                                        final id = state.pathParameters['sectionCCalId']!;
-                                        return CompleteCalendarView(sectionId: int.parse(id),);
-                                      },
-                                    ),
-                                    GoRoute(
-                                      path: '/completeStudents/:sectionCStudentsId',
-                                      builder: (context, state) {
-                                        final id = state.pathParameters['sectionCStudentsId']!;
-                                        return CompleteStudentsView(sectionId: int.parse(id),);
-                                      },
-                                    ),
-                                    GoRoute(
-                                      path: '/completeTrainers/:sectionCId',
-                                      builder: (context, state) {
-                                        final id = state.pathParameters['sectionCId']!;
-                                        return CompleteTrainersView(sectionId: int.parse(id),);
-                                      },
-                                    ),
-                                  ]
+                                path: '/completeCalendar/:sectionCCalId',
+                                builder: (context, state) {
+                                  final id =
+                                      state.pathParameters['sectionCCalId']!;
+                                  return CompleteCalendarView(
+                                    sectionId: int.parse(id),
+                                  );
+                                },
                               ),
-                            ]
-                        ),
-                      ]
+                              GoRoute(
+                                path: '/completeStudents/:sectionCStudentsId',
+                                builder: (context, state) {
+                                  final id =
+                                      state
+                                          .pathParameters['sectionCStudentsId']!;
+                                  return CompleteStudentsView(
+                                    sectionId: int.parse(id),
+                                  );
+                                },
+                              ),
+                              GoRoute(
+                                path: '/completeTrainers/:sectionCId',
+                                builder: (context, state) {
+                                  final id =
+                                      state.pathParameters['sectionCId']!;
+                                  return CompleteTrainersView(
+                                    sectionId: int.parse(id),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                   GoRoute(
                     path: '/searchTrainer',
@@ -257,7 +346,56 @@ class AppRouter {
                       return SearchTrainerView();
                     },
                   ),
-                ]
+                ],
+              ),
+              GoRoute(
+                path: GoRouterPath.employees,
+                builder: (context, state) => const EmployeesView(),
+                routes: [
+                  GoRoute(
+                    path: 'top-secretary',
+                    builder: (ctx, state) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider(
+                          create: (_) => TopSecretariesCubit(getIt<PointsRepo>())..fetchTopSecretaries(limit: 10),
+                        ),
+                        BlocProvider(
+                          create: (_) => UpdateSecretaryPointsCubit(getIt<PointsRepo>()),
+                        ),
+                      ],
+                      child: const TopSecretariesView(),
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'searchEmployee',
+                    builder: (context, state) => SearchEmployeeView(),
+                  ),
+                  GoRoute(
+                    path: ':id',
+                    name: 'employeeDetails',
+                    builder: (context, state) {
+                      final raw = state.pathParameters['id']!;
+                      final id = int.tryParse(raw);
+                      if (id == null) {
+                        return Scaffold(
+                          body: Center(
+                            child: Text('Invalid employee ID: $raw'),
+                          ),
+                        );
+                      }
+                      return EmployeeDetailsView(id: id);
+                    },
+                    routes: [                      GoRoute(
+                      path: 'gifts',
+                      builder: (ctx, state) {
+                        final sid = int.parse(state.pathParameters['id']!);
+                        return SecretaryGiftsView(secretaryId: sid);
+                      },
+                    ),
+                    ],
+                  ),
+
+                ],
               ),
 
               GoRoute(
@@ -268,49 +406,53 @@ class AppRouter {
                     path: '/completeDetails/:id',
                     builder: (context, state) {
                       final id = state.pathParameters['id']!;
-                      return CompleteDetailsView(sectionId: int.parse(id),);
+                      return CompleteDetailsView(sectionId: int.parse(id));
                     },
                     routes: [
                       GoRoute(
                         path: '/completeCalendar/:sectionCCalId',
                         builder: (context, state) {
                           final id = state.pathParameters['sectionCCalId']!;
-                          return CompleteCalendarView(sectionId: int.parse(id),);
+                          return CompleteCalendarView(sectionId: int.parse(id));
                         },
                       ),
                       GoRoute(
                         path: '/completeStudents/:sectionCStudentsId',
                         builder: (context, state) {
-                          final id = state.pathParameters['sectionCStudentsId']!;
-                          return CompleteStudentsView(sectionId: int.parse(id),);
+                          final id =
+                              state.pathParameters['sectionCStudentsId']!;
+                          return CompleteStudentsView(sectionId: int.parse(id));
                         },
                       ),
                       GoRoute(
                         path: '/completeTrainers/:sectionCId',
                         builder: (context, state) {
                           final id = state.pathParameters['sectionCId']!;
-                          return CompleteTrainersView(sectionId: int.parse(id),);
+                          return CompleteTrainersView(sectionId: int.parse(id));
                         },
                       ),
                       GoRoute(
-                          path: '/announcementsC/:sectionAnnCId',
-                          builder: (context, state) {
-                            final id = state.pathParameters['sectionAnnCId']!;
-                            return AnnouncementCView(sectionId: int.parse(id),);
-                          },
-                          routes: [
-                            GoRoute(
-                              path: '/announcementCDetails/:announcementCId',
-                              builder: (context, state) {
-                                final id = state.pathParameters['announcementCId']!;
-                                return AnnouncementCDetailsView(id: int.parse(id),);
-                              },
-                            ),
-                          ]
+                        path: '/announcementsC/:sectionAnnCId',
+                        builder: (context, state) {
+                          final id = state.pathParameters['sectionAnnCId']!;
+                          return AnnouncementCView(sectionId: int.parse(id));
+                        },
+                        routes: [
+                          GoRoute(
+                            path: '/announcementCDetails/:announcementCId',
+                            builder: (context, state) {
+                              final id =
+                                  state.pathParameters['announcementCId']!;
+                              return AnnouncementCDetailsView(
+                                id: int.parse(id),
+                              );
+                            },
+                          ),
+                        ],
                       ),
-                    ]
+                    ],
                   ),
-                ]
+                ],
               ),
 
               GoRoute(
@@ -321,19 +463,21 @@ class AppRouter {
                     path: '/inPreparationDetails/:id',
                     builder: (context, state) {
                       final id = state.pathParameters['id']!;
-                      return DetailsInPreparationView(sectionId: int.parse(id),);
+                      return DetailsInPreparationView(sectionId: int.parse(id));
                     },
                     routes: [
                       GoRoute(
                         path: '/inPreparationCalendar/:sectionIpCalId',
                         builder: (context, state) {
                           final id = state.pathParameters['sectionIpCalId']!;
-                          return InPreparationCalendarView(sectionId: int.parse(id),);
+                          return InPreparationCalendarView(
+                            sectionId: int.parse(id),
+                          );
                         },
                       ),
-                    ]
+                    ],
                   ),
-                ]
+                ],
               ),
 
               GoRoute(
@@ -344,10 +488,10 @@ class AppRouter {
                     path: '/detailsReport/:id',
                     builder: (context, state) {
                       final id = state.pathParameters['id']!;
-                      return DetailsReportView(id: int.parse(id),);
+                      return DetailsReportView(id: int.parse(id));
                     },
                   ),
-                ]
+                ],
               ),
 
               GoRoute(
@@ -358,7 +502,7 @@ class AppRouter {
                     path: '/complainDetails/:id',
                     builder: (context, state) {
                       final id = state.pathParameters['id']!;
-                      return ComplainDetailsView(complainId: int.parse(id),);
+                      return ComplainDetailsView(complainId: int.parse(id));
                     },
                   ),
                   GoRoute(
@@ -367,16 +511,16 @@ class AppRouter {
                       return SearchComplainView();
                     },
                   ),
-                ]
+                ],
               ),
 
               GoRoute(
                 path: '/profile',
                 builder: (context, state) => const ProfileView(),
               ),
-            ]
-          )
-        ]
+            ],
+          ),
+        ],
       ),
       GoRoute(
         path: '/verification',
@@ -386,7 +530,7 @@ class AppRouter {
             path: '/passwordReset',
             builder: (context, state) => const VerificationView(),
           ),
-        ]
+        ],
       ),
     ],
   );

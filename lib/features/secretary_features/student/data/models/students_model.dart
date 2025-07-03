@@ -1,3 +1,6 @@
+import 'package:intl/intl.dart';
+
+
 class StudentsModel {
   final String message;
   final Students students;
@@ -50,6 +53,7 @@ class Students {
   });
 
   factory Students.fromJson(Map<String, dynamic> json) => Students(
+
     currentPage: json["current_page"],
     data: List<DatumStudent>.from(json["data"].map((x) => DatumStudent.fromJson(x))),
     firstPageUrl: json["first_page_url"],
@@ -87,7 +91,7 @@ class DatumStudent {
   final String name;
   final String email;
   final String phone;
-  final String photo;
+  final String? photo;
   final DateTime birthday;
   final String gender;
   final DateTime createdAt;
@@ -100,7 +104,7 @@ class DatumStudent {
     required this.name,
     required this.email,
     required this.phone,
-    required this.photo,
+     this.photo,
     required this.birthday,
     required this.gender,
     required this.createdAt,
@@ -110,12 +114,13 @@ class DatumStudent {
   });
 
   factory DatumStudent.fromJson(Map<String, dynamic> json) => DatumStudent(
+
     id: json["id"],
     name: json["name"],
     email: json["email"],
     phone: json["phone"],
     photo: json["photo"],
-    birthday: DateTime.parse(json["birthday"]),
+    birthday: DateFormat('yyyy/M/d').parse(json['birthday'] as String),
     gender: json["gender"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),

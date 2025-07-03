@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class DetailsStudentModel {
   final String message;
   final Student student;
@@ -23,7 +25,7 @@ class Student {
   final String name;
   final String email;
   final String phone;
-  final String photo;
+  final String? photo;
   final DateTime birthday;
   final String gender;
   final DateTime createdAt;
@@ -36,7 +38,7 @@ class Student {
     required this.name,
     required this.email,
     required this.phone,
-    required this.photo,
+     this.photo,
     required this.birthday,
     required this.gender,
     required this.createdAt,
@@ -51,7 +53,7 @@ class Student {
     email: json["email"],
     phone: json["phone"],
     photo: json["photo"],
-    birthday: DateTime.parse(json["birthday"]),
+    birthday: DateFormat('yyyy/M/d').parse(json['birthday'] as String),
     gender: json["gender"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
