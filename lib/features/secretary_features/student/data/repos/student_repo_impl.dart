@@ -26,8 +26,8 @@ class StudentRepoImpl extends StudentRepo{
   Future<Either<Failure, StudentsModel>> fetchStudents({required int page}) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/secretary/student/showAllStudent?page=$page',
-        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+        endPoint: '/admin/student/showAllStudent?page=$page',
+        token: Constants.adminToken,/*await SharedPreferencesHelper.getJwtToken()*/
       ));
       log(data.toString());
       StudentsModel studentsModel;
@@ -68,7 +68,7 @@ class StudentRepoImpl extends StudentRepo{
       var data = await (dioApiService.postWithImage(
         endPoint: '/secretary/student/registrationStudent',
         data: formData,
-        token: await SharedPreferencesHelper.getJwtToken(),
+        token: await  Constants.sercToken, /*SharedPreferencesHelper.getJwtToken(),*/
       ));
       log(data.toString());
       CreateStudentModel createStudentModel;
@@ -160,7 +160,7 @@ class StudentRepoImpl extends StudentRepo{
   Future<Either<Failure, DetailsStudentModel>> fetchDetailsStudent({required int id}) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/secretary/student/showStudentById/$id',
+        endPoint: '/admin/student/showStudentById/$id',
         token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
       ));
       log(data.toString());
@@ -181,7 +181,7 @@ class StudentRepoImpl extends StudentRepo{
   Future<Either<Failure, SearchStudentModel>> fetchSearchStudent({required String querySearch, required int page}) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/secretary/student/searchStudent/$querySearch?page=$page',
+        endPoint: '/admin/student/searchStudent/$querySearch?page=$page',
         token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
       ));
       log(data.toString());

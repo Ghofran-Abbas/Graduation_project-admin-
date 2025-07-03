@@ -135,7 +135,8 @@ class _StudentsViewBodyState extends State<StudentsViewBody> {
                 showSearchField: true,
                 textFirstButton: AppLocalizations.of(context).translate('Most points'),
                 showFirstButton: true,
-                onPressedFirst: () {},
+                onPressedFirst: () {    context.go('/students/top-students');
+                },
                 onPressedSecond: () {},
                 onTapSearch: () {
                   context.go(GoRouterPath.searchStudent);

@@ -7,6 +7,11 @@ import 'core/localization/local_cubit/local_cubit.dart';
 import 'core/utils/app_router.dart';
 import 'core/utils/bloc_observer.dart';
 import 'core/utils/service_locator.dart';
+import 'features/employee/data/repos/employee_repo_impl.dart';
+import 'features/employee/presentation/manager/create_employee_cubit/create_employee_cubit.dart';
+import 'features/employee/presentation/manager/delete_employee_cubit/delete_employee_cubit.dart';
+import 'features/employee/presentation/manager/employees_cubit/employees_cubit.dart';
+import 'features/employee/presentation/manager/update_employee_cubit/update_employee_cubit.dart';
 import 'features/login/data/repos/login_secretary_repo_impl.dart';
 import 'features/login/presentation/manager/login_cubit/login_secretary_cubit.dart';
 import 'features/profile/presentaion/views/widgets/profile_view_body.dart';
@@ -78,6 +83,20 @@ class MyApp extends StatelessWidget {
             )..fetchTrainers(page: 1);
           },
         ),
+        // Employees list + create/update/delete
+  /*      BlocProvider(
+          create: (_) => EmployeesCubit(getIt.get<EmployeeRepoImpl>())..fetchEmployees(),
+        ),
+        BlocProvider(
+          create: (_) => CreateEmployeeCubit(getIt.get<EmployeeRepoImpl>()),
+        ),
+        BlocProvider(
+          create: (_) => UpdateEmployeeCubit(getIt.get<EmployeeRepoImpl>()),
+        ),
+        BlocProvider(
+          create: (_) => DeleteEmployeeCubit(getIt.get<EmployeeRepoImpl>()),
+        ),
+*/
       ],
       child: BlocBuilder<LocaleCubit, Locale>(
         builder: (context, locale) {
