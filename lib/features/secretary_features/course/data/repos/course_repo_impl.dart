@@ -412,7 +412,7 @@ class CourseRepoImpl implements CourseRepo {
   }) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/secretary/section/ShowByIdCourseSectionn/$id',
+        endPoint: '/secretary/section/ShowByIdCourseSection/$id',
         token: Constants.adminToken,
       ));
       log(data.toString());
@@ -591,7 +591,8 @@ class CourseRepoImpl implements CourseRepo {
     try {
       var data = await (dioApiService.get(
         endPoint: '/file/showAllFileInSection/$sectionId?page=$page',
-        token: await SharedPreferencesHelper.getJwtToken(),
+        //token: await SharedPreferencesHelper.getJwtToken(),
+        token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwODAvYXBpL2F1dGgvdHJhaW5lci9sb2dpbiIsImlhdCI6MTc1MDYzNzE2NywiZXhwIjoxNzUzMjI5MTY3LCJuYmYiOjE3NTA2MzcxNjcsImp0aSI6IlB4cGNHdU5Nb0lEUHBYTFIiLCJzdWIiOiI1IiwicHJ2IjoiYzcxYTdkZTE1YTc4OTkwZjkwM2RhZmRjMzdhNjlhNjQ4ODJmZDIxZCJ9.GJzQmzONI6KPXKWIC2Bq7UwRL8ZGTWjhhThliY8I2OI',
       ));
       log(data.toString());
       FilesModel filesModel;
