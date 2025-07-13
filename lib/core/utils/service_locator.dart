@@ -1,7 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../features/employee/data/repos/employee_repo_impl.dart';
+import '../../features/gifts/data/repos/gift_repo.dart';
+import '../../features/gifts/data/repos/gift_repo_impl.dart';
+import '../../features/gifts/presentation/manager/gifts_cubit/gifts_cubit.dart';
 import '../../features/login/data/repos/login_secretary_repo_impl.dart';
+import '../../features/points/data/repos/points_repo.dart';
+import '../../features/points/data/repos/points_repo_impl.dart';
+import '../../features/points/presentation/manager/top_students_cubit/top_students_cubit.dart';
+import '../../features/points/presentation/manager/update_points_cubit/update_points_cubit.dart';
 import '../../features/secretary_features/complain/data/repos/complain_repo_impl.dart';
 import '../../features/secretary_features/course/data/repos/course_repo_impl.dart';
 import '../../features/secretary_features/department/data/repos/department_repo_impl.dart';
@@ -82,4 +90,23 @@ void setupServiceLocator() {
       getIt.get<DioApiService>(),
     ),
   );
+
+  getIt.registerSingleton<EmployeeRepoImpl>(
+    EmployeeRepoImpl(
+      getIt.get<DioApiService>(),
+    ),
+  );
+
+  getIt.registerSingleton<GiftRepoImpl>(
+    GiftRepoImpl(getIt.get<DioApiService>()),
+  );
+
+  getIt.registerSingleton<PointsRepo>(
+    PointsRepoImpl(getIt<DioApiService>()),
+  );
+
+  getIt.registerSingleton<PointsRepoImpl>(
+    PointsRepoImpl(getIt<DioApiService>()),
+  );
+
 }

@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'dart:convert' show json;
+
 import 'app_localizations_delegate.dart';
 
 class AppLocalizations {
@@ -17,14 +19,16 @@ class AppLocalizations {
   Map<String, String> _localizedStrings = {};
 
   Future<void> load() async {
-    String jsonString = await rootBundle.loadString('lang/${locale.languageCode}.json');
-    Map<String, dynamic> jsonMap = json.decode(jsonString);
-    _localizedStrings = jsonMap.map<String, String>((key, value) {
-      return MapEntry(key, value.toString());
-    });
+    final jsonString = await rootBundle.loadString('lang/${locale.languageCode}.json');
+    final Map<String, dynamic> jsonMap = json.decode(jsonString);
+    _localizedStrings = jsonMap.map((k, v) => MapEntry(k, v.toString()));
   }
 
-  String translate(String key) => _localizedStrings[key]!;
+  String translate(String key) {
+    // if the map isn’t loaded yet, or the key isn’t found, fall back to the key itself
+    return _localizedStrings[key] ?? key;
+  }
 
-  bool get isEnLocale => locale.languageCode == 'ar';
+  /// should be true for English, false for Arabic
+  bool get isEnLocale => locale.languageCode == 'en';
 }

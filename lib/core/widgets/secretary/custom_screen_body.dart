@@ -5,7 +5,26 @@ import 'custom_app_bar.dart';
 
 class CustomScreenBody extends StatelessWidget {
   const CustomScreenBody({
-    super.key, required this.body, required this.title, this.showSearchField, this.textFirstButton, this.showFirstButton, this.showButtonIcon, this.textSecondButton, this.showSecondButton, required this.onPressedFirst, required this.onPressedSecond, this.widget, this.turnSearch, this.onFieldSubmitted, this.searchController, this.onTapSearch, this.showProfileAvatar,
+    super.key,
+    required this.body,
+    required this.title,
+    this.showSearchField,
+    this.textFirstButton,
+    this.showFirstButton,
+    this.showButtonIcon,
+    this.textSecondButton,
+    this.showSecondButton,
+    required this.onPressedFirst,
+    required this.onPressedSecond,
+    this.widget,
+    this.turnSearch,
+    this.onFieldSubmitted,
+    this.searchController,
+    this.onTapSearch,
+    this.showProfileAvatar,
+    this.textThirdButton,
+    this.showThirdButton,
+    this.onPressedThird,
   });
 
   final String title;
@@ -24,6 +43,9 @@ class CustomScreenBody extends StatelessWidget {
   final Function? onFieldSubmitted;
   final TextEditingController? searchController;
   final Widget? widget;
+  final String? textThirdButton;
+  final bool? showThirdButton;
+  final Function? onPressedThird;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +53,7 @@ class CustomScreenBody extends StatelessWidget {
       width: 1143.w,
       child: Stack(
         children: [
-          Container(height: 171.h,),
+          Container(height: 171.h),
           body,
           CustomAppBar(
             title: title,
@@ -44,14 +66,19 @@ class CustomScreenBody extends StatelessWidget {
             textSecondButton: textSecondButton,
             showSecondButton: showSecondButton,
             searchController: searchController,
-            onPressedFirst: (){
+            textThirdButton: textThirdButton,
+            showThirdButton: showThirdButton,
+            onPressedThird: onPressedThird,
+            onPressedFirst: () {
               onPressedFirst();
             },
-            onPressedSecond: (){
+            onPressedSecond: () {
               onPressedSecond();
             },
-            onTapSearch: () {onTapSearch!() ?? () {};},
-            onFieldSubmitted: (value){
+            onTapSearch: () {
+              onTapSearch!() ?? () {};
+            },
+            onFieldSubmitted: (value) {
               onFieldSubmitted!(value) ?? (value) {};
             },
             widget: widget,
