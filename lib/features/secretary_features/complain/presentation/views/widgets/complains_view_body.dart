@@ -63,8 +63,8 @@ class ComplainsViewBody extends StatelessWidget {
                               itemBuilder: (BuildContext context, int index) {
                                 return Align(child: InformationFieldItem(
                                   color: index % 2 != 0 ? AppColors.darkHighlightPurple : AppColors.white,
-                                  //image: state.complains.data.data![index].secretary.photo,
-                                  name: ''/*state.reports.reports.data![index].secretary.name*/,
+                                  image: state.complains.data.data![index].student.photo,
+                                  name: state.complains.data.data![index].student.name,
                                   secondText: state.complains.data.data![index].description,
                                   showSecondDetailsText: true,
                                   fifthText: handleDate(state.complains.data.data![index].createdAt),
@@ -72,7 +72,7 @@ class ComplainsViewBody extends StatelessWidget {
                                   isReportStyle: true,
                                   showIcons: true,
                                   hideFirstIcon: true,
-                                  isComplainStyle: true,
+                                  //isComplainStyle: true,
                                   onTap: () {
                                     context.go('${GoRouterPath.complains}${GoRouterPath.complainDetails}/${state.complains.data.data![index].id}');
                                   },

@@ -47,16 +47,18 @@ class ComplainDetailsViewBody extends StatelessWidget {
                         child: CustomDetailsInformation(
                           imageWidth: 176.w,
                           imageHeight: 176.w,
-                          //image: state.report.report.secretary.photo,
-                          name: ''/*state.report.report.secretary.name*/,
+                          image: state.complain.data.student.photo,
+                          name: state.complain.data.student.name,
                           showDetailsText: true,
                           showAboutText: true,
                           showFileTapText: true,
                           aboutText: state.complain.data.description,
                           onTap: () {
-                            GetFileCubit.get(context).fetchFile(
-                              filePath: state.complain.data.filePath,
-                            );
+                            if(state.complain.data.filePath!.isNotEmpty) {
+                              GetFileCubit.get(context).fetchFile(
+                                filePath: state.complain.data.filePath!,
+                              );
+                            }
                           },
                         ),
                       ),

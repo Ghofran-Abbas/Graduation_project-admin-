@@ -151,6 +151,7 @@ class CourseDetailsViewBody extends StatelessWidget {
                             if (stateSec is SelectSectionSuccess) {
                               TrainersSectionCubit.get(context).fetchTrainersSection(id: stateSec.section.id, page: 1);
                               StudentsSectionCubit.get(context).fetchStudentsSection(id: stateSec.section.id, page: 1);
+                              FilesCubit.get(context).fetchFiles(sectionId: stateSec.section.id, page: 1);
                             }
                           },
                           builder: (contextSec, stateSec) {
