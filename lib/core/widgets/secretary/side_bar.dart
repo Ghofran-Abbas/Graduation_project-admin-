@@ -56,6 +56,8 @@ class SideBar extends StatelessWidget {
                         SideBarItem(name: AppLocalizations.of(context).translate('Students'), icon: Icons.person_outline_outlined, route: GoRouterPath.students, color: AppColors.purple,),
                         SideBarItem(name: AppLocalizations.of(context).translate('Trainers'), icon: Icons.perm_identity, route: GoRouterPath.trainers, color: AppColors.purple,),
                         SideBarItem(name: AppLocalizations.of(context).translate('Employee'), icon: Icons.perm_identity, route: GoRouterPath.employees, color: AppColors.purple,),
+                        SideBarItem(name: AppLocalizations.of(context).translate('In preparation'), icon: Icons.school_outlined, route: GoRouterPath.inPreparation, color: AppColors.purple,),
+                        SideBarItem(name: AppLocalizations.of(context).translate('Complete'), icon: Icons.check_circle_outline, route: GoRouterPath.complete, color: AppColors.purple,),
                         SideBarItem(name: AppLocalizations.of(context).translate('Announcement'), icon: Icons.announcement_outlined, route: GoRouterPath.reports, color: AppColors.purple,),
                         SideBarItem(name: AppLocalizations.of(context).translate('Reports'), icon: Icons.insert_chart, route: GoRouterPath.reports, color: AppColors.purple,),
                         SideBarItem(name: AppLocalizations.of(context).translate('Complains'), icon: Icons.mail_outlined, route: GoRouterPath.complains, color: AppColors.purple,),

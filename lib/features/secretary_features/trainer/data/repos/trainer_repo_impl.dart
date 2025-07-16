@@ -8,6 +8,7 @@ import '../../../../../constants.dart';
 import '../../../../../core/errors/failure.dart';
 import '../../../../../core/utils/api_service.dart';
 import '../../../../../core/utils/shared_preferences_helper.dart';
+import '../models/archive_section_trainer_model.dart';
 import '../models/create_trainer_model.dart';
 import '../models/delete_trainer_model.dart';
 import '../models/details_trainer_model.dart';
@@ -71,7 +72,7 @@ class TrainerRepoImpl extends TrainerRepo{
     try {
       var data = await (dioApiService.get(
         endPoint: '/admin/trainer/showAllTrainer?page=$page',
-        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+        token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       TrainersModel trainersModel;
@@ -167,7 +168,7 @@ class TrainerRepoImpl extends TrainerRepo{
     try {
       var data = await (dioApiService.get(
         endPoint: '/admin/trainer/showTrainerById/$id',
-        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+        token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       DetailsTrainerModel detailsTrainerModel;
@@ -188,13 +189,34 @@ class TrainerRepoImpl extends TrainerRepo{
     try {
       var data = await (dioApiService.get(
         endPoint: '/admin/trainer/searchTrainer/$querySearch?page=$page',
-        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+        token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       SearchTrainerModel searchTrainerModel;
       searchTrainerModel = SearchTrainerModel.fromJson(data);
 
       return right(searchTrainerModel);
+    } catch (e) {
+      if (e is DioException){
+        return left(ServerFailure.fromDioError(e),);
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ArchiveSectionTrainerModel>> fetchArchiveTrainer({required int id, required int page}) async {
+    try {
+      var data = await (dioApiService.get(
+        endPoint: '/secretary/section/getTrainerArchive/$id?page=$page',
+        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+      ));
+      log(data.toString());
+      ArchiveSectionTrainerModel archiveSectionTrainerModel;
+      archiveSectionTrainerModel = ArchiveSectionTrainerModel.fromJson(data);
+
+      return right(archiveSectionTrainerModel);
+
     } catch (e) {
       if (e is DioException){
         return left(ServerFailure.fromDioError(e),);

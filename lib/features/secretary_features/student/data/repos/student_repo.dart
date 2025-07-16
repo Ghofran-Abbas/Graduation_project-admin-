@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:dartz/dartz.dart';
 
 import '../../../../../core/errors/failure.dart';
+import '../models/archive_section_student_model.dart';
 import '../models/create_student_model.dart';
 import '../models/delete_student_model.dart';
 import '../models/details_student_model.dart';
@@ -41,4 +42,6 @@ abstract class StudentRepo {
   });
 
   Future<Either<Failure, SearchStudentModel>> fetchSearchStudent({required String querySearch, required int page});
+
+  Future<Either<Failure, ArchiveSectionStudentModel>> fetchArchiveStudent({required int id, required int page});
 }

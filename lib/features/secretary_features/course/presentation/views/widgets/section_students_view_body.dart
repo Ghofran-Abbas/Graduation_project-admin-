@@ -23,8 +23,9 @@ import '../../manager/reservation_students_section_cubit/reservation_students_se
 import '../../manager/students_section_cubit/students_section_cubit.dart';
 
 class SectionStudentsViewBody extends StatelessWidget {
-  const SectionStudentsViewBody({super.key, required this.sectionId});
+  const SectionStudentsViewBody({super.key, required this.sectionId, required this.departmentId});
 
+  final int departmentId;
   final int sectionId;
 
   @override

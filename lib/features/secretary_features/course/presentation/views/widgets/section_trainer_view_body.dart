@@ -24,7 +24,10 @@ import '../../manager/trainers_section_cubit/trainers_section_cubit.dart';
 import '../../manager/trainers_section_cubit/trainers_section_state.dart';
 
 class SectionTrainerViewBody extends StatelessWidget {
-  const SectionTrainerViewBody({super.key});
+  const SectionTrainerViewBody({super.key, required this.departmentId, required this.sectionId});
+
+  final int departmentId;
+  final int sectionId;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +87,7 @@ class SectionTrainerViewBody extends StatelessWidget {
                                   thirdDetailsText: state.trainers.trainers![0].trainers![index].email,
                                   fourthDetailsText: state.trainers.trainers![0].trainers![index].gender,
                                   onTap: () {
-                                    context.go('${GoRouterPath.trainerDetails}/${state.trainers.trainers![0].trainers![index].id}');
+                                    context.go('${GoRouterPath.courses}/$departmentId${GoRouterPath.courseDetails}/${state.trainers.trainers![0].courseId}${GoRouterPath.sectionTrainers}/$departmentId/${state.trainers.trainers![0].id}${GoRouterPath.detailsSectionTrainer}/$departmentId/${state.trainers.trainers![0].courseId}/${state.trainers.trainers![0].id}/${state.trainers.trainers![0].trainers![index].id}');
                                   },
                                   onTapFirstIcon: () {},
                                   onTapSecondIcon: () {},

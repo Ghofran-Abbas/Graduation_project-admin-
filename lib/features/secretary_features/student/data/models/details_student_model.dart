@@ -53,7 +53,7 @@ class Student {
     email: json["email"],
     phone: json["phone"],
     photo: json["photo"],
-    birthday: DateFormat('yyyy/M/d').parse(json['birthday'] as String),
+    birthday: DateTime.parse(json["birthday"]),
     gender: json["gender"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),

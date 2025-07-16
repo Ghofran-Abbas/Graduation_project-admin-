@@ -30,5 +30,5 @@ class AppLocalizations {
   }
 
   /// should be true for English, false for Arabic
-  bool get isEnLocale => locale.languageCode == 'en';
+  bool get isEnLocale => locale.languageCode == 'ar';
 }

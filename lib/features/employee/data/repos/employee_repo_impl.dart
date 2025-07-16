@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/utils/api_service.dart';
+import '../../../../core/utils/shared_preferences_helper.dart';
 import '../models/create_employee_model.dart';
 import '../models/details_employee_model.dart';
 import '../models/employees_model.dart';
@@ -26,6 +27,7 @@ class EmployeeRepoImpl implements EmployeeRepo {
     // include the page query
     final resp = await _api.get(
       endPoint: '/admin/employee/showAllEmployees?page=$page',
+      token: await SharedPreferencesHelper.getJwtToken()
     );
     // parse into your new wrapper
     return EmployeesPage.fromJson(resp);
@@ -34,7 +36,10 @@ class EmployeeRepoImpl implements EmployeeRepo {
 
   @override
   Future<EmployeeDetail> fetchById(int id) async {
-    final resp = await _api.get(endPoint: '/admin/employee/showEmployeeById/$id');
+    final resp = await _api.get(
+        endPoint: '/admin/employee/showEmployeeById/$id',
+        token: await SharedPreferencesHelper.getJwtToken()
+    );
     // parse with our new model:
     final details = DetailsEmployeeModel.fromJson(resp);
     return details.employee;
@@ -42,14 +47,20 @@ class EmployeeRepoImpl implements EmployeeRepo {
   @override
   Future<List<Employee>> search(String query) async {
     final resp =
-    await _api.get(endPoint: '/admin/employee/searchEmployee/$query');
+    await _api.get(
+        endPoint: '/admin/employee/searchEmployee/$query',
+        token: await SharedPreferencesHelper.getJwtToken()
+    );
     final items = resp['Employees']['data'] as List;
     return items.map((e) => Employee.fromJson(e)).toList();
   }
 
   @override
   Future<void> delete(int id) async {
-    await _api.post(endPoint: '/admin/employee/deleteEmployee/$id', data: null);
+    await _api.post(
+        endPoint: '/admin/employee/deleteEmployee/$id',
+        token: await SharedPreferencesHelper.getJwtToken(),
+        data: null);
   }
 
   @override
@@ -87,6 +98,7 @@ class EmployeeRepoImpl implements EmployeeRepo {
 
       final respData = await _api.postWithImage(
         endPoint: '/admin/employee/updateEmployee/$id',
+        token: await SharedPreferencesHelper.getJwtToken(),
         data: form,
       );
       debugPrint('✅ UPDATE response → $respData');
@@ -145,6 +157,7 @@ class EmployeeRepoImpl implements EmployeeRepo {
 
       final respData = await _api.postWithImage(
         endPoint: '/admin/employee/addEmployee',
+        token: await SharedPreferencesHelper.getJwtToken(),
         data: form,
       );
 
@@ -203,6 +216,7 @@ class EmployeeRepoImpl implements EmployeeRepo {
 
       final respData = await _api.postWithImage(
         endPoint: '/admin/secretary/registrationSecretary',
+        token: await SharedPreferencesHelper.getJwtToken(),
         data: form,
       );
 
@@ -232,6 +246,7 @@ class EmployeeRepoImpl implements EmployeeRepo {
     try {
       final data = await _api.get(
         endPoint: '/admin/employee/searchEmployee/$querySearch?page=$page',
+          token: await SharedPreferencesHelper.getJwtToken()
       );
       final model = SearchEmployeeModel.fromJson(data);
       return right(model);

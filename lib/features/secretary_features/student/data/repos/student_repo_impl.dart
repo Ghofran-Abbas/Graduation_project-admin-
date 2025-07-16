@@ -9,6 +9,7 @@ import '../../../../../constants.dart';
 import '../../../../../core/errors/failure.dart';
 import '../../../../../core/utils/api_service.dart';
 import '../../../../../core/utils/shared_preferences_helper.dart';
+import '../models/archive_section_student_model.dart';
 import '../models/create_student_model.dart';
 import '../models/delete_student_model.dart';
 import '../models/details_student_model.dart';
@@ -27,7 +28,7 @@ class StudentRepoImpl extends StudentRepo{
     try {
       var data = await (dioApiService.get(
         endPoint: '/admin/student/showAllStudent?page=$page',
-        token: Constants.adminToken,/*await SharedPreferencesHelper.getJwtToken()*/
+        token: await SharedPreferencesHelper.getJwtToken()
       ));
       log(data.toString());
       StudentsModel studentsModel;
@@ -161,7 +162,7 @@ class StudentRepoImpl extends StudentRepo{
     try {
       var data = await (dioApiService.get(
         endPoint: '/admin/student/showStudentById/$id',
-        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+        token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       DetailsStudentModel detailsStudentModel;
@@ -182,13 +183,34 @@ class StudentRepoImpl extends StudentRepo{
     try {
       var data = await (dioApiService.get(
         endPoint: '/admin/student/searchStudent/$querySearch?page=$page',
-        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+        token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       SearchStudentModel searchStudentModel;
       searchStudentModel = SearchStudentModel.fromJson(data);
 
       return right(searchStudentModel);
+    } catch (e) {
+      if (e is DioException){
+        return left(ServerFailure.fromDioError(e),);
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ArchiveSectionStudentModel>> fetchArchiveStudent({required int id, required int page}) async {
+    try {
+      var data = await (dioApiService.get(
+        endPoint: '/secretary/section/getStudentArchive/$id?page=$page',
+        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+      ));
+      log(data.toString());
+      ArchiveSectionStudentModel archiveSectionStudentModel;
+      archiveSectionStudentModel = ArchiveSectionStudentModel.fromJson(data);
+
+      return right(archiveSectionStudentModel);
+
     } catch (e) {
       if (e is DioException){
         return left(ServerFailure.fromDioError(e),);
