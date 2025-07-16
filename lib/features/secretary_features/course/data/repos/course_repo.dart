@@ -3,8 +3,11 @@ import 'dart:typed_data';
 import 'package:dartz/dartz.dart';
 
 import '../../../../../core/errors/failure.dart';
+import '../../../complete_course/data/models/complete_model.dart';
+import '../../../in_preparation_course/data/models/in_preparation_model.dart';
 import '../models/add_section_student_model.dart';
 import '../models/add_section_trainer_model.dart';
+import '../models/all_courses_model.dart';
 import '../models/confirmed_students_section_model.dart';
 import '../models/courses_model.dart';
 import '../models/create_course_model.dart';
@@ -17,8 +20,11 @@ import '../models/details_section_model.dart';
 import '../models/files_model.dart';
 import '../models/reservation_students_section_model.dart';
 import '../models/search_course_model.dart';
+import '../models/section_progress_model.dart';
+import '../models/section_rating_model.dart';
 import '../models/sections_model.dart';
 import '../models/students_section_model.dart';
+import '../models/trainer_rating_model.dart';
 import '../models/trainers_section_model.dart';
 import '../models/update_course_model.dart';
 import '../models/update_section_model.dart';
@@ -55,6 +61,7 @@ abstract class CourseRepo {
 
   Future<Either<Failure, SectionsModel>> fetchSections({
     required int id,
+    required int page,
   });
 
   Future<Either<Failure, CreateSectionModel>> fetchCreateSection({
@@ -122,4 +129,16 @@ abstract class CourseRepo {
   });
 
   Future<Either<Failure, FilesModel>> fetchFiles({required int sectionId, required int page});
+
+  Future<Either<Failure, SectionRatingModel>> fetchSectionRating({required int sectionId});
+
+  Future<Either<Failure, TrainerRatingModel>> fetchTrainerRating({required int trainerId, required int sectionId});
+
+  Future<Either<Failure, InPreparationModel>> fetchPendingSection({required int courseId, required int page});
+
+  Future<Either<Failure, AllCoursesModel>> fetchAllCourses({required int page});
+
+  Future<Either<Failure, SectionProgressModel>> fetchSectionProgress({required int sectionId});
+
+  Future<Either<Failure, CompleteModel>> fetchFinishedSection({required int courseId, required int page});
 }

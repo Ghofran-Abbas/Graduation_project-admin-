@@ -75,7 +75,7 @@ import '../custom_image_network.dart';
 
 class CustomCard extends StatelessWidget {
   const CustomCard({
-    super.key, this.width, this.height, this.color, this.image, this.imageWidth, this.imageHeight, this.imageBorderRadius, this.heightProfileText, required this.text, this.textColor, this.showDetailsText, this.detailsText, this.detailsTextColor, this.showSecondDetailsText, this.secondDetailsText, this.secondDetailsTextColor, this.showIcons, this.heightTextIcon, this.leftIcon, this.rightIcon, required this.onTap, this.showRating, this.ratingIcon, this.ratingIconColor, this.ratingIconSize, this.ratingText, this.ratingTextColor, this.showCheckEndCourse, required this.onTapFirstIcon, required this.onTapSecondIcon,
+    super.key, this.width, this.height, this.color, this.image, this.imageWidth, this.imageHeight, this.imageBorderRadius, this.heightProfileText, required this.text, this.textColor, this.showDetailsText, this.detailsText, this.detailsTextColor, this.showSecondDetailsText, this.secondDetailsText, this.secondDetailsTextColor, this.showIcons, this.heightTextIcon, this.leftIcon, this.rightIcon, required this.onTap, this.showRating, this.ratingIcon, this.ratingIconColor, this.ratingIconSize, this.ratingText, this.ratingTextColor, this.showCheckEndCourse, required this.onTapFirstIcon, required this.onTapSecondIcon, this.dateText, this.showDate,
   });
 
   final double? width;
@@ -106,6 +106,8 @@ class CustomCard extends StatelessWidget {
   final String? ratingText;
   final Color? ratingTextColor;
   final bool? showCheckEndCourse;
+  final String? dateText;
+  final bool? showDate;
   final Function onTapFirstIcon;
   final Function onTapSecondIcon;
 
@@ -195,6 +197,15 @@ class CustomCard extends StatelessWidget {
                     ),
                   ),
                 ],
+              ) : SizedBox(width: 0, height: 0,),
+              SizedBox(height: showDate ?? false ? 20.08.h : 0.0,),
+              showDate ?? false ? Expanded(
+                child: Text(
+                  dateText ?? '',
+                  style: Styles.b2Normal(color: textColor ?? AppColors.t1),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ) : SizedBox(width: 0, height: 0,),
               //Action icons
               SizedBox(height: showDetailsText ?? false ? 15.08.h : 20.0.h,),

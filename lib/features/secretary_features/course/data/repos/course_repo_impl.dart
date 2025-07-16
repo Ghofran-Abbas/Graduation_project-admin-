@@ -9,8 +9,11 @@ import '../../../../../constants.dart';
 import '../../../../../core/errors/failure.dart';
 import '../../../../../core/utils/api_service.dart';
 import '../../../../../core/utils/shared_preferences_helper.dart';
+import '../../../complete_course/data/models/complete_model.dart';
+import '../../../in_preparation_course/data/models/in_preparation_model.dart';
 import '../models/add_section_student_model.dart';
 import '../models/add_section_trainer_model.dart';
+import '../models/all_courses_model.dart';
 import '../models/confirmed_students_section_model.dart';
 import '../models/courses_model.dart';
 import '../models/create_course_model.dart';
@@ -23,8 +26,11 @@ import '../models/details_section_model.dart';
 import '../models/files_model.dart';
 import '../models/reservation_students_section_model.dart';
 import '../models/search_course_model.dart';
+import '../models/section_progress_model.dart';
+import '../models/section_rating_model.dart';
 import '../models/sections_model.dart';
 import '../models/students_section_model.dart';
+import '../models/trainer_rating_model.dart';
 import '../models/trainers_section_model.dart';
 import '../models/update_course_model.dart';
 import '../models/update_section_model.dart';
@@ -199,10 +205,11 @@ class CourseRepoImpl implements CourseRepo {
   @override
   Future<Either<Failure, SectionsModel>> fetchSections({
     required int id,
+    required int page,
   }) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/secretary/section/showAllCourseSection/$id',
+        endPoint: '/secretary/section/showAllCourseSection/$id?page=$page',
         token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
       ));
       log(data.toString());
@@ -592,13 +599,133 @@ class CourseRepoImpl implements CourseRepo {
       var data = await (dioApiService.get(
         endPoint: '/file/showAllFileInSection/$sectionId?page=$page',
         //token: await SharedPreferencesHelper.getJwtToken(),
-        token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwODAvYXBpL2F1dGgvdHJhaW5lci9sb2dpbiIsImlhdCI6MTc1MDYzNzE2NywiZXhwIjoxNzUzMjI5MTY3LCJuYmYiOjE3NTA2MzcxNjcsImp0aSI6IlB4cGNHdU5Nb0lEUHBYTFIiLCJzdWIiOiI1IiwicHJ2IjoiYzcxYTdkZTE1YTc4OTkwZjkwM2RhZmRjMzdhNjlhNjQ4ODJmZDIxZCJ9.GJzQmzONI6KPXKWIC2Bq7UwRL8ZGTWjhhThliY8I2OI',
+        token: Constants.trainerToken,
       ));
       log(data.toString());
       FilesModel filesModel;
       filesModel = FilesModel.fromJson(data);
 
       return right(filesModel);
+    } catch (e) {
+      if (e is DioException){
+        return left(ServerFailure.fromDioError(e),);
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, TrainerRatingModel>> fetchTrainerRating({required int trainerId, required int sectionId}) async {
+    try {
+      var data = await (dioApiService.get(
+        endPoint: '/trainer-rating/$trainerId/section/$sectionId/ratings',
+        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+      ));
+      log(data.toString());
+      TrainerRatingModel trainerRatingModel;
+      trainerRatingModel = TrainerRatingModel.fromJson(data);
+
+      return right(trainerRatingModel);
+    } catch (e) {
+      if (e is DioException){
+        return left(ServerFailure.fromDioError(e),);
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SectionRatingModel>> fetchSectionRating({required int sectionId}) async {
+    try {
+      var data = await (dioApiService.get(
+        endPoint: '/section-rating/$sectionId/ratings',
+        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+      ));
+      log(data.toString());
+      SectionRatingModel sectionRatingModel;
+      sectionRatingModel = SectionRatingModel.fromJson(data);
+
+      return right(sectionRatingModel);
+    } catch (e) {
+      if (e is DioException){
+        return left(ServerFailure.fromDioError(e),);
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, InPreparationModel>> fetchPendingSection({required int courseId, required int page}) async {
+    try {
+      var data = await (dioApiService.get(
+        endPoint: '/section/showAllCourseSectionIsPending/$courseId/?page=$page',
+        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+      ));
+      log(data.toString());
+      InPreparationModel inPreparationModel;
+      inPreparationModel = InPreparationModel.fromJson(data);
+
+      return right(inPreparationModel);
+    } catch (e) {
+      if (e is DioException){
+        return left(ServerFailure.fromDioError(e),);
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AllCoursesModel>> fetchAllCourses({required int page}) async {
+    try {
+      var data = await (dioApiService.get(
+        endPoint: '/secretary/courses?page=$page',
+        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+      ));
+      log(data.toString());
+      AllCoursesModel allCoursesModel;
+      allCoursesModel = AllCoursesModel.fromJson(data);
+
+      return right(allCoursesModel);
+    } catch (e) {
+      if (e is DioException){
+        return left(ServerFailure.fromDioError(e),);
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SectionProgressModel>> fetchSectionProgress({required int sectionId}) async {
+    try {
+      var data = await (dioApiService.get(
+        endPoint: '/course-sections/$sectionId/progress',
+        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+      ));
+      log(data.toString());
+      SectionProgressModel sectionProgressModel;
+      sectionProgressModel = SectionProgressModel.fromJson(data);
+
+      return right(sectionProgressModel);
+    } catch (e) {
+      if (e is DioException){
+        return left(ServerFailure.fromDioError(e),);
+      }
+      return left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CompleteModel>> fetchFinishedSection({required int courseId, required int page}) async {
+    try {
+      var data = await (dioApiService.get(
+        endPoint: '/section/showAllCourseSectionIsPending/$courseId/?page=$page',
+        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+      ));
+      log(data.toString());
+      CompleteModel completeModel;
+      completeModel = CompleteModel.fromJson(data);
+
+      return right(completeModel);
     } catch (e) {
       if (e is DioException){
         return left(ServerFailure.fromDioError(e),);

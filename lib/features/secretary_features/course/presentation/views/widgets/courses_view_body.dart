@@ -172,147 +172,40 @@ class _CoursesViewBodyState extends State<CoursesViewBody> {
                                       left: 47.0.w,
                                       right: 47.0.w,
                                       bottom: 27.0.h),
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      top: 40.h, right: 47.0.w,),
-                                    child: DefaultTabController(
-                                      length: 3,
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                            height: 70.h,
-                                            child: TabBar(
-                                              labelColor: AppColors
-                                                  .blue,
-                                              unselectedLabelColor: AppColors
-                                                  .blue,
-                                              indicator: BoxDecoration(
-                                                shape: BoxShape
-                                                    .circle,
-                                                color: AppColors
-                                                    .darkBlue,
-                                              ),
-                                              indicatorPadding: EdgeInsets
-                                                  .only(
-                                                  top: 48.r,
-                                                  bottom: 12.r),
-                                              indicatorWeight: 20,
-                                              labelStyle: TextStyle(
-                                                  fontSize: 20.sp,
-                                                  fontWeight: FontWeight
-                                                      .bold),
-                                              unselectedLabelStyle: TextStyle(
-                                                  fontWeight: FontWeight
-                                                      .normal),
-                                              tabs: [
-                                                Tab(text: AppLocalizations.of(context).translate('         Active         '),),
-                                                Tab(text: AppLocalizations.of(context).translate('In preparation')),
-                                                Tab(text: AppLocalizations.of(context).translate('        Complete        '),),
-
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 592.23.h,
-                                            child: TabBarView(
-                                              children: [
-                                                SingleChildScrollView(
-                                                  physics: BouncingScrollPhysics(),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      state.courses.courses.data!.isNotEmpty ? GridView.builder(
-                                                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: crossAxisCount, crossAxisSpacing: 10.w, mainAxisExtent: 354.66.h),
-                                                        itemBuilder: (BuildContext context, int index) {
-                                                          return Align(child: CustomCard(
-                                                            image: state.courses.courses.data![index].photo,
-                                                            text: state.courses.courses.data![index].name,
-                                                            onTap: () {
-                                                              context.go('${GoRouterPath.courses}/${stateD.showResult.department.id}${GoRouterPath.courseDetails}/${state.courses.courses.data![index].id}');
-                                                            },
-                                                            onTapFirstIcon: () {},
-                                                            onTapSecondIcon: (){},
-                                                          ));
-                                                        },
-                                                        itemCount: state.courses.courses.data!.length,
-                                                        shrinkWrap: true,
-                                                        physics: NeverScrollableScrollPhysics(),
-                                                      ) : CustomEmptyWidget(
-                                                        firstText: AppLocalizations.of(context).translate('No active courses at this time'),
-                                                        secondText: AppLocalizations.of(context).translate('Courses will appear here after they enroll in your institute.'),
-                                                      ),
-                                                      CustomNumberPagination(
-                                                        numberPages: state.courses.courses.lastPage,
-                                                        initialPage: state.courses.courses.currentPage,
-                                                        onPageChange: (int index) {
-                                                          context.read<CoursesCubit>().fetchCourses(departmentId: state.courses.courses.data![index].departmentId, page: index + 1);
-                                                        },
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                SingleChildScrollView(
-                                                  physics: BouncingScrollPhysics(),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      GridView.builder(
-                                                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: crossAxisCount, crossAxisSpacing: 10.w, mainAxisExtent: 354.66.h),
-                                                        itemBuilder: (BuildContext context, int index) {
-                                                          return Align(child: CustomCard(
-                                                            text: 'Video Editing',
-                                                            detailsText: 'Section 1',
-                                                            secondDetailsText: 'Media & Pro',
-                                                            showDetailsText: true,
-                                                            onTap: (){context.go('${GoRouterPath.inPreparationDetails}/1');},
-                                                            onTapFirstIcon: (){},
-                                                            onTapSecondIcon: (){},
-                                                          ));
-                                                        },
-                                                        itemCount: 20,
-                                                        shrinkWrap: true,
-                                                        physics: NeverScrollableScrollPhysics(),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                SingleChildScrollView(
-                                                  physics: BouncingScrollPhysics(),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      GridView.builder(
-                                                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: crossAxisCount, crossAxisSpacing: 10.w, mainAxisExtent: 354.66.h),
-                                                        itemBuilder: (BuildContext context, int index) {
-                                                          return Align(child: CustomCard(
-                                                            text: 'Video Editing',
-                                                            detailsText: 'Section 1',
-                                                            secondDetailsText: 'Media & Pro',
-                                                            showDetailsText: true,
-                                                            showRating: true,
-                                                            showCheckEndCourse: true,
-                                                            ratingText: '2.8',
-                                                            ratingIcon: Icons.star,
-                                                            onTap: (){context.go('${GoRouterPath.completeDetails}/1');},
-                                                            onTapFirstIcon: (){},
-                                                            onTapSecondIcon: (){},
-                                                          ));
-                                                        },
-                                                        itemCount: 20,
-                                                        shrinkWrap: true,
-                                                        physics: NeverScrollableScrollPhysics(),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                  child: SingleChildScrollView(
+                                    physics: BouncingScrollPhysics(),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        state.courses.courses.data!.isNotEmpty ? GridView.builder(
+                                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: crossAxisCount, crossAxisSpacing: 10.w, mainAxisExtent: 354.66.h),
+                                          itemBuilder: (BuildContext context, int index) {
+                                            return Align(child: CustomCard(
+                                              image: state.courses.courses.data![index].photo,
+                                              text: state.courses.courses.data![index].name,
+                                              onTap: () {
+                                                context.go('${GoRouterPath.courses}/${stateD.showResult.department.id}${GoRouterPath.courseDetails}/${state.courses.courses.data![index].id}');
+                                              },
+                                              onTapFirstIcon: () {},
+                                              onTapSecondIcon: (){},
+                                            ));
+                                          },
+                                          itemCount: state.courses.courses.data!.length,
+                                          shrinkWrap: true,
+                                          physics: NeverScrollableScrollPhysics(),
+                                        ) : CustomEmptyWidget(
+                                          firstText: AppLocalizations.of(context).translate('No active courses at this time'),
+                                          secondText: AppLocalizations.of(context).translate('Courses will appear here after they enroll in your institute.'),
+                                        ),
+                                        CustomNumberPagination(
+                                          numberPages: state.courses.courses.lastPage,
+                                          initialPage: state.courses.courses.currentPage,
+                                          onPageChange: (int index) {
+                                            context.read<CoursesCubit>().fetchCourses(departmentId: state.courses.courses.data![index].departmentId, page: index + 1);
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),

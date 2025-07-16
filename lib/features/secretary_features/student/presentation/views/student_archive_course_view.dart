@@ -5,6 +5,8 @@ import '../../../../../core/utils/service_locator.dart';
 import '../../../course/data/repos/course_repo_impl.dart';
 import '../../../course/presentation/manager/students_section_cubit/students_section_cubit.dart';
 import '../../../course/presentation/manager/trainers_section_cubit/trainers_section_cubit.dart';
+import '../../data/repos/student_repo_impl.dart';
+import '../manager/archive_section_student_cubit/archive_section_student_cubit.dart';
 import 'widgets/student_archive_course_view_body.dart';
 
 class StudentArchiveCourseView extends StatelessWidget {
@@ -30,8 +32,15 @@ class StudentArchiveCourseView extends StatelessWidget {
             );
           },
         ),
+        BlocProvider(
+          create: (context) {
+            return ArchiveStudentCubit(
+              getIt.get<StudentRepoImpl>(),
+            )..fetchArchiveStudent(id: studentId, page: 1);
+          },
+        ),
       ],
-      child: StudentArchiveCourseViewBody(),
+      child: StudentArchiveCourseViewBody(studentId: studentId,),
     );
   }
 }

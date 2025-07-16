@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../../../core/utils/api_service.dart';
+import '../../../../core/utils/shared_preferences_helper.dart';
 import '../models/gift_model.dart';
 import 'gift_repo.dart';
 
@@ -27,13 +28,16 @@ class GiftRepoImpl implements GiftRepo {
     if (secretaryId != null) parts.add('secretary_id=$secretaryId');
     final query = parts.join('&');
 
-    final resp = await _api.get(endPoint: '/admin/gifts?$query');
+    final resp = await _api.get(
+        endPoint: '/admin/gifts?$query',
+        token: await SharedPreferencesHelper.getJwtToken()
+    );
     return GiftsPage.fromJson(resp);
   }
 
   @override
   Future<Gift> fetchById(int id) async {
-    final resp = await _api.get(endPoint: '/admin/gifts/$id');
+    final resp = await _api.get(endPoint: '/admin/gifts/$id', token: await SharedPreferencesHelper.getJwtToken());
     return Gift.fromJson(resp['gift'] as Map<String, dynamic>);
   }
 
@@ -69,6 +73,7 @@ class GiftRepoImpl implements GiftRepo {
 
       final resp = await _api.postWithImage(
         endPoint: '/admin/gifts',
+        token: await SharedPreferencesHelper.getJwtToken(),
         data: form,
       );
       debugPrint('✅ CREATE response → $resp');
@@ -122,6 +127,7 @@ class GiftRepoImpl implements GiftRepo {
 
       final resp = await _api.postWithImage(
         endPoint: '/admin/gifts/$id',
+        token: await SharedPreferencesHelper.getJwtToken(),
         data: form,
       );
       debugPrint('✅ UPDATE response → $resp');
@@ -147,7 +153,7 @@ class GiftRepoImpl implements GiftRepo {
   Future<Either<Failure, Unit>> delete(int id) async {
     try {
       debugPrint('📡 DELETE → /admin/gifts/$id');
-      await _api.delete(endPoint: '/admin/gifts/$id', data: null);
+      await _api.delete(endPoint: '/admin/gifts/$id', token: await SharedPreferencesHelper.getJwtToken(), data: null);
       debugPrint('✅ DELETE succeeded for id=$id');
       return right(unit);
     } on DioException catch (e, st) {
