@@ -99,7 +99,7 @@ class Datum {
     required this.id,
     required this.studentId,
     required this.description,
-    required this.filePath,
+    this.filePath,
     required this.createdAt,
     required this.updatedAt,
     required this.student,

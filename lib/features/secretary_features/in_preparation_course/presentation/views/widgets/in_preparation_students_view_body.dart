@@ -42,7 +42,6 @@ class InPreparationStudentsViewBody extends StatelessWidget {
                   child: CustomScreenBody(
                     title: 'Students',
                     textSecondButton: AppLocalizations.of(context).translate('Add student'),
-                    showSecondButton: true,
                     onPressedFirst: () {},
                     onPressedSecond: () {
                       context.go('${GoRouterPath.inPreparationDetails}/${stateCS.confirmedStudents.students.data![0].id}${GoRouterPath.inPreparationStudents}/${stateCS.confirmedStudents.students.data![0].id}${GoRouterPath.searchStudentIp}/${stateCS.confirmedStudents.students.data![0].id}');
@@ -83,8 +82,6 @@ class InPreparationStudentsViewBody extends StatelessWidget {
                                         fifthText: 'Confirmed',
                                         showFifthDetailsText: true,
                                         fifthTextColor: AppColors.mintGreen,
-                                        showIcons: true,
-                                        hideFirstIcon: true,
                                         onTap: () {
                                           context.go('${GoRouterPath.studentDetails}/${stateCS.confirmedStudents.students.data![0].students![index].id}');
                                         },

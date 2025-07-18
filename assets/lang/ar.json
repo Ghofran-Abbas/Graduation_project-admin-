@@ -254,6 +254,9 @@
   "No complains at this time": "No complains at this time",
   "Complains will appear here after they enroll in your institute.": "Complains will appear here after they enroll in your institute.",
 
+  "No files in this section at this time": "No files in this section at this time",
+  "Files will appear here after they add to the section.": "Files will appear here after they add to the section.",
+
 
   "Click to see Kristin’s awards": "Click to see Kristin’s awards",
   "DetailsSectionFailure": "Failed to load week days. Please try again later",
@@ -266,6 +269,8 @@
 
 
   "Sessions number": "Sessions number",
+
+  "Rating": "Rating",
 
   "Put Trainer translation under this line": "******************************************"
 }
