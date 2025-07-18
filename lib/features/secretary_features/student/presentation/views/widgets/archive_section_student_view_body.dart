@@ -283,7 +283,6 @@ class ArchiveSectionStudentViewBody extends StatelessWidget {
                                                                           );
                                                                         }
                                                                     ),
-                                                                    Container(),
                                                                   ],
                                                                 ),
                                                               ),

@@ -281,7 +281,6 @@ class ArchiveSectionTrainerViewBody extends StatelessWidget {
                                                                       );
                                                                     }
                                                                 ),
-                                                                Container(),
                                                               ],
                                                             ),
                                                           ),

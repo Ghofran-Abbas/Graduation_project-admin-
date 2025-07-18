@@ -42,7 +42,9 @@ import '../../manager/trainers_section_cubit/trainers_section_state.dart';
 
 
 class CourseDetailsViewBody extends StatelessWidget {
-  const CourseDetailsViewBody({super.key});
+  const CourseDetailsViewBody({super.key, required this.courseId});
+
+  final int courseId;
 
   @override
   Widget build(BuildContext context) {
@@ -61,91 +63,119 @@ class CourseDetailsViewBody extends StatelessWidget {
                 builder: (context, state) {
                   if (state is SectionsSuccess) {
                     final List<DatumSection> sections = state.createResult.data!;
+                    final current = state.currentPage;
+                    final last = state.lastPage;
                     return Padding(
                       padding: EdgeInsets.only(top: 56.0.h,),
                       child: CustomScreenBody(
                         title: stateDC.course.course.name,
                         textFirstButton: 'Section 2',
                         showFirstButton: true,
-                        widget: BlocBuilder<SelectSectionCubit, SelectSectionState>(
-                          builder: (context, selectState) {
-                            DatumSection? selected;
-                            if (selectState is SelectSectionSuccess) {
-                              selected = selectState.section;
-                              showSecondButton = true;
-                            }
-                            return Padding(
-                              padding: EdgeInsets.only(top: 0.h, bottom: 0.h),
-                              child: DropdownMenu<DatumSection>(
-                                enableSearch: false,
-                                requestFocusOnTap: false,
-                                width: 200.w,
-                                hintText: AppLocalizations.of(context).translate('No section'),
-                                initialSelection: selected,
-                                inputDecorationTheme: InputDecorationTheme(
-                                  constraints: BoxConstraints(
-                                      maxHeight: 53.h),
-                                  hintStyle: Styles.l1Normal(
-                                      color: AppColors.t0),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: AppColors.purple,
-                                      width: 1.23,
-                                    ),
-                                    borderRadius: BorderRadius.circular(
-                                        24.67.r),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: AppColors.purple,
-                                      width: 1.23,
-                                    ),
-                                    borderRadius: BorderRadius.circular(
-                                        24.67.r),
-                                  ),
-                                ),
-                                alignmentOffset: Offset(4, 2),
-                                menuStyle: MenuStyle(
-                                  backgroundColor: WidgetStateColor
-                                      .resolveWith(
-                                        (states) {
-                                      return AppColors.white;
-                                    },
-                                  ),
-                                  elevation: WidgetStateProperty.resolveWith(
-                                        (states) {
-                                      return 0;
-                                    },
-                                  ),
-                                  side: WidgetStateBorderSide.resolveWith(
-                                        (states) {
-                                      return BorderSide(
-                                        width: 1.23,
-                                        color: AppColors.purple,
-
-                                      );
-                                    },
-                                  ),
-
-                                ),
-                                dropdownMenuEntries: sections.map((section) {
-                                  return DropdownMenuEntry<DatumSection>(
-                                    value: section,
-                                    label: section.name,
-                                  );
-                                }).toList(),
-                                onSelected: (DatumSection? selectedSection) {
-                                  if (selectedSection != null) {
-                                    BlocProvider.of<SelectSectionCubit>(
-                                        context).selectSection(
-                                        section: selectedSection);
-                                    log('✅ Selected ID: ${selectedSection
-                                        .id}');
+                        widget: Row(
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.chevron_left, color: current > 1
+                                  ? AppColors.purple
+                                  : AppColors.t0
+                              ),
+                              onPressed: current > 1
+                                  ? () => context.read<SectionsCubit>()
+                                  .fetchSections(id: courseId, page: current - 1)
+                                  : null,
+                            ),
+                            SizedBox(
+                              width: 200.w,
+                              child: BlocBuilder<SelectSectionCubit, SelectSectionState>(
+                                builder: (context, selectState) {
+                                  DatumSection? selected;
+                                  if (selectState is SelectSectionSuccess) {
+                                    selected = selectState.section;
+                                    showSecondButton = true;
                                   }
+                                  return Padding(
+                                    padding: EdgeInsets.only(top: 0.h, bottom: 0.h),
+                                    child: DropdownMenu<DatumSection>(
+                                      enableSearch: false,
+                                      requestFocusOnTap: false,
+                                      width: 200.w,
+                                      hintText: AppLocalizations.of(context).translate('No section'),
+                                      initialSelection: selected,
+                                      inputDecorationTheme: InputDecorationTheme(
+                                        constraints: BoxConstraints(
+                                            maxHeight: 53.h),
+                                        hintStyle: Styles.l1Normal(
+                                            color: AppColors.t0),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: AppColors.purple,
+                                            width: 1.23,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                              24.67.r),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: AppColors.purple,
+                                            width: 1.23,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                              24.67.r),
+                                        ),
+                                      ),
+                                      alignmentOffset: Offset(4, 2),
+                                      menuStyle: MenuStyle(
+                                        backgroundColor: WidgetStateColor
+                                            .resolveWith(
+                                              (states) {
+                                            return AppColors.white;
+                                          },
+                                        ),
+                                        elevation: WidgetStateProperty.resolveWith(
+                                              (states) {
+                                            return 0;
+                                          },
+                                        ),
+                                        side: WidgetStateBorderSide.resolveWith(
+                                              (states) {
+                                            return BorderSide(
+                                              width: 1.23,
+                                              color: AppColors.purple,
+
+                                            );
+                                          },
+                                        ),
+
+                                      ),
+                                      dropdownMenuEntries: sections.map((section) {
+                                        return DropdownMenuEntry<DatumSection>(
+                                          value: section,
+                                          label: section.name,
+                                        );
+                                      }).toList(),
+                                      onSelected: (DatumSection? selectedSection) {
+                                        if (selectedSection != null) {
+                                          BlocProvider.of<SelectSectionCubit>(
+                                              context).selectSection(
+                                              section: selectedSection);
+                                          log('Selected ID: ${selectedSection
+                                              .id}');
+                                        }
+                                      },
+                                    ),
+                                  );
                                 },
                               ),
-                            );
-                          },
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.chevron_right, color: current < last
+                                  ? AppColors.purple
+                                  : AppColors.t0),
+                              onPressed: current < last
+                                  ? () => context.read<SectionsCubit>()
+                                  .fetchSections(id: courseId, page: current + 1)
+                                  : null,
+                            ),
+                          ],
                         ),
                         onPressedFirst: () {},
                         showButtonIcon: true,
@@ -301,7 +331,7 @@ class CourseDetailsViewBody extends StatelessWidget {
                                                                   padding: EdgeInsets.only(
                                                                     top: 40.h, right: 47.0.w,),
                                                                   child: DefaultTabController(
-                                                                    length: 2,
+                                                                    length: 1,
                                                                     child: Column(
                                                                       children: [
                                                                         SizedBox(
@@ -393,7 +423,6 @@ class CourseDetailsViewBody extends StatelessWidget {
                                                                                     );
                                                                                   }
                                                                               ),
-                                                                              Container(),
                                                                               /*CustomOverLoadingCard(
                                                                                 cardCount: count,
                                                                                 onTapSeeMore: () {

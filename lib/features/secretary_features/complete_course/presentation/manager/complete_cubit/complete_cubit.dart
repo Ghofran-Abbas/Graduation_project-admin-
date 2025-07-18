@@ -28,7 +28,9 @@ class CompleteCubit extends Cubit<CompleteState>{
       log(failure.errorMessage);
       emit(CompleteFailure(failure.errorMessage));
     }, (complete) {
-      emit(CompleteSuccess(complete));
+      final current = complete.currentPage;
+      final last    = complete.lastPage;
+      emit(CompleteSuccess(createResult: complete, currentPage: current, lastPage: last,),);
     });
   }
 }

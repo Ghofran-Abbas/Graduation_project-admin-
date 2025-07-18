@@ -113,7 +113,7 @@ class CourseDetailsView extends StatelessWidget {
           },
         ),
       ],
-      child: CourseDetailsViewBody(),
+      child: CourseDetailsViewBody(courseId: courseId,),
     );
   }
 }
