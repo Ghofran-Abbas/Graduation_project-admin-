@@ -45,7 +45,6 @@ class _EmployeesViewBodyState extends State<EmployeesViewBody> {
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
-    context.read<EmployeesCubit>().fetchFirstPage();
   }
 
   @override
@@ -69,7 +68,8 @@ class _EmployeesViewBodyState extends State<EmployeesViewBody> {
   Future<void> _showAddDialog() async {
     final added = await showDialog<bool>(
       context: context,
-      builder: (_) => BlocProvider.value(
+      builder:
+          (_) => BlocProvider.value(
         value: context.read<CreateEmployeeCubit>(),
         child: const CreateEmployeeDialog(),
       ),
@@ -80,7 +80,8 @@ class _EmployeesViewBodyState extends State<EmployeesViewBody> {
   Future<void> _showRegisterSecretaryDialog() async {
     await showDialog<bool>(
       context: context,
-      builder: (_) => BlocProvider.value(
+      builder:
+          (_) => BlocProvider.value(
         value: context.read<RegisterSecretaryCubit>(),
         child: const RegisterSecretaryDialog(),
       ),
@@ -90,7 +91,8 @@ class _EmployeesViewBodyState extends State<EmployeesViewBody> {
   Future<void> _showEditDialog(Employee e) async {
     final updated = await showDialog<bool>(
       context: context,
-      builder: (_) => BlocProvider.value(
+      builder:
+          (_) => BlocProvider.value(
         value: context.read<UpdateEmployeeCubit>(),
         child: UpdateEmployeeDialog(employee: e),
       ),
@@ -102,9 +104,12 @@ class _EmployeesViewBodyState extends State<EmployeesViewBody> {
     final loc = AppLocalizations.of(context)!;
     final shouldDelete = await showDialog<bool>(
       context: context,
-      builder: (d) => AlertDialog(
+      builder:
+          (d) => AlertDialog(
         title: Text(loc.translate('Warning')),
-        content: Text(loc.translate('Are you sure you want to delete this employee?')),
+        content: Text(
+          loc.translate('Are you sure you want to delete this employee?'),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(d, false),
@@ -117,7 +122,8 @@ class _EmployeesViewBodyState extends State<EmployeesViewBody> {
         ],
       ),
     );
-    if (shouldDelete == true) context.read<DeleteEmployeeCubit>().deleteEmployee(id);
+    if (shouldDelete == true)
+      context.read<DeleteEmployeeCubit>().deleteEmployee(id);
   }
 
   Widget _buildHeader() {
@@ -127,10 +133,34 @@ class _EmployeesViewBodyState extends State<EmployeesViewBody> {
       padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
       child: Row(
         children: [
-          Expanded(flex: 3, child: Text(loc.translate('Name'), style: TextStyle(fontWeight: FontWeight.bold))),
-          Expanded(flex: 4, child: Text(loc.translate('Role'), style: TextStyle(fontWeight: FontWeight.bold))),
-          Expanded(flex: 3, child: Text(loc.translate('Email'), style: TextStyle(fontWeight: FontWeight.bold))),
-          Expanded(flex: 3, child: Text(loc.translate('Gender'), style: TextStyle(fontWeight: FontWeight.bold))),
+          Expanded(
+            flex: 3,
+            child: Text(
+              loc.translate('Name'),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          Expanded(
+            flex: 4,
+            child: Text(
+              loc.translate('Role'),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Text(
+              loc.translate('Email'),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Text(
+              loc.translate('Gender'),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
           SizedBox(width: 68.w), // space for icons column
         ],
       ),
@@ -142,35 +172,73 @@ class _EmployeesViewBodyState extends State<EmployeesViewBody> {
     final loc = AppLocalizations.of(context)!;
     return BlocListener<RegisterSecretaryCubit, RegisterSecretaryState>(
       listener: (_, state) {
-        if (state is RegisterSecretarySuccess) CustomSnackBar.showSnackBar(context, msg: loc.translate('Secretary registered successfully'));
-        else if (state is RegisterSecretaryFailure) CustomSnackBar.showErrorSnackBar(context, msg: state.error);
+        if (state is RegisterSecretarySuccess){     CustomSnackBar.showSnackBar(
+          context,
+          msg: loc.translate('Secretary registered successfully'),
+        );
+        context.read<EmployeesCubit>().fetchFirstPage();
+        }
+
+
+        else if (state is RegisterSecretaryFailure)
+          CustomSnackBar.showErrorSnackBar(context, msg: state.error);
       },
       child: BlocConsumer<CreateEmployeeCubit, CreateEmployeeState>(
         listener: (_, state) {
-          if (state is CreateEmployeeFailure) CustomSnackBar.showErrorSnackBar(context, msg: state.error);
-          else if (state is CreateEmployeeSuccess) CustomSnackBar.showSnackBar(context, msg: loc.translate('Employee created successfully'));
+          if (state is CreateEmployeeFailure)
+            CustomSnackBar.showErrorSnackBar(context, msg: state.error);
+          else if (state is CreateEmployeeSuccess)
+            CustomSnackBar.showSnackBar(
+              context,
+              msg: loc.translate('Employee created successfully'),
+            );
         },
-        builder: (_, __) => BlocConsumer<UpdateEmployeeCubit, UpdateEmployeeState>(
+        builder:
+            (_, __) => BlocConsumer<UpdateEmployeeCubit, UpdateEmployeeState>(
           listener: (_, state) {
-            if (state is UpdateEmployeeFailure) CustomSnackBar.showErrorSnackBar(context, msg: state.error);
-            else if (state is UpdateEmployeeSuccess) CustomSnackBar.showSnackBar(context, msg: loc.translate('Employee updated successfully'));
+            if (state is UpdateEmployeeFailure)
+              CustomSnackBar.showErrorSnackBar(context, msg: state.error);
+            else if (state is UpdateEmployeeSuccess)
+              CustomSnackBar.showSnackBar(
+                context,
+                msg: loc.translate('Employee updated successfully'),
+              );
           },
-          builder: (_, __) => BlocConsumer<DeleteEmployeeCubit, DeleteEmployeeState>(
+          builder:
+              (
+              _,
+              __,
+              ) => BlocConsumer<DeleteEmployeeCubit, DeleteEmployeeState>(
             listener: (_, state) {
-              if (state is DeleteEmployeeFailure) CustomSnackBar.showErrorSnackBar(context, msg: state.error);
+              if (state is DeleteEmployeeFailure)
+                CustomSnackBar.showErrorSnackBar(
+                  context,
+                  msg: state.error,
+                );
               else if (state is DeleteEmployeeSuccess) {
                 context.read<EmployeesCubit>().fetchFirstPage();
-                CustomSnackBar.showSnackBar(context, msg: loc.translate('Employee deleted successfully'));
+                CustomSnackBar.showSnackBar(
+                  context,
+                  msg: loc.translate('Employee deleted successfully'),
+                );
               }
             },
-            builder: (_, __) => BlocBuilder<EmployeesCubit, EmployeesState>(
+            builder:
+                (_, __) => BlocBuilder<EmployeesCubit, EmployeesState>(
               builder: (ctx, state) {
-                if (state is EmployeesLoading) return const Center(child: CustomCircularProgressIndicator());
-                if (state is EmployeesFailure) return CustomErrorWidget(errorMessage: state.error);
+                if (state is EmployeesLoading)
+                  return const Center(
+                    child: CustomCircularProgressIndicator(),
+                  );
+                if (state is EmployeesFailure)
+                  return CustomErrorWidget(
+                    errorMessage: state.error,
+                  );
 
                 final success = state as EmployeesSuccess;
                 final list = success.employees;
-                final totalCount = list.length + (success.hasMore ? 2 : 1);
+                final totalCount =
+                    list.length + (success.hasMore ? 2 : 1);
 
                 return Padding(
                   padding: EdgeInsets.only(top: 56.h),
@@ -178,18 +246,31 @@ class _EmployeesViewBodyState extends State<EmployeesViewBody> {
                     title: loc.translate('Employees'),
                     showSearchField: true,
                     searchController: _searchController,
-                    onTapSearch: () {  context.go('/employees/searchEmployee');},
+                    onTapSearch: () {
+                      context.go('/employees/searchEmployee');
+                    },
                     onPressedFirst: _showRegisterSecretaryDialog,
-                    textFirstButton: loc.translate('Register Secretary'),
+                    textFirstButton: loc.translate(
+                      'Register Secretary',
+                    ),
                     showFirstButton: true,
                     onPressedSecond: _showAddDialog,
                     textSecondButton: loc.translate('New employee'),
                     showSecondButton: true,
-                    onPressedThird:(){context.go('/employees/top-secretary');},
-                    textThirdButton: loc.translate('Most Points Secretary'),
+                    onPressedThird: () {
+                      context.go('/employees/top-secretary');
+                    },
+                    textThirdButton: loc.translate(
+                      'Most Points Secretary',
+                    ),
                     showThirdButton: true,
                     body: Padding(
-                      padding: EdgeInsets.only(top: 238.h, left: 20.w, right: 20.w, bottom: 27.h),
+                      padding: EdgeInsets.only(
+                        top: 238.h,
+                        left: 20.w,
+                        right: 20.w,
+                        bottom: 27.h,
+                      ),
                       child: ListView.builder(
                         controller: _scrollController,
                         itemCount: totalCount,
@@ -200,11 +281,21 @@ class _EmployeesViewBodyState extends State<EmployeesViewBody> {
                             final e = list[itemIndex];
                             return Container(
                               height: 120.h,
-                              padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 12.w),
+                              padding: EdgeInsets.symmetric(
+                                vertical: 12.h,
+                                horizontal: 12.w,
+                              ),
                               child: InformationFieldItem(
-                                color: itemIndex.isEven ? AppColors.white : AppColors.darkHighlightPurple,
+                                color:
+                                itemIndex.isEven
+                                    ? AppColors.white
+                                    : AppColors
+                                    .darkHighlightPurple,
                                 image: e.photo,
-                                imageWidth:   50.w,imageHeight: 70.h,imageBorderRadius: 90.h,height: 100.h,
+                                imageWidth: 50.w,
+                                imageHeight: 70.h,
+                                imageBorderRadius: 90.h,
+                                height: 100.h,
                                 name: e.name,
                                 secondText: e.role,
                                 showSecondDetailsText: true,
@@ -212,16 +303,25 @@ class _EmployeesViewBodyState extends State<EmployeesViewBody> {
                                 fourthDetailsText: e.gender,
                                 fifthText: e.points.toString(),
                                 showIcons: true,
-                                onTap: () => ctx.go('${GoRouterPath.employees}/${e.id}'),
-                                onTapFirstIcon: () => _showEditDialog(e),
-                                onTapSecondIcon: () => _confirmDelete(e.id),
+                                onTap:
+                                    () => ctx.go(
+                                  '${GoRouterPath.employees}/${e.id}',
+                                ),
+                                onTapFirstIcon:
+                                    () => _showEditDialog(e),
+                                onTapSecondIcon:
+                                    () => _confirmDelete(e.id),
                               ),
                             );
                           }
                           // loader
                           return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            child: Center(child: CircularProgressIndicator()),
+                            padding: EdgeInsets.symmetric(
+                              vertical: 16,
+                            ),
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
                           );
                         },
                       ),

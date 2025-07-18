@@ -22,6 +22,7 @@ import '../../manager/delete_complain_cubit/delete_complain_cubit.dart';
 import '../../manager/delete_complain_cubit/delete_complain_state.dart';
 import '../../manager/search_complain_cubit/search_complain_cubit.dart';
 import '../../manager/search_complain_cubit/search_complain_state.dart';
+import 'complains_view_body.dart';
 
 class SearchComplainViewBody extends StatelessWidget {
   SearchComplainViewBody({super.key});
@@ -66,16 +67,16 @@ class SearchComplainViewBody extends StatelessWidget {
                           itemBuilder: (BuildContext context, int index) {
                             return Align(child: InformationFieldItem(
                               color: index % 2 != 0 ? AppColors.darkHighlightPurple : AppColors.white,
-                              //image: state.complains.data.data![index].secretary.photo,
-                              name: ''/*state.reports.reports.data![index].secretary.name*/,
+                              image: state.complain.data.data![index].student.photo,
+                              name: state.complain.data.data![index].student.name,
                               secondText: state.complain.data.data![index].description,
                               showSecondDetailsText: true,
-                              //fifthText: handleDate(state.complain.data.data![index].createdAt),
-                              //showFifthDetailsText: true,
+                              fifthText: handleDate(state.complain.data.data![index].createdAt),
+                              showFifthDetailsText: true,
                               isReportStyle: true,
                               showIcons: true,
                               hideFirstIcon: true,
-                              isComplainStyle: true,
+                              //isComplainStyle: true,
                               onTap: () {
                                 context.go('${GoRouterPath.complains}${GoRouterPath.complainDetails}/${state.complain.data.data![index].id}');
                               },

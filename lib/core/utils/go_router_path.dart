@@ -29,6 +29,7 @@ class GoRouterPath {
   static const archiveSectionTrainerView = '/archiveSectionTrainerView';
   static const searchTrainer = '/trainers/searchTrainer';
   static const inPreparation = '/inPreparation';
+  static const searchInPreparation = '$inPreparation/searchInPreparation';
   static const inPreparationDetails = '$inPreparation/inPreparationDetails';
   static const inPreparationCalendar = '/inPreparationCalendar';
   static const inPreparationTrainers = '/inPreparationTrainers';
@@ -36,6 +37,7 @@ class GoRouterPath {
   static const searchTrainerIp = '/searchTrainerIp';
   static const searchStudentIp = '/searchStudentIp';
   static const complete = '/complete';
+  static const searchComplete = '$complete/searchComplete';
   static const completeDetails = '/complete/completeDetails';
   static const completeCalendar = '/completeCalendar';
   static const completeRating = '/completeRating';

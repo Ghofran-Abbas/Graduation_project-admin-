@@ -297,12 +297,12 @@ class DetailsInPreparationViewBody extends StatelessWidget {
                                                                     unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
                                                                     tabs: [
                                                                       Tab(text: AppLocalizations.of(context).translate('         File         '),),
-                                                                      Tab(text: AppLocalizations.of(context).translate('Announcement')),
+                                                                      //Tab(text: AppLocalizations.of(context).translate('Announcement')),
                                                                     ],
                                                                   ),
                                                                 ),
                                                                 SizedBox(
-                                                                  height: 470.23.h,
+                                                                  height: 570.23.h,
                                                                   child: TabBarView(
                                                                     children: [
                                                                       Column(
@@ -310,22 +310,10 @@ class DetailsInPreparationViewBody extends StatelessWidget {
                                                                         crossAxisAlignment: CrossAxisAlignment.start,
                                                                         children: [
                                                                           //Image(image: AssetImage(Assets.empty)),
-                                                                          Expanded(
-                                                                            child: Text(
-                                                                              AppLocalizations.of(context).translate('No courses at this time'),
-                                                                              style: Styles.h3Bold(color: AppColors.t3),
-                                                                              maxLines: 1,
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                            ),
-                                                                          ),
-                                                                          Expanded(
-                                                                            child: Text(
-                                                                              AppLocalizations.of(context).translate('Courses will appear here after they enroll in your school.'),
-                                                                              style: Styles.l1Normal(color: AppColors.t3),
-                                                                              maxLines: 1,
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                            ),
-                                                                          ),
+                                                                          CustomEmptyWidget(
+                                                                            firstText: AppLocalizations.of(context).translate('No files in this section at this time'),
+                                                                            secondText: AppLocalizations.of(context).translate('Files will appear here after they add to the section.'),
+                                                                          )
                                                                         ],
                                                                       ),
                                                                       Column(

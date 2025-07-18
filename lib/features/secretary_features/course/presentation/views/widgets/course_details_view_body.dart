@@ -332,7 +332,7 @@ class CourseDetailsViewBody extends StatelessWidget {
                                                                             tabs: [
                                                                               Tab(
                                                                                 text: AppLocalizations.of(context).translate('         File         '),),
-                                                                              Tab(text: AppLocalizations.of(context).translate('Announcement')),
+                                                                              //Tab(text: AppLocalizations.of(context).translate('Announcement')),
                                                                             ],
                                                                           ),
                                                                         ),
@@ -354,7 +354,7 @@ class CourseDetailsViewBody extends StatelessWidget {
                                                                                           if(stateF is FilesSuccess) {
                                                                                             return Column(
                                                                                               children: [
-                                                                                                GridView.builder(
+                                                                                                stateF.files.files.data!.isNotEmpty ? GridView.builder(
                                                                                                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 10.w, mainAxisExtent: 100.h),
                                                                                                   itemBuilder: (BuildContext context, int index) {
                                                                                                     return Align(
@@ -370,6 +370,9 @@ class CourseDetailsViewBody extends StatelessWidget {
                                                                                                   itemCount: stateF.files.files.data!.length,
                                                                                                   shrinkWrap: true,
                                                                                                   physics: NeverScrollableScrollPhysics(),
+                                                                                                ) : CustomEmptyWidget(
+                                                                                                  firstText: AppLocalizations.of(context).translate('No files in this section at this time'),
+                                                                                                  secondText: AppLocalizations.of(context).translate('Files will appear here after they add to the section.'),
                                                                                                 ),
                                                                                                 CustomNumberPagination(
                                                                                                   numberPages: stateF.files.files.lastPage,
