@@ -1,8 +1,16 @@
 import 'package:admin_alhadara_dashboard/core/utils/service_locator.dart';
+import 'package:admin_alhadara_dashboard/features/ads/presentation/manager/getAllAdsCubit/updateAd_cubit.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/ads/presentation/manager/getAllAdsCubit/addAdd_cubit.dart';
+import '../../features/ads/presentation/manager/getAllAdsCubit/getAllAdsCubit.dart';
+import '../../features/ads/presentation/manager/getAllAdsCubit/singleAdCubit.dart';
+import '../../features/ads/presentation/views/widgets/adsDetail_view.dart';
+import '../../features/ads/presentation/views/widgets/ads_view.dart';
+import '../../features/ads/presentation/views/widgets/createAds_view.dart';
 import '../../features/employee/presentation/views/employee_details_view.dart';
 import '../../features/employee/presentation/views/employees_view.dart';
 import '../../features/employee/presentation/views/search_employee_view.dart';
@@ -69,15 +77,64 @@ import '../../features/secretary_features/student/presentation/views/students_vi
 import 'go_router_path.dart';
 
 class AppRouter {
+
   static final GoRouter router = GoRouter(
+    debugLogDiagnostics: true,
     routes: [
       GoRoute(
+
         path: '/',
         builder: (context, state) => const LoginView(),
         routes: [
           ShellRoute(
             builder: (context, state, child) => MainScaffold(child: child),
             routes: [
+              //batool
+              GoRoute(
+                path: '/announcements',                  // the list
+                name: 'announcements',
+                builder: (context, state) => BlocProvider(
+                  create: (_) => getIt<AdsCubit>()..fetchAds(page: 1),
+                  child: const AnnouncementsView(),
+                ),
+                routes: [
+                  GoRoute(
+                    path: ':id',                         // dynamic segment for the ad’s id
+                    name: 'announcementDetails',
+                    builder: (context, state) {
+                      // pathParameters['id'] is always a String, even if it looks like "1"
+                      final idStr = state.pathParameters['id']!;
+                      final adId = int.parse(idStr);     // 🔑 must parse to int
+                      return BlocProvider(
+                        create: (_) =>
+                        getIt<SingleAdCubit>()..fetchAd(adId),
+                        child: AnnouncementDetailsView(adId: adId),
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: 'create',
+                    name: 'createAnnouncement',
+                    builder: (context, state) => BlocProvider<CreateAdCubit>(
+                      create: (_) => getIt<CreateAdCubit>(),
+                      child: const CreateAnnouncementView(),
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'edit/:id',              // يصبح "/announcements/edit/12"
+                    name: 'announcementEdit',
+                    builder: (context, state) {
+                      final raw = state.pathParameters['id']!;
+                      final id = int.parse(raw);
+                      return AnnouncementDetailsView(adId: id);  // أو صفحة التعديل اللي أنشأتها
+                    },
+                  ),
+                ],
+              ),
+
+
+
+
               GoRoute(
                 path: '/dashboard',
                 builder: (context, state) => const DepartmentsView(),
@@ -760,8 +817,32 @@ class AppRouter {
             path: '/passwordReset',
             builder: (context, state) => const VerificationView(),
           ),
+
+
+
         ],
       ),
+
+      //Batool
+      //allAds
+      // GoRoute(
+      //   path: GoRouterPath.announcements,         // "/announcements"
+      //   name: 'announcements',
+      //   builder: (context, state) {
+      //     // نوفّر Cubit قبل بناء الشاشة
+      //     return BlocProvider<AdsCubit>(
+      //       create: (_) => getIt<AdsCubit>()..fetchAds(page: 1),
+      //       child: const AnnouncementsView(),
+      //     );
+      //   },
+      // ),
+
+
+
+
+
+
+
     ],
   );
 }

@@ -1,38 +1,136 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--  &lt;!&ndash;-->
+<!--    If you are serving your web app in a path other than the root, change the-->
+<!--    href value below to reflect the base path you are serving from.-->
+
+<!--    The path provided below has to start and end with a slash "/" in order for-->
+<!--    it to work correctly.-->
+
+<!--    For more details:-->
+<!--    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base-->
+
+<!--    This is a placeholder for base href that will be replaced by the value of-->
+<!--    the `&#45;&#45;base-href` argument provided to `flutter build`.-->
+<!--  &ndash;&gt;-->
+<!--  <base href="$FLUTTER_BASE_HREF">-->
+
+<!--  <meta charset="UTF-8">-->
+<!--  <meta content="IE=Edge" http-equiv="X-UA-Compatible">-->
+<!--  <meta name="description" content="A new Flutter project.">-->
+
+<!--  &lt;!&ndash; iOS meta tags & icons &ndash;&gt;-->
+<!--  <meta name="mobile-web-app-capable" content="yes">-->
+<!--  <meta name="apple-mobile-web-app-status-bar-style" content="black">-->
+<!--  <meta name="apple-mobile-web-app-title" content="admin_alhadara_dashboard">-->
+<!--  <link rel="apple-touch-icon" href="icons/Icon-192.png">-->
+
+<!--  &lt;!&ndash; Favicon &ndash;&gt;-->
+<!--  <link rel="icon" type="image/png" href="favicon.png"/>-->
+
+<!--  <title>admin_alhadara_dashboard</title>-->
+<!--  <link rel="manifest" href="manifest.json">-->
+<!--</head>-->
+<!--<body>-->
+<!--  <script src="flutter_bootstrap.js" async></script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
-
   <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
-
-  <!-- iOS meta tags & icons -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="admin_alhadara_dashboard">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
-
-  <title>admin_alhadara_dashboard</title>
+  <title>Trainer Section</title>
   <link rel="manifest" href="manifest.json">
+  <!-- إضافة gcm_sender_id في manifest.json مهمّ -->
 </head>
 <body>
-  <script src="flutter_bootstrap.js" async></script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+  import {
+    getMessaging,
+    getToken,
+    onMessage,
+    isSupported
+  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-messaging.js";
+
+ const firebaseConfig = {
+    apiKey:             "AIzaSyBrBrrP8RmHbdj0CA9aXhonShhB10k0ryo",
+    authDomain:         "graduationproject-3d3b0.firebaseapp.com",
+    projectId:          "graduationproject-3d3b0",
+    storageBucket:      "graduationproject-3d3b0.firebasestorage.app",
+    messagingSenderId:  "425903761784",
+    appId:              "1:425903761784:web:ce5370b117d9b6a78f808d"
+  };
+
+  // 1) تهيئة Firebase
+  const app = initializeApp(firebaseConfig);
+
+  (async () => {
+    if (!await isSupported()) {
+      console.warn("🚫 FCM Web غير مدعوم");
+      return;
+    }
+    if (!('serviceWorker' in navigator)) {
+      console.error("🚫 المتصفّح لا يدعم Service Workers");
+      return;
+    }
+
+    // 2) تسجيل SW
+    const reg = await navigator.serviceWorker.register('firebase-messaging-sw.js');
+    console.log("✅ SW مسجّل:", reg);
+
+    // 3) اطلب إذن الإشعارات
+    const perm = await Notification.requestPermission();
+    if (perm !== 'granted') {
+      console.error("🚫 تم رفض إذن الإشعارات");
+      return;
+    }
+
+    // 4) احصل على التوكن فوراً بعد تسجيل الـ SW
+    const messaging = getMessaging(app);
+    try {
+      const currentToken = await getToken(messaging, {
+        vapidKey: 'BMUIu0ik_OZJ9r9n3GPXib5fouwP02aKUqHBPJZFio406nmC_henlk7OtEco9fc5xd7Q3q_tZM0RuP6oBBPqTPc',
+        serviceWorkerRegistration: reg
+      });
+      if (currentToken) {
+        console.log("🔑 FCM Token:", currentToken);
+        // TODO: أرسل currentToken إلى السيرفرك بالخلفية
+      } else {
+        console.warn("⚠️ لم يتم إنشاء توكن — حاول إعادة تحميل الصفحة");
+      }
+    } catch (e) {
+      console.error("❌ خطأ أثناء getToken():", e);
+    }
+
+    // 5) استماع للـ messages في الـ foreground
+    onMessage(messaging, payload => {
+      console.log("📬 رسالة واردة (foreground):", payload);
+      // هنا يمكنك عرض Snackbar أو Notification API
+    });
+  })().catch(e => console.error("Firebase init failed:", e));
+</script>
+
+<script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

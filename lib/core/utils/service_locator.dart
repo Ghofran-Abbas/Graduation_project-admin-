@@ -1,6 +1,21 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../features/ads/data/repos/add-delete_model_repo.dart';
+import '../../features/ads/data/repos/add-delete_model_repo_impl.dart';
+import '../../features/ads/data/repos/addAd_repo.dart';
+import '../../features/ads/data/repos/addAd_repo_impl.dart';
+import '../../features/ads/data/repos/getAllAds_repo.dart';
+import '../../features/ads/data/repos/getAllAds_repo_impl.dart';
+import '../../features/ads/data/repos/singleAd_repo.dart';
+import '../../features/ads/data/repos/singleAd_repo_impl.dart';
+import '../../features/ads/data/repos/updateAd_repo.dart';
+import '../../features/ads/data/repos/updateAd_repo_impl.dart';
+import '../../features/ads/presentation/manager/getAllAdsCubit/add-delete_cubit.dart';
+import '../../features/ads/presentation/manager/getAllAdsCubit/addAdd_cubit.dart';
+import '../../features/ads/presentation/manager/getAllAdsCubit/getAllAdsCubit.dart';
+import '../../features/ads/presentation/manager/getAllAdsCubit/singleAdCubit.dart';
+import '../../features/ads/presentation/manager/getAllAdsCubit/updateAd_cubit.dart';
 import '../../features/employee/data/repos/employee_repo_impl.dart';
 import '../../features/gifts/data/repos/gift_repo.dart';
 import '../../features/gifts/data/repos/gift_repo_impl.dart';
@@ -109,4 +124,49 @@ void setupServiceLocator() {
     PointsRepoImpl(getIt<DioApiService>()),
   );
 
+  //batool
+  //allAd
+  getIt.registerLazySingleton<AdsRepository>(
+        () => AdsRepositoryImpl(getIt<DioApiService>()),
+  );
+  getIt.registerFactory(
+        () => AdsCubit(getIt<AdsRepository>()),
+  );
+//singleAd
+
+  getIt.registerLazySingleton<SingleAdRepository>(
+        () => SingleAdRepositoryImpl(getIt<DioApiService>()),
+  );
+
+  getIt.registerFactory(
+        () => SingleAdCubit(getIt<SingleAdRepository>()),
+  );
+
+  //  AdRepository
+  getIt.registerLazySingleton<AdRepository>(
+        () => AdRepositoryImpl(getIt<DioApiService>()),
+  );
+  //  CreateAdCubit
+  getIt.registerFactory<CreateAdCubit>(
+        () => CreateAdCubit(getIt<AdRepository>()),
+  );
+
+  getIt.registerLazySingleton<UpdateAdRepository>(
+        () => UpdateAdRepositoryImpl(getIt<DioApiService>()),
+  );
+
+
+  getIt.registerFactory<UpdateAdCubit>(
+        () => UpdateAdCubit(getIt<UpdateAdRepository>()),
+  );
+
+  // register delete repo
+  getIt.registerLazySingleton<DeleteAdRepository>(
+        () => DeleteAdRepositoryImpl(getIt<DioApiService>()),
+  );
+
+// register cubit
+  getIt.registerFactory(
+        () => DeleteAdCubit(getIt<DeleteAdRepository>()),
+  );
 }
