@@ -54,4 +54,33 @@ class GoRouterPath {
   static const profile = '/profile';
   static const employees = '/employees';
 
+  //batool
+  static const announcements = '/announcements';
+  static const notifications = '/notifications';
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

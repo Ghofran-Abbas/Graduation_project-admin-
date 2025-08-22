@@ -18,6 +18,7 @@ class AppColors
   static const purple = Color(0xFF4D44B5);
   static const blue = Color(0xFF303972);
   static const darkBlue = Color(0xFF121E8A);
+  static const gray = Colors.grey;
 
 //second colors
   static const highlightPurple = Color(0x26C1BBEB);
