@@ -108,7 +108,7 @@ class LoginViewBody extends StatelessWidget {
                               buttonColor: AppColors.purple,
                               borderColor: Colors.transparent,
                               onPressed: ()async{
-                                String deviceKey =  await _getDeviceToken();
+                                String deviceKey = await _getDeviceToken();
                                 print("🔑 deviceKey=$deviceKey");
                                 if(_formKey.currentState!.validate()) {
                                   cubit.fetchCreateTrainer(
