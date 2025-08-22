@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../features/ads/data/repos/active-repo.dart';
+import '../../features/ads/data/repos/active_repo_impl.dart';
 import '../../features/ads/data/repos/add-delete_model_repo.dart';
 import '../../features/ads/data/repos/add-delete_model_repo_impl.dart';
 import '../../features/ads/data/repos/addAd_repo.dart';
@@ -11,6 +13,7 @@ import '../../features/ads/data/repos/singleAd_repo.dart';
 import '../../features/ads/data/repos/singleAd_repo_impl.dart';
 import '../../features/ads/data/repos/updateAd_repo.dart';
 import '../../features/ads/data/repos/updateAd_repo_impl.dart';
+import '../../features/ads/presentation/manager/getAllAdsCubit/active_cubit.dart';
 import '../../features/ads/presentation/manager/getAllAdsCubit/add-delete_cubit.dart';
 import '../../features/ads/presentation/manager/getAllAdsCubit/addAdd_cubit.dart';
 import '../../features/ads/presentation/manager/getAllAdsCubit/getAllAdsCubit.dart';
@@ -21,6 +24,9 @@ import '../../features/gifts/data/repos/gift_repo.dart';
 import '../../features/gifts/data/repos/gift_repo_impl.dart';
 import '../../features/gifts/presentation/manager/gifts_cubit/gifts_cubit.dart';
 import '../../features/login/data/repos/login_secretary_repo_impl.dart';
+import '../../features/notification/data/repos/notification_repo.dart';
+import '../../features/notification/data/repos/notification_repo_impl.dart';
+import '../../features/notification/presentation/manager/notification_cubit.dart';
 import '../../features/points/data/repos/points_repo.dart';
 import '../../features/points/data/repos/points_repo_impl.dart';
 import '../../features/points/presentation/manager/top_students_cubit/top_students_cubit.dart';
@@ -124,8 +130,10 @@ void setupServiceLocator() {
     PointsRepoImpl(getIt<DioApiService>()),
   );
 
-  //batool
-  //allAd
+
+  //////batool
+  ////allAd
+
   getIt.registerLazySingleton<AdsRepository>(
         () => AdsRepositoryImpl(getIt<DioApiService>()),
   );
@@ -169,4 +177,22 @@ void setupServiceLocator() {
   getIt.registerFactory(
         () => DeleteAdCubit(getIt<DeleteAdRepository>()),
   );
+  // تسجيل repo + cubit
+  getIt.registerLazySingleton<ActiveAdsRepository>(
+        () => ActiveAdsRepositoryImpl(getIt<DioApiService>()),
+  );
+
+  getIt.registerFactory(
+        () => ActiveAdsCubit(getIt<ActiveAdsRepository>()),
+  );
+
+  //notification
+
+  // Repositories
+  getIt.registerLazySingleton<NotificationsRepository>(
+        () => NotificationsRepositoryImpl(getIt<DioApiService>()),
+  );
+
+  // Cubits
+  getIt.registerFactory(() => NotificationsCubit(getIt<NotificationsRepository>()));
 }

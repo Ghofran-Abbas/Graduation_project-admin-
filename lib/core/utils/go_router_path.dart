@@ -56,6 +56,7 @@ class GoRouterPath {
 
   //batool
   static const announcements = '/announcements';
+  static const notifications = '/notifications';
 
 
 }

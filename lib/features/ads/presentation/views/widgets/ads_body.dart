@@ -8,23 +8,34 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../../core/localization/app_localizations.dart';
 import '../../../../../../core/utils/app_colors.dart';
-import '../../../../../../core/utils/go_router_path.dart';
+
 import '../../../../../../core/utils/styles.dart';
 import '../../../../../../core/widgets/custom_circular_progress_indicator.dart';
 import '../../../../../../core/widgets/custom_error_widget.dart';
 import '../../../../../../core/widgets/custom_image_network.dart';
-import '../../../../../../core/widgets/custom_number_pagination.dart';
+
 import '../../../../../../core/widgets/secretary/custom_empty_widget.dart';
-import '../../../../../../core/widgets/secretary/custom_screen_body.dart';
 
-
+import '../../../../../core/utils/go_router_path.dart';
 import '../../../../../core/utils/service_locator.dart';
+import '../../../../../core/widgets/custom_number_pagination.dart';
 import '../../../data/models/ad_model.dart';
+import '../../manager/getAllAdsCubit/active_cubit.dart';
+import '../../manager/getAllAdsCubit/active_state.dart';
+
 import '../../manager/getAllAdsCubit/add-delete_cubit.dart';
 import '../../manager/getAllAdsCubit/addAdd_cubit.dart';
 import '../../manager/getAllAdsCubit/getAllAdsCubit.dart';
 import '../../manager/getAllAdsCubit/getAllAdsState.dart';
 import '../../manager/getAllAdsCubit/updateAd_cubit.dart';
+
+
+
+
+
+
+
+
 //
 // class AnnouncementsViewBody extends StatelessWidget {
 //   const AnnouncementsViewBody({Key? key}) : super(key: key);
@@ -47,7 +58,7 @@ import '../../manager/getAllAdsCubit/updateAd_cubit.dart';
 //             return Column(
 //               crossAxisAlignment: CrossAxisAlignment.start,
 //               children: [
-//
+//                 // title + add button
 //                 Row(
 //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //                   children: [
@@ -60,7 +71,6 @@ import '../../manager/getAllAdsCubit/updateAd_cubit.dart';
 //                     ),
 //                     ElevatedButton.icon(
 //                       onPressed: () {
-//
 //                         showDialog<bool>(
 //                           context: context,
 //                           builder: (_) => BlocProvider<CreateAdCubit>(
@@ -68,7 +78,6 @@ import '../../manager/getAllAdsCubit/updateAd_cubit.dart';
 //                             child: const CreateAnnouncementView(),
 //                           ),
 //                         ).then((created) {
-//
 //                           if (created == true) {
 //                             context.read<AdsCubit>().fetchAds(page: 1);
 //                           }
@@ -92,46 +101,37 @@ import '../../manager/getAllAdsCubit/updateAd_cubit.dart';
 //                 ),
 //                 SizedBox(height: 16.h),
 //
+//                 // content
 //                 Expanded(
 //                   child: ads.isEmpty
 //                       ? CustomEmptyWidget(
-//                     firstText: AppLocalizations.of(context)
-//                         .translate('No announcements at this time'),
-//                     secondText: AppLocalizations.of(context).translate(
-//                         'Add new announcements to see them here.'),
+//                     firstText: AppLocalizations.of(context).translate('No announcements at this time'),
+//                     secondText: AppLocalizations.of(context).translate('Add new announcements to see them here.'),
 //                   )
 //                       : LayoutBuilder(
 //                     builder: (context, constraints) {
 //                       const minItemWidth = 250.0;
 //                       final availableWidth = constraints.maxWidth;
-//                       int crossAxisCount =
-//                       (availableWidth / minItemWidth).floor();
+//                       int crossAxisCount = (availableWidth / minItemWidth).floor();
 //                       if (crossAxisCount < 1) crossAxisCount = 1;
+//
+//                       // Desired tile height (adjust this number to make card taller/shorter)
+//                       final double desiredTileHeight = 360.w; // use w/h depending on your scale
+//                       final tileWidth = availableWidth / crossAxisCount;
+//                       final childAspectRatio = tileWidth / desiredTileHeight;
 //
 //                       return GridView.builder(
 //                         padding: EdgeInsets.zero,
-//                         gridDelegate:
-//                         SliverGridDelegateWithFixedCrossAxisCount(
+//                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
 //                           crossAxisCount: crossAxisCount,
 //                           mainAxisSpacing: 24.h,
 //                           crossAxisSpacing: 24.w,
-//                           childAspectRatio: 0.9,
+//                           childAspectRatio: childAspectRatio,
 //                         ),
 //                         itemCount: ads.length,
 //                         itemBuilder: (_, i) => _AdCard(ad: ads[i]),
 //                       );
 //                     },
-//                   ),
-//                 ),
-//
-//                 // ---------- الترقيم ----------
-//                 SizedBox(height: 16.h),
-//                 Center(
-//                   child: CustomNumberPagination(
-//                     numberPages: state.page.lastPage,
-//                     initialPage: state.page.currentPage,
-//                     onPageChange: (idx) =>
-//                         context.read<AdsCubit>().fetchAds(page: idx + 1),
 //                   ),
 //                 ),
 //               ],
@@ -151,17 +151,12 @@ import '../../manager/getAllAdsCubit/updateAd_cubit.dart';
 //
 //   @override
 //   Widget build(BuildContext context) {
-//     final dateText = DateFormat('yyyy‑MM‑dd').format(ad.startDate!);
+//     final dateText = DateFormat('yyyy-MM-dd').format(ad.startDate);
 //
 //     return GestureDetector(
-//
 //       onTap: () {
-//         print('id=${ad.id}');
 //         context.go('/announcements/${ad.id}');
-//         print('id=${ad.id}');
-//         },
-//
-//
+//       },
 //       child: Card(
 //         shape: RoundedRectangleBorder(
 //           borderRadius: BorderRadius.circular(16.r),
@@ -170,49 +165,94 @@ import '../../manager/getAllAdsCubit/updateAd_cubit.dart';
 //         child: Padding(
 //           padding: EdgeInsets.all(12.w),
 //           child: Column(
+//             mainAxisSize: MainAxisSize.min, // important
+//             crossAxisAlignment: CrossAxisAlignment.center,
 //             children: [
-//               CustomImageNetwork(
-//                 image: ad.photo,
-//                 imageWidth: 120.w,
-//                 imageHeight: 150.h,
-//                 borderRadius: 64.r,
+//               // image
+//               SizedBox(
+//                 width: 120.w,
+//                 height: 120.h,
+//                 child: ClipOval(
+//                   child: CustomImageNetwork(
+//                     image: ad.photo,
+//                     imageWidth: 120.w,
+//                     imageHeight: 120.h,
+//                     borderRadius: 64.r,
+//                   ),
+//                 ),
 //               ),
 //               SizedBox(height: 10.h),
+//
+//               // title (2 lines max)
 //               Text(
 //                 ad.title,
 //                 style: Styles.b1Normal(color: AppColors.t4),
 //                 textAlign: TextAlign.center,
+//                 maxLines: 2,
+//                 overflow: TextOverflow.ellipsis,
 //               ),
-//               Text(dateText, style: Styles.b2Normal(color: AppColors.t2)),
-//               const Spacer(),
+//
+//               SizedBox(height: 6.h),
+//
+//               // description (optional, limited)
+//               if (ad.description.isNotEmpty)
+//                 Text(
+//                   ad.description,
+//                   style: Styles.b2Normal(color: AppColors.t2),
+//                   textAlign: TextAlign.center,
+//                   maxLines: 3,
+//                   overflow: TextOverflow.ellipsis,
+//                 ),
+//
+//               SizedBox(height: 6.h),
+//
+//               Text(
+//                 dateText,
+//                 style: Styles.b2Normal(color: AppColors.t2),
+//               ),
+//
+//               SizedBox(height: 10.h),
+//
+//               // action buttons
 //               Row(
 //                 mainAxisAlignment: MainAxisAlignment.center,
 //                 children: [
 //                   IconButton(
-//                     icon: Icon(Icons.edit, size: 30.r, color: AppColors.blue),
+//                     icon: Icon(Icons.edit, size: 26.r, color: AppColors.blue),
 //                     onPressed: () {
 //                       showDialog<bool>(
 //                         context: context,
 //                         builder: (_) => BlocProvider<UpdateAdCubit>(
 //                           create: (_) => getIt<UpdateAdCubit>(),
-//                           child: UpdateAnnouncementView(
-//                             ad: ad,
-//                           ),
+//                           child: UpdateAnnouncementView(ad: ad),
 //                         ),
 //                       ).then((updated) {
 //                         if (updated == true) {
-//
 //                           context.read<AdsCubit>().fetchAds(page: 1);
 //                         }
 //                       });
 //                     },
 //                   ),
-//
+//                   SizedBox(width: 12.w),
 //                   IconButton(
-//                     icon: Icon(Icons.delete, size: 30.r, color: AppColors.red),
-//                     onPressed: () {
+//                     icon: Icon(Icons.delete, size: 26.r, color: AppColors.red),
+//                     onPressed: () async {
+//                       final confirmed = await showDialog<bool>(
+//                         context: context,
+//                         builder: (ctx) => AlertDialog(
+//                           title: Text('Are you sure?'),
+//                           content: Text('Do you really want to delete this announcement?'),
+//                           actions: [
+//                             TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text('Cancel')),
+//                             TextButton(onPressed: () => Navigator.of(ctx).pop(true), child: Text('Delete')),
+//                           ],
+//                         ),
+//                       );
 //
-//                       // context.read<AdsCubit>().deleteAd(ad.id);
+//                       if (confirmed == true) {
+//                         // افترض أن لديك DeleteAdCubit مسجّلة في الشجرة أعلاه
+//                         context.read<DeleteAdCubit>().deleteAd(ad.id);
+//                       }
 //                     },
 //                   ),
 //                 ],
@@ -224,18 +264,26 @@ import '../../manager/getAllAdsCubit/updateAd_cubit.dart';
 //     );
 //   }
 // }
-//
 
 
 
-
-
-
-
-
-
-class AnnouncementsViewBody extends StatelessWidget {
+class AnnouncementsViewBody extends StatefulWidget {
   const AnnouncementsViewBody({Key? key}) : super(key: key);
+
+  @override
+  State<AnnouncementsViewBody> createState() => _AnnouncementsViewBodyState();
+}
+
+class _AnnouncementsViewBodyState extends State<AnnouncementsViewBody> {
+  bool _showOnlyActive = false;
+
+  bool _isAdActive(AdModel ad) {
+    final now = DateTime.now().toUtc();
+    final start = ad.startDate.toUtc();
+    final end = ad.endDate.toUtc();
+    // active if now in [start, end]
+    return !now.isBefore(start) && !now.isAfter(end);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -250,22 +298,67 @@ class AnnouncementsViewBody extends StatelessWidget {
             return Center(child: CustomErrorWidget(errorMessage: state.message));
           }
           if (state is AdsLoaded) {
-            final ads = state.page.ads;
+            final allAds = state.page.ads;
+            final ads = _showOnlyActive ? allAds.where(_isAdActive).toList() : allAds;
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // title + add button
+                // title + Active toggle + add button
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    // title + Active toggle
                     Expanded(
-                      child: Text(
-                        AppLocalizations.of(context).translate('Announcements'),
-                        style: Styles.h2Bold(color: AppColors.blue),
-                        overflow: TextOverflow.ellipsis,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              AppLocalizations.of(context).translate('Announcements'),
+                              style: Styles.h2Bold(color: AppColors.blue),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          SizedBox(width: 12.w),
+                          // Active toggle (keeps on same page)
+                          GestureDetector(
+                            onTap: () {
+                              setState(() => _showOnlyActive = !_showOnlyActive);
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+                              decoration: BoxDecoration(
+                                color: _showOnlyActive ? Colors.white : Colors.white,
+                                borderRadius: BorderRadius.circular(20.r),
+                                border: Border.all(color: AppColors.t2.withOpacity(0.2)),
+                              ),
+                              child: Row(
+                                children: [
+                                  // green dot if active filter enabled
+                                  Container(
+                                    width: 10.w,
+                                    height: 10.w,
+                                    decoration: BoxDecoration(
+                                      color: _showOnlyActive ? Colors.green : Colors.grey,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8.w),
+                                  Text(
+                                    AppLocalizations.of(context).translate('Active'),
+                                    style: Styles.b2Bold(
+                                      color: _showOnlyActive ? AppColors.t4 : AppColors.t3,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+
+                    // + New announcement button
                     ElevatedButton.icon(
                       onPressed: () {
                         showDialog<bool>(
@@ -296,14 +389,19 @@ class AnnouncementsViewBody extends StatelessWidget {
                     ),
                   ],
                 ),
+
                 SizedBox(height: 16.h),
 
                 // content
                 Expanded(
                   child: ads.isEmpty
                       ? CustomEmptyWidget(
-                    firstText: AppLocalizations.of(context).translate('No announcements at this time'),
-                    secondText: AppLocalizations.of(context).translate('Add new announcements to see them here.'),
+                    firstText: _showOnlyActive
+                        ? AppLocalizations.of(context).translate('No active announcements at this time')
+                        : AppLocalizations.of(context).translate('No announcements at this time'),
+                    secondText: _showOnlyActive
+                        ? AppLocalizations.of(context).translate('There are no announcements currently active.')
+                        : AppLocalizations.of(context).translate('Add new announcements to see them here.'),
                   )
                       : LayoutBuilder(
                     builder: (context, constraints) {
@@ -312,8 +410,8 @@ class AnnouncementsViewBody extends StatelessWidget {
                       int crossAxisCount = (availableWidth / minItemWidth).floor();
                       if (crossAxisCount < 1) crossAxisCount = 1;
 
-                      // Desired tile height (adjust this number to make card taller/shorter)
-                      final double desiredTileHeight = 360.w; // use w/h depending on your scale
+                      // calculate childAspectRatio based on desired tile height
+                      final double desiredTileHeight = 360.0; // adjust to taste
                       final tileWidth = availableWidth / crossAxisCount;
                       final childAspectRatio = tileWidth / desiredTileHeight;
 
@@ -331,6 +429,18 @@ class AnnouncementsViewBody extends StatelessWidget {
                     },
                   ),
                 ),
+
+                SizedBox(height: 16.h),
+
+                // pagination only when showing all (if you want it hidden for active, adjust)
+                if (!_showOnlyActive)
+                  Center(
+                    child: CustomNumberPagination(
+                      numberPages: state.page.lastPage,
+                      initialPage: state.page.currentPage,
+                      onPageChange: (idx) => context.read<AdsCubit>().fetchAds(page: idx + 1),
+                    ),
+                  ),
               ],
             );
           }
@@ -362,10 +472,8 @@ class _AdCard extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(12.w),
           child: Column(
-            mainAxisSize: MainAxisSize.min, // important
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              // image
               SizedBox(
                 width: 120.w,
                 height: 120.h,
@@ -379,8 +487,6 @@ class _AdCard extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10.h),
-
-              // title (2 lines max)
               Text(
                 ad.title,
                 style: Styles.b1Normal(color: AppColors.t4),
@@ -388,10 +494,7 @@ class _AdCard extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
-
               SizedBox(height: 6.h),
-
-              // description (optional, limited)
               if (ad.description.isNotEmpty)
                 Text(
                   ad.description,
@@ -400,17 +503,9 @@ class _AdCard extends StatelessWidget {
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),
-
               SizedBox(height: 6.h),
-
-              Text(
-                dateText,
-                style: Styles.b2Normal(color: AppColors.t2),
-              ),
-
-              SizedBox(height: 10.h),
-
-              // action buttons
+              Text(dateText, style: Styles.b2Normal(color: AppColors.t2)),
+              const Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -424,9 +519,7 @@ class _AdCard extends StatelessWidget {
                           child: UpdateAnnouncementView(ad: ad),
                         ),
                       ).then((updated) {
-                        if (updated == true) {
-                          context.read<AdsCubit>().fetchAds(page: 1);
-                        }
+                        if (updated == true) context.read<AdsCubit>().fetchAds(page: 1);
                       });
                     },
                   ),
@@ -445,10 +538,13 @@ class _AdCard extends StatelessWidget {
                           ],
                         ),
                       );
-
                       if (confirmed == true) {
-                        // افترض أن لديك DeleteAdCubit مسجّلة في الشجرة أعلاه
-                        context.read<DeleteAdCubit>().deleteAd(ad.id);
+                        // delete via DeleteAdCubit if available in ancestor providers
+                        try {
+                          context.read<DeleteAdCubit>().deleteAd(ad.id);
+                        } catch (_) {
+                          // if no cubit provided, fallback to calling AdsCubit.fetchAds after deleting elsewhere
+                        }
                       }
                     },
                   ),
@@ -461,6 +557,3 @@ class _AdCard extends StatelessWidget {
     );
   }
 }
-
-
-

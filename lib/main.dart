@@ -144,6 +144,7 @@ import 'core/utils/app_router.dart';
 import 'core/utils/bloc_observer.dart';
 import 'core/utils/service_locator.dart';
 import 'features/ads/data/repos/getAllAds_repo.dart';
+import 'features/ads/presentation/manager/getAllAdsCubit/active_cubit.dart';
 import 'features/ads/presentation/manager/getAllAdsCubit/getAllAdsCubit.dart';
 import 'features/employee/data/repos/employee_repo_impl.dart';
 import 'features/employee/presentation/manager/create_employee_cubit/create_employee_cubit.dart';
@@ -274,7 +275,10 @@ class _RootAppState extends State<RootApp> {
           create: (_) => getIt<AdsCubit>()..fetchAds(page: 1),
         ),
 
+        BlocProvider<ActiveAdsCubit>(
+            create: (_) => getIt<ActiveAdsCubit>()..fetchActiveAds(page: 1),
 
+        )
 
         // Employees list + create/update/delete
         /*      BlocProvider(

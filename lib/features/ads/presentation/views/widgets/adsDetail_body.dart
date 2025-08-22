@@ -15,21 +15,6 @@ import '../../manager/getAllAdsCubit/singleAdCubit.dart';
 import '../../manager/getAllAdsCubit/singleAdState.dart';
 
 
-// lib/features/ads/presentation/views/widgets/announcement_details_body.dart
-
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../../core/localization/app_localizations.dart';
-import '../../../../../core/utils/app_colors.dart';
-import '../../../../../core/utils/styles.dart';
-import '../../../../../core/widgets/custom_circular_progress_indicator.dart';
-import '../../../../../core/widgets/custom_error_widget.dart';
-import '../../../../../core/widgets/custom_image_network.dart';
-import '../../manager/getAllAdsCubit/singleAdCubit.dart';
-import '../../manager/getAllAdsCubit/singleAdState.dart';
 
 class AnnouncementDetailsBody extends StatelessWidget {
   const AnnouncementDetailsBody({Key? key}) : super(key: key);

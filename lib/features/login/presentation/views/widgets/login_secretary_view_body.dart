@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,6 +16,12 @@ import '../../manager/login_cubit/login_secretary_cubit.dart';
 import '../../manager/login_cubit/login_secretary_state.dart';
 
 class LoginViewBody extends StatelessWidget {
+  Future<String> _getDeviceToken() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    String? token = await messaging.getToken();
+    return token ?? 'unknown_token';
+  }
+
   LoginViewBody({super.key});
 
   final _formKey = GlobalKey<FormState>();
@@ -100,12 +107,14 @@ class LoginViewBody extends StatelessWidget {
                               borderWidth: 0.w,
                               buttonColor: AppColors.purple,
                               borderColor: Colors.transparent,
-                              onPressed: (){
+                              onPressed: ()async{
+                                String deviceKey =  await _getDeviceToken();
+                                print("🔑 deviceKey=$deviceKey");
                                 if(_formKey.currentState!.validate()) {
                                   cubit.fetchCreateTrainer(
                                     email: emailController.text,
                                     password: passwordController.text,
-                                    fcm_token: 'fcmToken',
+                                    fcm_token: deviceKey,
                                   );
                                 }
                               },

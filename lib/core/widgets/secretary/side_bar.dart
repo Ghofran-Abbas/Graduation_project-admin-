@@ -61,7 +61,7 @@ class SideBar extends StatelessWidget {
                         SideBarItem(name: AppLocalizations.of(context).translate('Announcement'), icon: Icons.announcement_outlined, route: GoRouterPath.announcements,color: AppColors.purple,),
                         SideBarItem(name: AppLocalizations.of(context).translate('Reports'), icon: Icons.insert_chart, route: GoRouterPath.reports, color: AppColors.purple,),
                         SideBarItem(name: AppLocalizations.of(context).translate('Complains'), icon: Icons.mail_outlined, route: GoRouterPath.complains, color: AppColors.purple,),
-                        SideBarItem(name: AppLocalizations.of(context).translate('Notification'), icon: Icons.notifications_none, route: GoRouterPath.reports, color: AppColors.purple,),
+                        SideBarItem(name: AppLocalizations.of(context).translate('Notification'), icon: Icons.notifications_none, route: GoRouterPath.notifications, color: AppColors.purple,),
                       ],
                     ),
                   ),
