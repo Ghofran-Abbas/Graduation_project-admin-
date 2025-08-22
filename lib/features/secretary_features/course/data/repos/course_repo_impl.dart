@@ -209,7 +209,7 @@ class CourseRepoImpl implements CourseRepo {
   }) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/secretary/section/showAllCourseSection/$id?page=$page',
+        endPoint: '/section/showAllCourseSectionInProgress/$id?page=$page',
         token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
       ));
       log(data.toString());
@@ -718,7 +718,7 @@ class CourseRepoImpl implements CourseRepo {
   Future<Either<Failure, CompleteModel>> fetchFinishedSection({required int courseId, required int page}) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/section/showAllCourseSectionIsPending/$courseId/?page=$page',
+        endPoint: '/section/showAllCourseSectionFinished/$courseId/?page=$page',
         token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
       ));
       log(data.toString());

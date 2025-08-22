@@ -8,12 +8,12 @@
   "LogoutSecretaryFailure": "فشل في تسجيل الخروج. يرجى المحاولة لاحقًا",
   "LogoutSecretarySuccess": "تم تسجيل الخروج بنجاح",
 
-  "CreateDepartmentFailure": "Failed to add department. Please try again later",
-  "CreateDepartmentSuccess": "Department added successfully",
-  "UpdateDepartmentFailure": "Failed to update department. Please try again later",
-  "UpdateDepartmentSuccess": "Department information updated successfully",
-  "DeleteDepartmentFailure": "Failed to delete department. Please try again later",
-  "DeleteDepartmentSuccess": "Department deleted successfully",
+  "CreateDepartmentFailure": "فشل في إضافة القسم. يرجى المحاولة لاحقًا",
+  "CreateDepartmentSuccess": "تمت إضافة القسم بنجاح",
+  "UpdateDepartmentFailure": "فشل في تحديث القسم. يرجى المحاولة لاحقًا",
+  "UpdateDepartmentSuccess": "تم تحديث معلومات الدورة بنجاح",
+  "DeleteDepartmentFailure": "فشل في حذف القسم. يرجى المحاولة لاحقًا",
+  "DeleteDepartmentSuccess": "تم حذف القسم بنجاح",
 
   "CreateCourseFailure": "فشل في إضافة الدورة. يرجى المحاولة لاحقًا",
   "CreateCourseSuccess": "تمت إضافة الدورة بنجاح",
@@ -258,7 +258,7 @@
   "Files will appear here after they add to the section.": "Files will appear here after they add to the section.",
 
 
-  "Click to see Kristin’s awards": "Click to see Kristin’s awards",
+  "Click to see Kristin’s awards": "اضغط هنا لرؤية جوائز Kristin",
   "DetailsSectionFailure": "Failed to load week days. Please try again later",
 
   "SelectEndDateFailure": "فشل في تحديد تاريخ الانتهاء. يرجى المحاولة لاحقًا",
@@ -268,9 +268,9 @@
   "Please choose start time first!": "يرجى اختيار وقت البدء أولاً!",
 
 
-  "Sessions number": "Sessions number",
+  "Sessions number": "عدد الجلسات",
 
-  "Rating": "Rating",
+  "Rating": "التقييم",
 
   "Put Trainer translation under this line": "******************************************"
 }
