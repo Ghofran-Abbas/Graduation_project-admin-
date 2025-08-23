@@ -107,17 +107,37 @@ class LoginViewBody extends StatelessWidget {
                               borderWidth: 0.w,
                               buttonColor: AppColors.purple,
                               borderColor: Colors.transparent,
-                              onPressed: ()async{
-                                String deviceKey = await _getDeviceToken();
-                                print("🔑 deviceKey=$deviceKey");
-                                if(_formKey.currentState!.validate()) {
-                                  cubit.fetchCreateTrainer(
-                                    email: emailController.text,
-                                    password: passwordController.text,
-                                    fcm_token: deviceKey,
-                                  );
-                                }
+                              // onPressed: ()async{
+                              //   String deviceKey = await _getDeviceToken();
+                              //   print("🔑 deviceKey=$deviceKey");
+                              //   if(_formKey.currentState!.validate()) {
+                              //     cubit.fetchCreateTrainer(
+                              //       email: emailController.text,
+                              //       password: passwordController.text,
+                              //       fcm_token: deviceKey,
+                              //     );
+                              //   }
+                              // },
+
+
+                              onPressed: () async {
+                                if (!_formKey.currentState!.validate()) return;
+
+                                // احصل على آخر FCM token مضبوط للويب
+                                final deviceKey = await _getDeviceToken();
+                                debugPrint("🔑 deviceKey=$deviceKey");
+
+                                // ممكن تمنع الإرسال لو 'unknown_token'
+                                // if (deviceKey == 'unknown_token') { ... ارجع برسالة للمستخدم ... }
+
+                                cubit.fetchCreateTrainer(
+                                  email: emailController.text.trim(),
+                                  password: passwordController.text,
+                                  fcm_token: deviceKey,
+                                );
                               },
+
+
                             ),
                           ],
                         ),
