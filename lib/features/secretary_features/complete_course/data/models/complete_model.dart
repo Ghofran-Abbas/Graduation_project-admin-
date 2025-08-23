@@ -1,16 +1,16 @@
 class CompleteModel {
   final int currentPage;
-  final List<DatumComplete> data;
+  final List<DatumComplete>? data;
   final String firstPageUrl;
-  final int from;
+  final int? from;
   final int lastPage;
   final String lastPageUrl;
   final List<Link> links;
-  final dynamic nextPageUrl;
+  final String? nextPageUrl;
   final String path;
   final int perPage;
-  final dynamic prevPageUrl;
-  final int to;
+  final String? prevPageUrl;
+  final int? to;
   final int total;
 
   CompleteModel({
@@ -47,7 +47,7 @@ class CompleteModel {
 
   Map<String, dynamic> toJson() => {
     "current_page": currentPage,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
     "first_page_url": firstPageUrl,
     "from": from,
     "last_page": lastPage,

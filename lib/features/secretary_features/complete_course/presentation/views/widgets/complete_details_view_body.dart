@@ -333,7 +333,7 @@ class CompleteDetailsViewBody extends StatelessWidget {
                                                 ),
                                               ],
                                             ),
-                                            Padding(
+                                            /*Padding(
                                               padding: EdgeInsets.only(top: 40.h, right: 47.0.w,),
                                               child: DefaultTabController(
                                                 length: 1,
@@ -421,7 +421,7 @@ class CompleteDetailsViewBody extends StatelessWidget {
                                                   ],
                                                 ),
                                               ),
-                                            ),
+                                            ),*/
                                           ],
                                         ),
                                       ],

@@ -22,24 +22,28 @@ class TrainersSectionModelTrainer {
   final int id;
   final String name;
   final int seatsOfNumber;
+  final int reservedSeats;
   final String state;
   final DateTime startDate;
   final DateTime endDate;
   final int courseId;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final int totalSessions;
   final List<TrainerTrainer>? trainers;
 
   TrainersSectionModelTrainer({
     required this.id,
     required this.name,
     required this.seatsOfNumber,
+    required this.reservedSeats,
     required this.state,
     required this.startDate,
     required this.endDate,
     required this.courseId,
     required this.createdAt,
     required this.updatedAt,
+    required this.totalSessions,
     required this.trainers,
   });
 
@@ -47,12 +51,14 @@ class TrainersSectionModelTrainer {
     id: json["id"],
     name: json["name"],
     seatsOfNumber: json["seatsOfNumber"],
+    reservedSeats: json["reservedSeats"],
     state: json["state"],
     startDate: DateTime.parse(json["startDate"]),
     endDate: DateTime.parse(json["endDate"]),
     courseId: json["courseId"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
+    totalSessions: json["total_sessions"],
     trainers: List<TrainerTrainer>.from(json["trainers"].map((x) => TrainerTrainer.fromJson(x))),
   );
 
@@ -60,12 +66,14 @@ class TrainersSectionModelTrainer {
     "id": id,
     "name": name,
     "seatsOfNumber": seatsOfNumber,
+    "reservedSeats": reservedSeats,
     "state": state,
     "startDate": "${startDate.year.toString().padLeft(4, '0')}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}",
     "endDate": "${endDate.year.toString().padLeft(4, '0')}-${endDate.month.toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(2, '0')}",
     "courseId": courseId,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
+    "total_sessions": totalSessions,
     "trainers": List<dynamic>.from(trainers!.map((x) => x.toJson())),
   };
 }
