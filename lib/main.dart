@@ -167,15 +167,235 @@ import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'firebase_options.dart';
+//
+// void main()async {
+//
+//   setupServiceLocator();
+//   Bloc.observer = MyBlocObserver();
+//   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+//
+//   runApp(const RootApp());
+// }
+// class RootApp extends StatefulWidget {
+//   const RootApp({Key? key}) : super(key: key);
+//   @override
+//   State<RootApp> createState() => _RootAppState();
+// }
+//
+// class _RootAppState extends State<RootApp> {
+//   @override
+//   void initState() {
+//     super.initState();
+//     _setupFCM();
+//   }
+//
+//   Future<void> _setupFCM() async {
+//     final messaging = FirebaseMessaging.instance;
+//
+//     // طلب إذن الإشعارات
+//     NotificationSettings settings = await messaging.requestPermission(
+//       alert: true,
+//       badge: true,
+//       sound: true,
+//     );
+//     if (settings.authorizationStatus != AuthorizationStatus.authorized) {
+//       debugPrint('🚫 Permission denied');
+//       return;
+//     }
+//
+//     // جلب الـ token
+//     try {
+//       final token = await messaging.getToken(
+//         vapidKey: 'BMUIu0ik_OZJ9r9n3GPXib5fouwP02aKUqHBPJZFio406nmC_henlk7OtEco9fc5xd7Q3q_tZM0RuP6oBBPqTPc',
+//       );
+//       debugPrint('🔑 FCM Token: $token');
+//     } catch (e) {
+//       debugPrint('❌ FCM token error: $e');
+//     }
+//
+//     // استماع للرسائل عند الـ foreground
+//     FirebaseMessaging.onMessage.listen((msg) {
+//       debugPrint('📬 Message: ${msg.notification}');
+//     });
+//   }
+// // class MyApp extends StatelessWidget {
+// //   const MyApp({super.key});
+//
+//   // This widget is the root of your application.
+//   @override
+//   Widget build(BuildContext context) {
+//     return MultiBlocProvider(
+//       providers: [
+//         BlocProvider<LocaleCubit>(create: (_) => LocaleCubit()),
+//         BlocProvider(
+//           create: (context) {
+//             return LoginCubit(
+//               getIt.get<LoginRepoImpl>(),
+//             );
+//           },
+//         ),
+//         BlocProvider(
+//           create: (context) {
+//             return UserCubit(
+//               //getIt.get<LoginRepoImpl>(),
+//             )..loadUser();
+//           },
+//         ),
+//         BlocProvider(
+//           create: (context) {
+//             return LogoutSecretaryCubit(
+//               getIt.get<LogoutSecretaryRepoImpl>(),
+//             );
+//           },
+//         ),
+//         BlocProvider(
+//           create: (context) {
+//             return DepartmentsCubit(
+//               getIt.get<DepartmentRepoImpl>(),
+//             )..fetchDepartments(page: 1);
+//           },
+//         ),
+//         BlocProvider(
+//           create: (context) {
+//             return StudentsCubit(
+//               getIt.get<StudentRepoImpl>(),
+//             )..fetchStudents(page: 1);
+//           },
+//         ),
+//         BlocProvider(
+//           create: (context) {
+//             return TrainersCubit(
+//               getIt.get<TrainerRepoImpl>(),
+//             )..fetchTrainers(page: 1);
+//           },
+//         ),
+//
+//         //Batool
+//         BlocProvider<AdsCubit>(
+//           create: (_) => getIt<AdsCubit>()..fetchAds(page: 1),
+//         ),
+//
+//         BlocProvider<ActiveAdsCubit>(
+//             create: (_) => getIt<ActiveAdsCubit>()..fetchActiveAds(page: 1),
+//
+//         )
+//
+//         // Employees list + create/update/delete
+//         /*      BlocProvider(
+//           create: (_) => EmployeesCubit(getIt.get<EmployeeRepoImpl>())..fetchEmployees(),
+//         ),
+//         BlocProvider(
+//           create: (_) => CreateEmployeeCubit(getIt.get<EmployeeRepoImpl>()),
+//         ),
+//         BlocProvider(
+//           create: (_) => UpdateEmployeeCubit(getIt.get<EmployeeRepoImpl>()),
+//         ),
+//         BlocProvider(
+//           create: (_) => DeleteEmployeeCubit(getIt.get<EmployeeRepoImpl>()),
+//         ),
+// */
+//       ],
+//       child: BlocBuilder<LocaleCubit, Locale>(
+//         builder: (context, locale) {
+//           return ScreenUtilInit(
+//             designSize: const Size(1440, 1024),
+//             minTextAdapt: true,
+//             splitScreenMode: true,
+//             builder: (context, child) {
+//               return MaterialApp.router(
+//                 routerDelegate: AppRouter.router.routerDelegate,
+//                 routeInformationParser: AppRouter.router.routeInformationParser,
+//                 routeInformationProvider: AppRouter.router.routeInformationProvider,
+//                 debugShowCheckedModeBanner: false,
+//                 supportedLocales: AppLocalizationsSetup.supportedLocales,
+//                 localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
+//                 localeResolutionCallback: AppLocalizationsSetup.localeResolutionCallback,
+//                 locale: locale,
+//               );
+//             },
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
 
-void main()async {
+
+
+
+
+
+
+
+
+
+
+// ⚠️ الملف مخصص للويب (نستخدم dart:html لعرض إشعارات المتصفح)
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // على الويب، إشعارات الخلفية تُدار عبر Service Worker،
+  // إبقاء هذا الهاندلر لا يضر ومفيد للموبايل إذا بنيت لاحقًا.
+  print('🔧 BG message (Dart): ${message.messageId}');
+}
+
+/// يهيّئ FCM ويطبع الـ token قبل تحميل أي UI
+Future<void> _initFCMAndPrintTokenPreUI() async {
+  final messaging = FirebaseMessaging.instance;
+
+  // طلب إذن الإشعارات قبل الواجهات
+  final settings = await messaging.requestPermission(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  if (settings.authorizationStatus != AuthorizationStatus.authorized) {
+    debugPrint('🚫 Permission denied (no token)');
+    return;
+  }
+
+  // جلب التوكن (الويب يحتاج VAPID)
+  try {
+    final token = await messaging.getToken(
+      vapidKey:
+      'BMUIu0ik_OZJ9r9n3GPXib5fouwP02aKUqHBPJZFio406nmC_henlk7OtEco9fc5xd7Q3q_tZM0RuP6oBBPqTPc',
+    );
+    debugPrint('🔑 FCM Token (pre-UI): $token');
+    // TODO: أرسِل التوكن لسيرفرك هنا إذا رغبت
+  } catch (e) {
+    debugPrint('❌ FCM getToken error: $e');
+  }
+
+  // الاستماع لتجديد التوكن مبكرًا
+  FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
+    debugPrint('🔁 Token refreshed: $newToken');
+    // TODO: حدّث التوكن في السيرفر
+  });
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
   setupServiceLocator();
   Bloc.observer = MyBlocObserver();
+
+  // تهيئة Firebase بالقيم المولّدة من FlutterFire CLI
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  // هاندلر الخلفية (لن يؤثر على الويب لكن آمن)
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  // ✅ اطبع التوكن قبل أي واجهات
+  await _initFCMAndPrintTokenPreUI();
+
+  // شغّل الواجهات
   runApp(const RootApp());
 }
+
+// ====== تطبيقك كما هو مع مزوّدي الـ Bloc ======
+
 class RootApp extends StatefulWidget {
   const RootApp({Key? key}) : super(key: key);
   @override
@@ -186,42 +406,53 @@ class _RootAppState extends State<RootApp> {
   @override
   void initState() {
     super.initState();
-    _setupFCM();
+    _setupForegroundHandlers();
   }
 
-  Future<void> _setupFCM() async {
-    final messaging = FirebaseMessaging.instance;
+  /// عند استقبال رسالة والصفحة مفتوحة:
+  /// - نحاول عرض Browser Notification
+  /// - وإلا نعرض SnackBar كبديل
+  void _setupForegroundHandlers() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage msg) async {
+      final title =
+          msg.notification?.title ?? msg.data['title'] ?? 'Notification';
+      final body = msg.notification?.body ?? msg.data['body'] ?? '';
 
-    // طلب إذن الإشعارات
-    NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-    if (settings.authorizationStatus != AuthorizationStatus.authorized) {
-      debugPrint('🚫 Permission denied');
-      return;
-    }
+      bool shownAsBrowserNotification = false;
 
-    // جلب الـ token
-    try {
-      final token = await messaging.getToken(
-        vapidKey: 'BMUIu0ik_OZJ9r9n3GPXib5fouwP02aKUqHBPJZFio406nmC_henlk7OtEco9fc5xd7Q3q_tZM0RuP6oBBPqTPc',
-      );
-      debugPrint('🔑 FCM Token: $token');
-    } catch (e) {
-      debugPrint('❌ FCM token error: $e');
-    }
+      try {
+        // إن لم يكن الإذن ممنوحًا لإشعارات المتصفح، اطلبه (لن يظهر مربع إن كان مرفوضًا مسبقًا)
+        if (html.Notification.permission != 'granted') {
+          await html.Notification.requestPermission();
+        }
+        if (html.Notification.permission == 'granted') {
+          html.Notification(title, body: body, icon: '/icons/Icon-192.png');
+          shownAsBrowserNotification = true;
+        }
+      } catch (e) {
+        // تجاهل أي خطأ هنا (قد يحدث في بيئات لا تدعم Notification API)
+        debugPrint('⚠️ Browser Notification error: $e');
+      }
 
-    // استماع للرسائل عند الـ foreground
-    FirebaseMessaging.onMessage.listen((msg) {
-      debugPrint('📬 Message: ${msg.notification}');
+      // إن لم نعرض إشعار المتصفح، اعرض SnackBar داخل التطبيق
+      if (!shownAsBrowserNotification && mounted) {
+        if (title.isNotEmpty || body.isNotEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('$title\n$body')),
+          );
+        }
+      }
+
+      debugPrint('📬 Foreground message: ${msg.messageId} | ${msg.data}');
+    });
+
+    // فتح التطبيق من إشعار (للمنصات التي تدعم ذلك)
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage msg) {
+      debugPrint('🔔 Opened from notification: ${msg.messageId}');
+      // TODO: وجّه المستخدم بناءً على msg.data (إن رغبت)
     });
   }
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -236,9 +467,7 @@ class _RootAppState extends State<RootApp> {
         ),
         BlocProvider(
           create: (context) {
-            return UserCubit(
-              //getIt.get<LoginRepoImpl>(),
-            )..loadUser();
+            return UserCubit()..loadUser();
           },
         ),
         BlocProvider(
@@ -270,30 +499,14 @@ class _RootAppState extends State<RootApp> {
           },
         ),
 
-        //Batool
+        // Batool
         BlocProvider<AdsCubit>(
           create: (_) => getIt<AdsCubit>()..fetchAds(page: 1),
         ),
-
         BlocProvider<ActiveAdsCubit>(
-            create: (_) => getIt<ActiveAdsCubit>()..fetchActiveAds(page: 1),
-
-        )
-
-        // Employees list + create/update/delete
-        /*      BlocProvider(
-          create: (_) => EmployeesCubit(getIt.get<EmployeeRepoImpl>())..fetchEmployees(),
+          create: (_) =>
+          getIt<ActiveAdsCubit>()..fetchActiveAds(page: 1),
         ),
-        BlocProvider(
-          create: (_) => CreateEmployeeCubit(getIt.get<EmployeeRepoImpl>()),
-        ),
-        BlocProvider(
-          create: (_) => UpdateEmployeeCubit(getIt.get<EmployeeRepoImpl>()),
-        ),
-        BlocProvider(
-          create: (_) => DeleteEmployeeCubit(getIt.get<EmployeeRepoImpl>()),
-        ),
-*/
       ],
       child: BlocBuilder<LocaleCubit, Locale>(
         builder: (context, locale) {
@@ -304,12 +517,16 @@ class _RootAppState extends State<RootApp> {
             builder: (context, child) {
               return MaterialApp.router(
                 routerDelegate: AppRouter.router.routerDelegate,
-                routeInformationParser: AppRouter.router.routeInformationParser,
-                routeInformationProvider: AppRouter.router.routeInformationProvider,
+                routeInformationParser:
+                AppRouter.router.routeInformationParser,
+                routeInformationProvider:
+                AppRouter.router.routeInformationProvider,
                 debugShowCheckedModeBanner: false,
                 supportedLocales: AppLocalizationsSetup.supportedLocales,
-                localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
-                localeResolutionCallback: AppLocalizationsSetup.localeResolutionCallback,
+                localizationsDelegates:
+                AppLocalizationsSetup.localizationsDelegates,
+                localeResolutionCallback:
+                AppLocalizationsSetup.localeResolutionCallback,
                 locale: locale,
               );
             },

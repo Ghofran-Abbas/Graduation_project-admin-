@@ -2,7 +2,12 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../fcm_config.dart';
 import '../../features/login/data/models/login_secretary_model.dart';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 
 class SharedPreferencesHelper {
   static const _jwtTokenKey = 'jwt_token';
@@ -99,4 +104,46 @@ class SharedPreferencesHelper {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('login_model');
   }
+
+  //batool
+  // ✅ جديد: دالة موحّدة للحصول على FCM token مع دعم الويب (vapidKey)
+  static Future<String?> getOrRequestFcmToken() async {
+    // 1) جرّب المخزّن أولاً
+    final cached = await getFcmToken();
+    if (cached != null && cached.isNotEmpty) return cached;
+
+    final messaging = FirebaseMessaging.instance;
+
+    // 2) تأكد من الإذن (لو لم يُمنح سابقًا)
+    final settings = await messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    if (settings.authorizationStatus != AuthorizationStatus.authorized) {
+      return null;
+    }
+
+    // 3) جلب التوكن (مع vapidKey لو على الويب)
+    String? token;
+    try {
+      if (kIsWeb) {
+        token = await messaging.getToken(vapidKey: FcmConfig.vapidKey);
+      } else {
+        token = await messaging.getToken();
+      }
+    } catch (_) {
+      token = null;
+    }
+
+    // 4) خزّنه في SharedPreferences وأعده
+    if (token != null && token.isNotEmpty) {
+      await saveFcmToken(token);
+    }
+    return token;
+  }
+
+
+
+
 }
