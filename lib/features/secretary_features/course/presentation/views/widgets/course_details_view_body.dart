@@ -327,7 +327,7 @@ class CourseDetailsViewBody extends StatelessWidget {
                                                                     ),
                                                                   ],
                                                                 ),
-                                                                Padding(
+                                                                /*Padding(
                                                                   padding: EdgeInsets.only(
                                                                     top: 40.h, right: 47.0.w,),
                                                                   child: DefaultTabController(
@@ -423,7 +423,7 @@ class CourseDetailsViewBody extends StatelessWidget {
                                                                                     );
                                                                                   }
                                                                               ),
-                                                                              /*CustomOverLoadingCard(
+                                                                              *//*CustomOverLoadingCard(
                                                                                 cardCount: count,
                                                                                 onTapSeeMore: () {
                                                                                   context.go('${GoRouterPath.courses}/${stateDC.course.course.departmentId}${GoRouterPath.courseDetails}/${stateDC.course.course.id}${GoRouterPath.announcementsA}/1');
@@ -447,14 +447,14 @@ class CourseDetailsViewBody extends StatelessWidget {
                                                                                   shrinkWrap: true,
                                                                                   physics: NeverScrollableScrollPhysics(),
                                                                                 ),
-                                                                              ),*/
+                                                                              ),*//*
                                                                             ],
                                                                           ),
                                                                         ),
                                                                       ],
                                                                     ),
                                                                   ),
-                                                                ),
+                                                                ),*/
                                                               ],
                                                             ),
                                                           ],

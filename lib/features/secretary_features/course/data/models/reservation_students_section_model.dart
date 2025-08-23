@@ -93,6 +93,7 @@ class Datum {
   final int courseId;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final int totalSessions;
   final List<Student>? students;
 
   Datum({
@@ -106,6 +107,7 @@ class Datum {
     required this.courseId,
     required this.createdAt,
     required this.updatedAt,
+    required this.totalSessions,
     required this.students,
   });
 
@@ -120,6 +122,7 @@ class Datum {
     courseId: json["courseId"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
+    totalSessions: json["total_sessions"],
     students: List<Student>.from(json["students"].map((x) => Student.fromJson(x))),
   );
 
@@ -134,6 +137,7 @@ class Datum {
     "courseId": courseId,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
+    "total_sessions": totalSessions,
     "students": List<dynamic>.from(students!.map((x) => x.toJson())),
   };
 }
