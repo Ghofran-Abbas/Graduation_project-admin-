@@ -273,5 +273,36 @@
 
   "Rating": "Rating",
 
-  "Put Trainer translation under this line": "******************************************"
+  "Put Trainer translation under this line": "******************************************",
+  "Top courses by student registrations": "Top courses by student registrations",
+  "No data yet": "No data yet",
+  "Department": "Department",
+  "Create Task": "Create Task",
+  "Update Task": "Update Task",
+  "Task Details": "Task Details",
+  "Tasks": "Tasks",
+  "New Task": "New Task",
+  "No tasks yet": "No tasks yet",
+  "Task created successfully": "Task created successfully",
+  "Task updated successfully": "Task updated successfully",
+  "Task deleted": "Task deleted",
+  "Delete task": "Delete task",
+  "Are you sure you want to delete this task?": "Are you sure you want to delete this task?",
+  "Actions": "Actions",
+  "Secretary": "Secretary",
+  "Created": "Created",
+  "Close": "Close",
+  "Cancel": "Cancel",
+  "Create": "Create",
+  "Save": "Save",
+  "Required": "Required",
+  "Pending": "Pending",
+  "In progress": "In progress",
+  "Completed": "Completed",
+  "Edit": "Edit",
+  "Delete": "Delete",
+  "Search secretary": "Search secretary",
+  "No secretaries found": "No secretaries found",
+  "Please pick a secretary": "Please pick a secretary"
+
 }

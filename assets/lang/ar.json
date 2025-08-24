@@ -272,5 +272,37 @@
 
   "Rating": "التقييم",
 
-  "Put Trainer translation under this line": "******************************************"
+  "Put Trainer translation under this line": "******************************************",
+
+  "Top courses by student registrations": "اكثر دورات مسجلة بها",
+  "No data yet": "لا يوجد بيانات بعد",
+  "Department": "الاقسام",
+  "Create Task": "إنشاء مهمة",
+  "Update Task": "تحديث المهمة",
+  "Task Details": "تفاصيل المهمة",
+  "Tasks": "المهام",
+  "New Task": "مهمة جديدة",
+  "No tasks yet": "لا توجد مهام بعد",
+  "Task created successfully": "تم إنشاء المهمة بنجاح",
+  "Task updated successfully": "تم تحديث المهمة بنجاح",
+  "Task deleted": "تم حذف المهمة",
+  "Delete task": "حذف المهمة",
+  "Are you sure you want to delete this task?": "هل أنت متأكد أنك تريد حذف هذه المهمة؟",
+  "Actions": "الإجراءات",
+  "Secretary": "السكرتير",
+  "Created": "تاريخ الإنشاء",
+  "Close": "إغلاق",
+  "Cancel": "إلغاء",
+  "Create": "إنشاء",
+  "Save": "حفظ",
+  "Required": "إلزامي",
+  "Pending": "قيد الانتظار",
+  "In progress": "قيد التنفيذ",
+  "Completed": "مكتملة",
+  "Edit": "تعديل",
+  "Delete": "حذف",
+  "Search secretary": "ابحث عن سكرتير",
+  "No secretaries found": "لم يتم العثور على سكرتيرين",
+  "Please pick a secretary": "يرجى اختيار سكرتير"
+
 }
