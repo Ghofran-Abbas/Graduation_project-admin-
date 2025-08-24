@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-<<<<<<< Updated upstream
+
 import '../../features/ads/presentation/manager/getAllAdsCubit/active_cubit.dart';
 import '../../features/ads/presentation/manager/getAllAdsCubit/addAdd_cubit.dart';
 import '../../features/ads/presentation/manager/getAllAdsCubit/getAllAdsCubit.dart';
@@ -13,9 +13,9 @@ import '../../features/ads/presentation/manager/getAllAdsCubit/singleAdCubit.dar
 import '../../features/ads/presentation/views/widgets/adsDetail_view.dart';
 import '../../features/ads/presentation/views/widgets/ads_view.dart';
 import '../../features/ads/presentation/views/widgets/createAds_view.dart';
-=======
+
 import '../../features/dashboard/presentation/views/dashboard_view.dart';
->>>>>>> Stashed changes
+
 import '../../features/employee/presentation/views/employee_details_view.dart';
 import '../../features/employee/presentation/views/employees_view.dart';
 import '../../features/employee/presentation/views/search_employee_view.dart';

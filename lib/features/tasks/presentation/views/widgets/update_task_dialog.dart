@@ -73,16 +73,16 @@ class _UpdateTaskDialogState extends State<UpdateTaskDialog> {
                     decoration: InputDecoration(labelText: loc.translate('Description')),
                     maxLines: 3,
                   ),
-                  DropdownButtonFormField<String>(
-                    value: _status,
-                    items: [
-                      DropdownMenuItem(value: 'pending',     child: Text(loc.translate('Pending'))),
-                      DropdownMenuItem(value: 'in_progress', child: Text(loc.translate('In progress'))),
-                      DropdownMenuItem(value: 'completed',   child: Text(loc.translate('Completed'))),
-                    ],
-                    onChanged: (v) => setState(() => _status = v ?? 'pending'),
-                    decoration: InputDecoration(labelText: loc.translate('Status')),
-                  ),
+                  // DropdownButtonFormField<String>(
+                  //   value: _status,
+                  //   items: [
+                  //     DropdownMenuItem(value: 'pending',     child: Text(loc.translate('Pending'))),
+                  //     DropdownMenuItem(value: 'in_progress', child: Text(loc.translate('In progress'))),
+                  //     DropdownMenuItem(value: 'completed',   child: Text(loc.translate('Completed'))),
+                  //   ],
+                  //   onChanged: (v) => setState(() => _status = v ?? 'pending'),
+                  //   decoration: InputDecoration(labelText: loc.translate('Status')),
+                  // ),
                   SizedBox(height: 12.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
