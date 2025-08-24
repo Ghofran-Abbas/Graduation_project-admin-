@@ -53,7 +53,7 @@ class GoRouterPath {
   static const searchComplain = '/searchComplain';
   static const profile = '/profile';
   static const employees = '/employees';
-  static const dashboardSt = '/dashboardSt';
+  static const stat = '/stat';
   static const tasks = '/tasks';
 
 

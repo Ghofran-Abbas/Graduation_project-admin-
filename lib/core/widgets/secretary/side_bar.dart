@@ -52,15 +52,15 @@ class SideBar extends StatelessWidget {
                     padding: EdgeInsets.only(top: 40.0.h ,left: 52.0.w),
                     child: Column(
                       children: [
-                        SideBarItem(name: AppLocalizations.of(context).translate('Dashboard'), icon: Icons.home_outlined, route: GoRouterPath.dashboardSt,),
+                        SideBarItem(name: AppLocalizations.of(context).translate('Dashboard'), icon: Icons.dashboard, route: GoRouterPath.stat,),
 
-                        SideBarItem(name: AppLocalizations.of(context).translate('Department'), icon: Icons.home_outlined, route: GoRouterPath.dashboard,),
-                        SideBarItem(name: AppLocalizations.of(context).translate('Tasks'), icon: Icons.home_outlined, route: GoRouterPath.tasks,),
+                        SideBarItem(name: AppLocalizations.of(context).translate('Department'), icon: Icons.category_outlined, route: GoRouterPath.dashboard,),
+                        SideBarItem(name: AppLocalizations.of(context).translate('Tasks'), icon: Icons.fact_check_outlined, route: GoRouterPath.tasks,),
 
-                        SideBarItem(name: AppLocalizations.of(context).translate('Students'), icon: Icons.person_outline_outlined, route: GoRouterPath.students, color: AppColors.purple,),
-                        SideBarItem(name: AppLocalizations.of(context).translate('Trainers'), icon: Icons.perm_identity, route: GoRouterPath.trainers, color: AppColors.purple,),
-                        SideBarItem(name: AppLocalizations.of(context).translate('Employee'), icon: Icons.perm_identity, route: GoRouterPath.employees, color: AppColors.purple,),
-                        SideBarItem(name: AppLocalizations.of(context).translate('In preparation'), icon: Icons.school_outlined, route: GoRouterPath.inPreparation, color: AppColors.purple,),
+                        SideBarItem(name: AppLocalizations.of(context).translate('Students'), icon: Icons.school_outlined, route: GoRouterPath.students, color: AppColors.purple,),
+                        SideBarItem(name: AppLocalizations.of(context).translate('Trainers'), icon: Icons.co_present, route: GoRouterPath.trainers, color: AppColors.purple,),
+                        SideBarItem(name: AppLocalizations.of(context).translate('Employee'), icon:Icons.badge_outlined, route: GoRouterPath.employees, color: AppColors.purple,),
+                        SideBarItem(name: AppLocalizations.of(context).translate('In preparation'), icon:  Icons.pending_actions, route: GoRouterPath.inPreparation, color: AppColors.purple,),
                         SideBarItem(name: AppLocalizations.of(context).translate('Complete'), icon: Icons.check_circle_outline, route: GoRouterPath.complete, color: AppColors.purple,),
                         SideBarItem(name: AppLocalizations.of(context).translate('Announcement'), icon: Icons.announcement_outlined, route: GoRouterPath.announcements,color: AppColors.purple,),
                         SideBarItem(name: AppLocalizations.of(context).translate('Reports'), icon: Icons.insert_chart, route: GoRouterPath.reports, color: AppColors.purple,),

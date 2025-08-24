@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../core/localization/app_localizations.dart';
 import '../../manager/section_ratings_cubit/section_ratings_cubit.dart';
 import '../../manager/section_ratings_cubit/section_ratings_state.dart';
 
@@ -45,6 +46,7 @@ class _SectionRatingsCardContentState extends State<SectionRatingsCardContent> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final primary = theme.colorScheme.primary;
 
@@ -60,21 +62,29 @@ class _SectionRatingsCardContentState extends State<SectionRatingsCardContent> {
             OutlinedButton.icon(
               onPressed: _pickStart,
               icon: const Icon(Icons.event_outlined),
-              label: Text(_start == null ? 'Start' : _start!.toIso8601String().substring(0,10)),
+              label: Text(_start == null ? loc.translate('Start') : _start!.toIso8601String().substring(0,10)),
             ),
             OutlinedButton.icon(
               onPressed: _pickEnd,
               icon: const Icon(Icons.event),
-              label: Text(_end == null ? 'End' : _end!.toIso8601String().substring(0,10)),
+              label: Text(_end == null ? loc.translate('End') : _end!.toIso8601String().substring(0,10)),
             ),
             DropdownButton<int>(
               value: _limit,
-              items: const [5,10,15,20].map((e) => DropdownMenuItem(value: e, child: Text('Limit $e'))).toList(),
+              items: const [5,10,15,20]
+                  .map((e) => DropdownMenuItem(
+                value: e,
+                child: Text('${loc.translate('Limit')} $e'),
+              ))
+                  .toList(),
               onChanged: (v) => setState(() => _limit = v ?? 5),
             ),
             DropdownButton<String>(
               value: _order,
-              items: const ['desc','asc'].map((e) => DropdownMenuItem(value: e, child: Text(e.toUpperCase()))).toList(),
+              items: [
+                DropdownMenuItem(value: 'desc', child: Text(loc.translate('DESC'))),
+                DropdownMenuItem(value: 'asc', child: Text(loc.translate('ASC'))),
+              ],
               onChanged: (v) => setState(() => _order = v ?? 'desc'),
             ),
             ElevatedButton.icon(
@@ -87,11 +97,16 @@ class _SectionRatingsCardContentState extends State<SectionRatingsCardContent> {
                 );
               },
               icon: const Icon(Icons.tune_rounded),
-              label: const Text('Apply'),
+              label: Text(loc.translate('Apply')),
             ),
             TextButton(
               onPressed: () {
-                setState(() { _start = null; _end = null; _limit = 5; _order = 'desc'; });
+                setState(() {
+                  _start = null;
+                  _end = null;
+                  _limit = 5;
+                  _order = 'desc';
+                });
                 context.read<SectionRatingsCubit>().load(
                   start: DateTime.now().subtract(const Duration(days: 60)),
                   end: DateTime.now(),
@@ -99,7 +114,7 @@ class _SectionRatingsCardContentState extends State<SectionRatingsCardContent> {
                   order: 'desc',
                 );
               },
-              child: const Text('Reset'),
+              child: Text(loc.translate('Reset')),
             ),
           ],
         ),
@@ -124,7 +139,7 @@ class _SectionRatingsCardContentState extends State<SectionRatingsCardContent> {
                         start: _start, end: _end, limit: _limit, order: _order,
                       ),
                       icon: const Icon(Icons.refresh),
-                      label: const Text('Retry'),
+                      label: Text(loc.translate('Retry')),
                     ),
                   ),
                 ],
@@ -135,7 +150,7 @@ class _SectionRatingsCardContentState extends State<SectionRatingsCardContent> {
               if (items.isEmpty) {
                 return Padding(
                   padding: EdgeInsets.symmetric(vertical: 24.h),
-                  child: const Center(child: Text('No data in selected range')),
+                  child: Center(child: Text(loc.translate('No data in selected range'))),
                 );
               }
               final palette = widget.buildPalette(primary, items.length);

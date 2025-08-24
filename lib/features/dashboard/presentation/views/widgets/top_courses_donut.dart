@@ -1,16 +1,18 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../core/localization/app_localizations.dart';
 import '../../../data/models/top_courses_model.dart';
 
 class TopCoursesDonut extends StatelessWidget {
-  final List<TopCourseStat> items;     // already filtered/sorted
-  final List<Color> colors;            // per-item color
+  final List<TopCourseStat> items; // already filtered/sorted
+  final List<Color> colors;        // per-item color
   const TopCoursesDonut({super.key, required this.items, required this.colors});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final loc = AppLocalizations.of(context)!;
     final total = items.fold<int>(0, (s, e) => s + e.totalStudents);
 
     if (total == 0) {
@@ -22,7 +24,7 @@ class TopCoursesDonut extends StatelessWidget {
             Icon(Icons.pie_chart_outline_rounded, color: Colors.black38, size: 32.sp),
             SizedBox(height: 8.h),
             Text(
-              'No registrations yet',
+              loc.translate('No registrations yet'),
               style: TextStyle(color: Colors.black54, fontSize: 12.sp),
             ),
           ],
@@ -40,7 +42,7 @@ class TopCoursesDonut extends StatelessWidget {
           value: v,
           color: colors[i],
           radius: 54.r,
-          title: '', // titles in legend, not on the chart
+          title: '',
         ),
       );
     }
@@ -50,7 +52,7 @@ class TopCoursesDonut extends StatelessWidget {
         sections: sections,
         centerSpaceRadius: 36.r,
         sectionsSpace: 2.w,
-        startDegreeOffset: -90, // start at top
+        startDegreeOffset: -90,
         pieTouchData: PieTouchData(enabled: false),
       ),
       swapAnimationDuration: const Duration(milliseconds: 500),

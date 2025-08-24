@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/localization/app_localizations.dart';
-import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/widgets/custom_circular_progress_indicator.dart';
 import '../../../../../core/widgets/custom_error_widget.dart';
 import '../../../../../core/widgets/secretary/custom_screen_body.dart';
@@ -52,14 +51,6 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    // When Yearly is loaded, default monthly to the latest year
-    // and trigger Monthly load automatically.
-    // We'll do this with a post-frame listener via BlocListener below.
-  }
-
-  @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
 
@@ -80,7 +71,7 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    // ====== Top Courses card (kept) ======
+                    // ====== Top Courses card ======
                     Wrap(
                       runSpacing: 20.h,
                       spacing: 20.w,
@@ -280,7 +271,6 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
                               title: loc.translate('Monthly student registrations'),
                               subtitle: loc.translate('Selected year'),
                               actions: [
-                                // Year selector (built from Yearly success)
                                 BlocBuilder<YearlyStudentsCubit, YearlyStudentsState>(
                                   builder: (context, yState) {
                                     final years = (yState is YearlyStudentsSuccess)
@@ -350,6 +340,7 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
                               ),
                             ),
                           ),
+
                           // ===== Section Ratings card =====
                           SizedBox(
                             width: cardWidth,

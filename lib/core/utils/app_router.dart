@@ -99,7 +99,7 @@ class AppRouter {
             routes: [
 
               GoRoute(
-                path: '/dashboardSt',
+                path: '/stat',
                 builder: (context, state) => const DashboardView(),
               ),
               GoRoute(
