@@ -46,7 +46,7 @@ class SearchStudentViewBody extends StatelessWidget {
                 child: state is SearchStudentSuccess ? Column(
                   children: [
                     state.student.students.data!.isNotEmpty ? CustomListInformationFields(
-                      secondField: AppLocalizations.of(context).translate('Subject'),
+                      secondField: AppLocalizations.of(context).translate('Birth date'),
                       showSecondField: true,
                       widget: ListView.builder(
                         itemBuilder: (BuildContext context, int index) {

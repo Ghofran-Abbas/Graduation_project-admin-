@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../core/localization/app_localizations.dart';
 import '../../../../../core/widgets/custom_circular_progress_indicator.dart';
 import '../../../../../core/widgets/custom_error_widget.dart';
 import '../../../../../core/widgets/custom_snack_bar.dart';
@@ -99,6 +100,7 @@ class _GiftsViewBodyState extends State<GiftsViewBody> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context); // + add
     final screenW = MediaQuery.of(context).size.width;
     final crossAxisCount = ((screenW - 210) / 250).floor().clamp(2, 10);
 
@@ -109,7 +111,7 @@ class _GiftsViewBodyState extends State<GiftsViewBody> {
             if (s is CreateGiftFailure) {
               CustomSnackBar.showErrorSnackBar(ctx, msg: s.error);
             } else if (s is CreateGiftSuccess) {
-              CustomSnackBar.showSnackBar(ctx, msg: 'Award created');
+              CustomSnackBar.showSnackBar(ctx, msg: t.translate('Award created'));
               _reload(page: 1);
             }
           },
@@ -119,7 +121,7 @@ class _GiftsViewBodyState extends State<GiftsViewBody> {
             if (s is UpdateGiftFailure) {
               CustomSnackBar.showErrorSnackBar(ctx, msg: s.error);
             } else if (s is UpdateGiftSuccess) {
-              CustomSnackBar.showSnackBar(ctx, msg: 'Award updated');
+              CustomSnackBar.showSnackBar(ctx, msg: t.translate('Award updated'));
               _reload(page: 1);
             }
           },
@@ -129,20 +131,12 @@ class _GiftsViewBodyState extends State<GiftsViewBody> {
             if (s is DeleteGiftFailure) {
               CustomSnackBar.showErrorSnackBar(ctx, msg: s.error);
             } else if (s is DeleteGiftSuccess) {
-              CustomSnackBar.showSnackBar(ctx, msg: 'Award deleted');
+              CustomSnackBar.showSnackBar(ctx, msg: t.translate('Award deleted'));
               _reload(page: 1);
             }
           },
         ),
-        BlocListener<GiftsCubit, GiftsState>(
-          listener: (ctx, state) {
-            if (state is GiftsSuccess) {
-              _currentPage = state.currentPage;
-              _lastPage = state.lastPage;
-              _loadingMore = false;
-            }
-          },
-        ),
+        // ...
       ],
       child: BlocBuilder<GiftsCubit, GiftsState>(
         builder: (ctx, state) {
@@ -158,18 +152,16 @@ class _GiftsViewBodyState extends State<GiftsViewBody> {
           return Padding(
             padding: EdgeInsets.only(top: 56.h),
             child: CustomScreenBody(
-              title: 'Awards',
-              showSearchField: false,onPressedFirst: (){},
+              title: t.translate('Awards'),
+              showSearchField: false,
+              onPressedFirst: (){},
               showFirstButton: false,
               showSecondButton: true,
-              textSecondButton: 'Add Award',
+              textSecondButton: t.translate('Add Award'),
               onPressedSecond: () => _showForm(ctx),
               body: Padding(
                 padding: EdgeInsets.only(
-                  top: 238.h,
-                  left: 20.w,
-                  right: 20.w,
-                  bottom: 27.h,
+                  top: 238.h, left: 20.w, right: 20.w, bottom: 27.h,
                 ),
                 child: SingleChildScrollView(
                   controller: _scrollController,
@@ -177,17 +169,16 @@ class _GiftsViewBodyState extends State<GiftsViewBody> {
                   child: Column(
                     children: [
                       if (gifts.isEmpty)
-                        const CustomEmptyWidget(
-                          firstText: 'No awards to display.',
-                          secondText: 'You’ll see awards here once you add them.',
+                        CustomEmptyWidget(
+                          firstText: t.translate('No awards to display.'),
+                          secondText: t.translate('Awards will appear here after you add them.'),
                         )
                       else
                         GridView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: gifts.length,
-                          gridDelegate:
-                          SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: crossAxisCount,
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
@@ -196,30 +187,27 @@ class _GiftsViewBodyState extends State<GiftsViewBody> {
                           itemBuilder: (c, i) {
                             final g = gifts[i];
                             return CustomCard(
-                              image: g.photo,onTap:(){},
+                              image: g.photo,
+                              onTap: (){},
                               text: g.description,
                               showSecondDetailsText: true,
-                              secondDetailsText:
-                              DateFormat.yMMMd().format(g.date),
+                              secondDetailsText: DateFormat.yMMMd().format(g.date),
                               showIcons: true,
                               onTapFirstIcon: () => _showForm(c, g),
                               onTapSecondIcon: () async {
                                 final confirmed = await showDialog<bool>(
                                   context: c,
                                   builder: (dCtx) => AlertDialog(
-                                    title: const Text('Confirm delete'),
-                                    content: const Text(
-                                        'Are you sure you want to delete this award?'),
+                                    title: Text(t.translate('Confirm delete')),
+                                    content: Text(t.translate('Are you sure you want to delete this award?')),
                                     actions: [
                                       TextButton(
-                                        onPressed: () =>
-                                            Navigator.of(dCtx).pop(false),
-                                        child: const Text('Cancel'),
+                                        onPressed: () => Navigator.of(dCtx).pop(false),
+                                        child: Text(t.translate('Cancel')),
                                       ),
                                       TextButton(
-                                        onPressed: () =>
-                                            Navigator.of(dCtx).pop(true),
-                                        child: const Text('Delete'),
+                                        onPressed: () => Navigator.of(dCtx).pop(true),
+                                        child: Text(t.translate('Delete')),
                                       ),
                                     ],
                                   ),
@@ -231,7 +219,6 @@ class _GiftsViewBodyState extends State<GiftsViewBody> {
                             );
                           },
                         ),
-
                       if (_loadingMore)
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 16.h),

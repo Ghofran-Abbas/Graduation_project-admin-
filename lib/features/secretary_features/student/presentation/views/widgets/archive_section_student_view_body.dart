@@ -91,7 +91,7 @@ class ArchiveSectionStudentViewBody extends StatelessWidget {
                                                         startDateText: stateS.section.section.startDate.toString().replaceRange(10, 23, ''),
                                                         showCourseCalenderIcon: true,
                                                         endDateText: stateS.section.section.endDate.toString().replaceRange(10, 23, ''),
-                                                        numberSeatsText: '${stateS.section.section.seatsOfNumber} Seats',
+                                                        numberSeatsText: '${stateS.section.section.seatsOfNumber} ${AppLocalizations.of(context).translate('Seats')}',
                                                         bodyText: stateC.course.course.description,
                                                         onTap: (){},
                                                         onTapDate: (){

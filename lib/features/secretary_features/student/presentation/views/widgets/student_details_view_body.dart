@@ -91,8 +91,8 @@ class StudentDetailsViewBody extends StatelessWidget {
                         ).translate('See more'),
                         avatarCount: 1,
                         showGifts: true,
-                        textGifts:
-                        'Click to see ${student.name} awards',
+                        textGifts: AppLocalizations.of(context).translate('Click to see awards'),
+
                         onTapGifts: () {
                           final sid = student.id;
                           context.go('/students/studentDetails/$sid/gifts');

@@ -1,63 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../core/localization/app_localizations.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/styles.dart';
-import '../../../../../core/widgets/custom_icon_button.dart';
 
-class InformationFieldItemForPoints extends StatelessWidget {
-  const InformationFieldItemForPoints({
+/// Use the same width for the trailing actions column (header & rows)
+const double _kActionColWidth = 48.0;
+
+class CustomListInformationFieldsForPoints extends StatelessWidget {
+  const CustomListInformationFieldsForPoints({
     super.key,
-    this.color,
-    required this.name,
-    this.nameColor,
-    required this.secondText,
-    this.secondTextColor,
-    required this.onEditTap,
+    required this.widget,
+    this.showSecondField = false,
   });
 
-  final Color? color;
-  final String name;
-  final Color? nameColor;
-  final String secondText;
-  final Color? secondTextColor;
-  final VoidCallback onEditTap;
+  final bool showSecondField;
+  final Widget widget;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: color ?? AppColors.white,
-      height: 66.h,
-      padding: EdgeInsets.symmetric(horizontal: 16.w),
-      child: Row(
-        children: [
-          // Name column (flex:3)
-          Expanded(
-            flex: 3,
-            child: Text(
-              name,
-              style: Styles.l2Medium(color: nameColor ?? AppColors.t3),
-              overflow: TextOverflow.ellipsis,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 24.h),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: Container(
+            height: 48.h,
+            color: AppColors.white,
+            child: Row(
+              children: [
+                // Name (3/6 of width)
+                Expanded(
+                  flex: 3,
+                  child: _HeaderText('Name'),
+                ),
+                // Points (2/6 of width)
+                if (showSecondField)
+                  Expanded(
+                    flex: 2,
+                    child: _HeaderText('Points'),
+                  ),
+                // Fixed space matching the row's trailing icon column
+                SizedBox(width: _kActionColWidth.w),
+              ],
             ),
           ),
+        ),
+        SizedBox(height: 8.h),
+        widget,
+        SizedBox(height: 16.h),
+      ],
+    );
+  }
+}
 
-          // Points column (flex:2)
-          Expanded(
-            flex: 2,
-            child: Text(
-              secondText,
-              style: Styles.l2Medium(color: secondTextColor ?? AppColors.t3),
-              textAlign: TextAlign.left,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
+class _HeaderText extends StatelessWidget {
+  final String label;
+  const _HeaderText(this.label);
 
-          // Edit icon
-          CustomIconButton(
-            icon: Icons.edit_outlined,
-            onTap: onEditTap,
-          ),
-        ],
+  @override
+  Widget build(BuildContext context) {
+    // Align to start so it looks right in both LTR/RTL
+    return Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: Text(
+        AppLocalizations.of(context).translate(label),
+        style: Styles.l2Medium(color: AppColors.t3),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }

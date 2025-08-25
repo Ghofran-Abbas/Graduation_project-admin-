@@ -8,18 +8,24 @@ import 'gifts_state.dart';
 
 class GiftsCubit extends Cubit<GiftsState> {
   final GiftRepo _repo;
+
   GiftsCubit(this._repo) : super(GiftsInitial());
 
-  /// Load a specific page for a student, appending if page>1
+// lib/features/gifts/presentation/manager/gifts_cubit/gifts_cubit.dart
+
   Future<void> fetchForStudent(int studentId, {int page = 1}) async {
     if (page == 1) emit(GiftsLoading());
     try {
       final p = await _repo.fetchAll(studentId: studentId, page: page);
+
+      // ⬇️ defensive filter (adjust field names to your model)
+      final current = p.gifts.where((g) => g.studentId == studentId).toList();
+
       final combined = page == 1
-          ? p.gifts
+          ? current
           : [
         if (state is GiftsSuccess) ...((state as GiftsSuccess).gifts),
-        ...p.gifts
+        ...current,
       ];
 
       emit(GiftsSuccess(
@@ -32,16 +38,20 @@ class GiftsCubit extends Cubit<GiftsState> {
     }
   }
 
-  /// Same for secretary
   Future<void> fetchForSecretary(int secretaryId, {int page = 1}) async {
     if (page == 1) emit(GiftsLoading());
     try {
       final p = await _repo.fetchAll(secretaryId: secretaryId, page: page);
+
+      // ⬇️ defensive filter (adjust field names to your model)
+      final current = p.gifts.where((g) => g.secretaryId == secretaryId)
+          .toList();
+
       final combined = page == 1
-          ? p.gifts
+          ? current
           : [
         if (state is GiftsSuccess) ...((state as GiftsSuccess).gifts),
-        ...p.gifts
+        ...current,
       ];
 
       emit(GiftsSuccess(
