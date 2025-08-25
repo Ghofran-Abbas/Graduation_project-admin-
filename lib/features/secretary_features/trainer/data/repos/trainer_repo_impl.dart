@@ -208,8 +208,8 @@ class TrainerRepoImpl extends TrainerRepo{
   Future<Either<Failure, ArchiveSectionTrainerModel>> fetchArchiveTrainer({required int id, required int page}) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/secretary/section/getTrainerArchive/$id?page=$page',
-        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+        endPoint: '/admin/section/getTrainerArchive/$id?page=$page',
+        token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       ArchiveSectionTrainerModel archiveSectionTrainerModel;
