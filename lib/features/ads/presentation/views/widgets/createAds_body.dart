@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import '../../../../../core/localization/app_localizations.dart';
 import '../../manager/getAllAdsCubit/addAd_state.dart';
 import '../../manager/getAllAdsCubit/addAdd_cubit.dart';
 import 'dart:typed_data';
@@ -72,7 +73,9 @@ class CreateAnnouncementBodyState extends State<CreateAnnouncementBody> {
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: Text('Add announcement', style: Theme.of(context).textTheme.titleLarge),
+              child: Text(
+                  AppLocalizations.of(context).translate('Add announcement'),
+                   style: Theme.of(context).textTheme.titleLarge),
             ),
             SizedBox(height: 16.h),
 
@@ -99,7 +102,9 @@ class CreateAnnouncementBodyState extends State<CreateAnnouncementBody> {
                 child: InkWell(
                   onTap: () => _pickDate(true),
                   child: InputDecorator(
-                    decoration: InputDecoration(labelText: 'Start date'),
+                    decoration: InputDecoration(labelText:
+                    AppLocalizations.of(context).translate('Start date'),
+                    ),
                     child: Text(fmt.format(_start)),
                   ),
                 ),
@@ -109,7 +114,9 @@ class CreateAnnouncementBodyState extends State<CreateAnnouncementBody> {
                 child: InkWell(
                   onTap: () => _pickDate(false),
                   child: InputDecorator(
-                    decoration: InputDecoration(labelText: 'End date'),
+                    decoration: InputDecoration(labelText:
+                    AppLocalizations.of(context).translate('End date')
+                    ),
                     child: Text(fmt.format(_end)),
                   ),
                 ),
@@ -121,23 +128,31 @@ class CreateAnnouncementBodyState extends State<CreateAnnouncementBody> {
             TextField(
               controller: _descCtrl,
               maxLines: 4,
-              decoration: InputDecoration(labelText: 'Description', border: OutlineInputBorder()),
+              decoration: InputDecoration(labelText:
+              AppLocalizations.of(context).translate('Description')
+              , border: OutlineInputBorder()),
             ),
             SizedBox(height: 16.h),
 
             TextField(
               controller: _titleCtrl,
-              decoration: InputDecoration(labelText: 'Title', border: OutlineInputBorder()),
+              decoration: InputDecoration(labelText:
+              AppLocalizations.of(context).translate('Title')
+              , border: OutlineInputBorder()),
             ),
             SizedBox(height: 24.h),
 
             Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              TextButton(onPressed: () => Navigator.of(context).pop(), child: Text('Cancel')),
+              TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(
+                  AppLocalizations.of(context).translate('Cancel')
+                  )),
               SizedBox(width: 12.w),
               ElevatedButton.icon(
                 onPressed: () {
                   if (_photoPath == null && _photoBytes == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please select a photo')));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(
+                        AppLocalizations.of(context).translate('Please select a photo')
+                        )));
                     return;
                   }
 
@@ -154,7 +169,9 @@ class CreateAnnouncementBodyState extends State<CreateAnnouncementBody> {
                 icon: state is CreateAdLoading
                     ? SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                     : Icon(Icons.add),
-                label: Text('Add'),
+                label: Text(
+                    AppLocalizations.of(context).translate('Add')
+                    ),
               ),
             ]),
           ],

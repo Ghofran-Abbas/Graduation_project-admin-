@@ -202,7 +202,20 @@
   "Employee": "Employee",
 
 
+
   "Announcements": "Announcement",
+  "Active": "Active",
+  "End Date": "End Date",
+  "Start Date": "Start Date",
+"No active announcements at this time": "No active announcements at this time",
+  "No announcements at this time": "No announcements at this time",
+  "There are no announcements currently active.": "There are no announcements currently active.",
+  "Add new announcements to see them here.": "Add new announcements to see them here.",
+  "Are you sure?": "Are you sure?",
+  "Do you really want to delete this announcement?": "Do you really want to delete this announcement?",
+"Please select a photo": "Please select a photo",
+
+
 
 
   "Full name": "Full name",

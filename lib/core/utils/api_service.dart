@@ -7,7 +7,7 @@ import '../../constants.dart';
 
 class DioApiService
 {
-  final _baseUrl = "http://127.0.0.1:8080/api";
+  final _baseUrl = "http://127.0.0.1:8000/api";
   final Dio _dio;
 
   DioApiService(this._dio);

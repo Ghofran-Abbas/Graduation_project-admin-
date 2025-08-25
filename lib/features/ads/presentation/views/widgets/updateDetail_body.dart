@@ -9,6 +9,7 @@ import 'package:image_network/image_network.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../core/localization/app_localizations.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../data/models/ad_detail_model.dart';
 import '../../../data/models/ad_model.dart';
@@ -170,7 +171,9 @@ class _UpdateAnnouncementBodyState extends State<UpdateAnnouncementBody> {
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: Text('Edit announcement', style: Theme.of(context).textTheme.titleLarge),
+            child: Text(
+                AppLocalizations.of(context).translate('Edit announcement')
+                , style: Theme.of(context).textTheme.titleLarge),
           ),
           SizedBox(height: 16.h),
           GestureDetector(onTap: _pickImage, child: avatar),
@@ -182,7 +185,9 @@ class _UpdateAnnouncementBodyState extends State<UpdateAnnouncementBody> {
               child: InkWell(
                 onTap: () => _pickDate(true),
                 child: InputDecorator(
-                  decoration: InputDecoration(labelText: 'Start date'),
+                  decoration: InputDecoration(labelText:
+                  AppLocalizations.of(context).translate('Start date')
+                  ),
                   child: Text(fmt.format(_start)),
                 ),
               ),
@@ -192,7 +197,9 @@ class _UpdateAnnouncementBodyState extends State<UpdateAnnouncementBody> {
               child: InkWell(
                 onTap: () => _pickDate(false),
                 child: InputDecorator(
-                  decoration: InputDecoration(labelText: 'End date'),
+                  decoration: InputDecoration(labelText:
+                  AppLocalizations.of(context).translate('End date')
+                  ),
                   child: Text(fmt.format(_end)),
                 ),
               ),
@@ -204,20 +211,26 @@ class _UpdateAnnouncementBodyState extends State<UpdateAnnouncementBody> {
           TextField(
             controller: _descCtrl,
             maxLines: 4,
-            decoration: InputDecoration(labelText: 'Description', border: OutlineInputBorder()),
+            decoration: InputDecoration(labelText:
+            AppLocalizations.of(context).translate('Description')
+            , border: OutlineInputBorder()),
           ),
           SizedBox(height: 16.h),
 
           // العنوان
           TextField(
             controller: _titleCtrl,
-            decoration: InputDecoration(labelText: 'Title', border: OutlineInputBorder()),
+            decoration: InputDecoration(labelText:
+            AppLocalizations.of(context).translate('Title')
+            , border: OutlineInputBorder()),
           ),
           SizedBox(height: 24.h),
 
           // أزرار الحفظ والإلغاء
           Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-            TextButton(onPressed: () => Navigator.of(context).pop(), child: Text('Cancel')),
+            TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(
+                AppLocalizations.of(context).translate('Cancel')
+                )),
             SizedBox(width: 12.w),
             ElevatedButton.icon(
               onPressed: state is UpdateAdLoading ? null : () {
@@ -236,7 +249,9 @@ class _UpdateAnnouncementBodyState extends State<UpdateAnnouncementBody> {
               icon: state is UpdateAdLoading
                   ? SizedBox(width:16, height:16, child:CircularProgressIndicator(strokeWidth:2, color:Colors.white))
                   : Icon(Icons.check),
-              label: Text('Save'),
+              label: Text(
+                  AppLocalizations.of(context).translate('Save')
+                  ),
             ),
           ]),
         ]),

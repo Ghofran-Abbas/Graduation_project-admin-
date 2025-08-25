@@ -376,7 +376,16 @@
   "Awards will appear here after you add them.": "ستظهر الجوائز هنا بعد إضافتها.",
   "Confirm delete": "تأكيد الحذف",
   "Are you sure you want to delete this award?": "هل أنت متأكد أنك تريد حذف هذه الجائزة؟",
-  "Date": "التاريخ"
+  "Date": "التاريخ",
 
-
+  "Active": "النشطة",
+  "End Date": "تاريخ الانتهاء",
+  "Start Date": "تاريخ البدأ",
+  "No active announcements at this time": "لا يوجد اعلانات نشطة بالوقت الحالي",
+  "No announcements at this time": "لا يوجد اعلانات  بالوقت الحالي",
+  "There are no announcements currently active.": "لا توجد إعلانات نشطة حاليًا.",
+  "Add new announcements to see them here.": "أضف إعلانات جديدة لرؤيتها هنا .",
+  "Are you sure?": "هل أنت متأكد",
+  "Do you really want to delete this announcement?": "هل تريد حقًا حذف هذا الإعلان؟",
+  "Please select a photo": "الرجاء اختيار الصورة"
 }

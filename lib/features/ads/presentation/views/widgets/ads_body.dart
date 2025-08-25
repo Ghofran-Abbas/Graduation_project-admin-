@@ -530,11 +530,19 @@ class _AdCard extends StatelessWidget {
                       final confirmed = await showDialog<bool>(
                         context: context,
                         builder: (ctx) => AlertDialog(
-                          title: Text('Are you sure?'),
-                          content: Text('Do you really want to delete this announcement?'),
+                          title: Text(
+                              AppLocalizations.of(context).translate('Are you sure?'),
+                              ),
+                          content: Text(
+                              AppLocalizations.of(context).translate('Do you really want to delete this announcement?')
+                              ),
                           actions: [
-                            TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text('Cancel')),
-                            TextButton(onPressed: () => Navigator.of(ctx).pop(true), child: Text('Delete')),
+                            TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text(
+                                AppLocalizations.of(context).translate('Cancel')
+                                )),
+                            TextButton(onPressed: () => Navigator.of(ctx).pop(true), child: Text(
+                                AppLocalizations.of(context).translate('Delete')
+                                )),
                           ],
                         ),
                       );
