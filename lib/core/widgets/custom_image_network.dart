@@ -24,7 +24,7 @@ class CustomImageNetwork extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ImageNetwork(
-      image: "http://127.0.0.1:8000/${image!}",
+      image: "http://127.0.0.1:8080/${image!}",
       // put a height and width because they are required
       height: imageHeight ?? 55,
       width: imageWidth ?? 50,
