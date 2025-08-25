@@ -45,7 +45,12 @@ class SearchEmployeeViewBody extends StatelessWidget {
                   ? CustomErrorWidget(errorMessage: state.errorMessage)
                   : state is SearchEmployeeSuccess
                   ? _buildResults(context, state)
-                  : const Center(child: CustomEmptyWidget(firstText: 'Search to see results', secondText: '',)),
+                  :  Center(
+                child: CustomEmptyWidget(
+                  firstText: AppLocalizations.of(context).translate('Search to see more'),
+                  secondText: '',
+                ),
+              ),
             ),
           ),
         );
@@ -88,7 +93,7 @@ class SearchEmployeeViewBody extends StatelessWidget {
           ),
         )
             : CustomEmptyWidget(secondText: '',
-          firstText: AppLocalizations.of(context).translate('Nothing to display'),
+          firstText: AppLocalizations.of(context).translate('No thing to display'),
         ),
         CustomNumberPagination(
           numberPages: state.employee.employees.lastPage,

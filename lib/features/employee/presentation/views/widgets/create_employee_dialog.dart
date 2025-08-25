@@ -23,16 +23,18 @@ class _CreateEmployeeDialogState extends State<CreateEmployeeDialog> {
   final _emailC    = TextEditingController();
   final _phoneC    = TextEditingController();
   final _birthdayC = TextEditingController();
-  final _genderC   = TextEditingController();
   Uint8List? _photoBytes;
 
-  // Dropdown state:
+  // Dropdowns:
   final List<String> roles = ['Security', 'Accountant', 'Buffer'];
   String? _selectedRole;
 
+  final List<String> genders = ['Male', 'Female'];
+  String? _selectedGender;
+
   @override
   void dispose() {
-    for (final c in [_nameC, _emailC, _phoneC, _birthdayC, _genderC]) {
+    for (final c in [_nameC, _emailC, _phoneC, _birthdayC]) {
       c.dispose();
     }
     super.dispose();
@@ -70,7 +72,7 @@ class _CreateEmployeeDialogState extends State<CreateEmployeeDialog> {
       email:      _emailC.text.trim(),
       phone:      _phoneC.text.trim(),
       birthday:   _birthdayC.text.trim(),
-      gender:     _genderC.text.trim(),
+      gender:     _selectedGender!.trim(),
       role:       _selectedRole!.trim(),
       photoBytes: _photoBytes,
     );
@@ -92,11 +94,8 @@ class _CreateEmployeeDialogState extends State<CreateEmployeeDialog> {
                 onTap: _pickPhoto,
                 child: CircleAvatar(
                   radius: 40,
-                  backgroundImage:
-                  _photoBytes != null ? MemoryImage(_photoBytes!) : null,
-                  child: _photoBytes == null
-                      ? const Icon(Icons.add_a_photo)
-                      : null,
+                  backgroundImage: _photoBytes != null ? MemoryImage(_photoBytes!) : null,
+                  child: _photoBytes == null ? const Icon(Icons.add_a_photo) : null,
                 ),
               ),
               const SizedBox(height: 12),
@@ -104,10 +103,8 @@ class _CreateEmployeeDialogState extends State<CreateEmployeeDialog> {
               // Full Name
               TextFormField(
                 controller: _nameC,
-                decoration:
-                InputDecoration(labelText: loc.translate('Full Name')),
-                validator: (v) =>
-                v == null || v.trim().isEmpty ? loc.translate('Required') : null,
+                decoration: InputDecoration(labelText: loc.translate('Full Name')),
+                validator: (v) => v == null || v.trim().isEmpty ? loc.translate('Required') : null,
               ),
 
               // Email
@@ -115,9 +112,7 @@ class _CreateEmployeeDialogState extends State<CreateEmployeeDialog> {
                 controller: _emailC,
                 decoration: InputDecoration(labelText: loc.translate('Email')),
                 validator: (v) {
-                  if (v == null || v.trim().isEmpty) {
-                    return loc.translate('Required');
-                  }
+                  if (v == null || v.trim().isEmpty) return loc.translate('Required');
                   final email = v.trim();
                   if (!email.contains('@') || !email.endsWith('.com')) {
                     return loc.translate('Enter a valid email');
@@ -132,13 +127,9 @@ class _CreateEmployeeDialogState extends State<CreateEmployeeDialog> {
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(labelText: loc.translate('Phone')),
                 validator: (v) {
-                  if (v == null || v.trim().isEmpty) {
-                    return loc.translate('Required');
-                  }
+                  if (v == null || v.trim().isEmpty) return loc.translate('Required');
                   final len = v.trim().length;
-                  if (len < 10 || len > 12) {
-                    return loc.translate('Phone must be 10–12 digits');
-                  }
+                  if (len < 10 || len > 12) return loc.translate('Phone must be 10–12 digits');
                   return null;
                 },
               ),
@@ -149,16 +140,21 @@ class _CreateEmployeeDialogState extends State<CreateEmployeeDialog> {
                 readOnly: true,
                 decoration: InputDecoration(labelText: loc.translate('Birthday')),
                 onTap: _pickDate,
-                validator: (v) =>
-                v == null || v.trim().isEmpty ? loc.translate('Required') : null,
+                validator: (v) => v == null || v.trim().isEmpty ? loc.translate('Required') : null,
               ),
 
-              // Gender
-              TextFormField(
-                controller: _genderC,
+              // Gender (dropdown)
+              DropdownButtonFormField<String>(
+                value: _selectedGender,
                 decoration: InputDecoration(labelText: loc.translate('Gender')),
-                validator: (v) =>
-                v == null || v.trim().isEmpty ? loc.translate('Required') : null,
+                items: genders
+                    .map((g) => DropdownMenuItem(
+                  value: g,
+                  child: Text(loc.translate(g)),
+                ))
+                    .toList(),
+                onChanged: (val) => setState(() => _selectedGender = val),
+                validator: (v) => v == null || v.isEmpty ? loc.translate('Required') : null,
               ),
 
               const SizedBox(height: 12),
@@ -174,8 +170,7 @@ class _CreateEmployeeDialogState extends State<CreateEmployeeDialog> {
                 ))
                     .toList(),
                 onChanged: (val) => setState(() => _selectedRole = val),
-                validator: (v) =>
-                v == null || v.isEmpty ? loc.translate('Required') : null,
+                validator: (v) => v == null || v.isEmpty ? loc.translate('Required') : null,
               ),
             ],
           ),
@@ -191,9 +186,7 @@ class _CreateEmployeeDialogState extends State<CreateEmployeeDialog> {
             if (state is CreateEmployeeSuccess) {
               Navigator.pop(ctx, true);
             } else if (state is CreateEmployeeFailure) {
-              ScaffoldMessenger.of(ctx).showSnackBar(
-                SnackBar(content: Text(state.error)),
-              );
+              ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(content: Text(state.error)));
             }
           },
           child: BlocBuilder<CreateEmployeeCubit, CreateEmployeeState>(
@@ -201,11 +194,7 @@ class _CreateEmployeeDialogState extends State<CreateEmployeeDialog> {
               if (state is CreateEmployeeLoading) {
                 return const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
+                  child: SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2)),
                 );
               }
               return ElevatedButton(

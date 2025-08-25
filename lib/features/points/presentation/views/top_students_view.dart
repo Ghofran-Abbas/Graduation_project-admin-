@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/widgets/custom_circular_progress_indicator.dart';
 import '../../../../core/widgets/custom_error_widget.dart';
 import '../../../../core/widgets/custom_snack_bar.dart';
@@ -21,12 +22,13 @@ class TopStudentsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
     return MultiBlocListener(
       listeners: [
         BlocListener<UpdatePointsCubit, UpdatePointsState>(
           listener: (ctx, state) {
             if (state is UpdatePointsSuccess) {
-              CustomSnackBar.showSnackBar(ctx, msg: 'Points updated');
+              CustomSnackBar.showSnackBar(ctx, msg: t.translate('Points updated'));
               ctx.read<TopStudentsCubit>().fetchTopStudents(limit: 10);
             } else if (state is UpdatePointsFailure) {
               CustomSnackBar.showErrorSnackBar(ctx, msg: state.error);
@@ -47,48 +49,41 @@ class TopStudentsView extends StatelessWidget {
           return Padding(
             padding: EdgeInsets.only(top: 46.h),
             child: CustomScreenBody(
-              title: 'Top Students',
+              title: t.translate('Top Students'),
               showSearchField: false,
               onPressedFirst: () {},
               onPressedSecond: () {},
-             body: Padding(
-            padding: EdgeInsets.symmetric(
-            horizontal: 16.w,
-              vertical: 58.h,
-            ),
-            child: students.isEmpty
-                ? Center(child: Text('No students found'))
-                : CustomListInformationFieldsForPoints(
-              showSecondField: true,
-              widget: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: students.length,
-                itemBuilder: (_, i) {
-                  final s = students[i];
-                  return InformationFieldItemForPoints(
-                    color: i.isOdd ? Colors.grey[200]! : Colors.white,
-                    name: s.name,
-                    secondText: '${s.points}',
-                    onEditTap: () async {
-                      final didSave = await EditPointsDialog.show(context, s);
-                      if (didSave == true) {
-                        // Optionally refresh your list here,
-                        // though your UpdatePointsCubit listener will already do that.
-                        context.read<TopStudentsCubit>().fetchTopStudents(limit: 10);
-                      }
+              body: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 58.h),
+                child: students.isEmpty
+                    ? Center(child: Text(t.translate('No students found')))
+                    : CustomListInformationFieldsForPoints(
+                  showSecondField: true,
+                  widget: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: students.length,
+                    itemBuilder: (_, i) {
+                      final s = students[i];
+                      return InformationFieldItemForPoints(
+                        color: i.isOdd ? Colors.grey[200]! : Colors.white,
+                        name: s.name,
+                        secondText: '${s.points}',
+                        onEditTap: () async {
+                          final didSave = await EditPointsDialog.show(context, s);
+                          if (didSave == true) {
+                            ctx.read<TopStudentsCubit>().fetchTopStudents(limit: 10);
+                          }
+                        },
+                      );
                     },
-                  );
-                },
+                  ),
+                ),
               ),
             ),
-          ),
-
-          ),
           );
         },
       ),
     );
   }
-
 }

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/widgets/custom_circular_progress_indicator.dart';
 import '../../../../core/widgets/custom_error_widget.dart';
 import '../../../../core/widgets/custom_snack_bar.dart';
@@ -23,13 +24,14 @@ class TopSecretariesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
     return MultiBlocListener(
       listeners: [
         BlocListener<UpdateSecretaryPointsCubit, UpdateSecretaryPointsState>(
           listener: (ctx, state) {
             if (state is UpdateSecretaryPointsSuccess) {
-              CustomSnackBar.showSnackBar(ctx, msg: 'Secretary points updated');
-              ctx.read().fetchTopSecretaries(limit: 10);
+              CustomSnackBar.showSnackBar(ctx, msg: t.translate('Secretary points updated'));
+              ctx.read<TopSecretariesCubit>().fetchTopSecretaries(limit: 10); // ⬅️ fixed
             } else if (state is UpdateSecretaryPointsFailure) {
               CustomSnackBar.showErrorSnackBar(ctx, msg: state.error);
             }
@@ -48,14 +50,14 @@ class TopSecretariesView extends StatelessWidget {
           return Padding(
             padding: EdgeInsets.only(top: 46.h),
             child: CustomScreenBody(
-              title: 'Top Secretaries',
+              title: t.translate('Top Secretaries'),
               showSearchField: false,
               onPressedFirst: () {},
               onPressedSecond: () {},
               body: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 58.h),
                 child: secretaries.isEmpty
-                    ? Center(child: Text('No secretaries found'))
+                    ? Center(child: Text(t.translate('No secretaries found')))
                     : CustomListInformationFieldsForPoints(
                   showSecondField: true,
                   widget: ListView.builder(
@@ -69,11 +71,9 @@ class TopSecretariesView extends StatelessWidget {
                         name: s.name,
                         secondText: '${s.points}',
                         onEditTap: () async {
-                          final didSave = await EditSecretaryPointsDialog.show(
-                              context, s);
+                          final didSave = await EditSecretaryPointsDialog.show(context, s);
                           if (didSave == true) {
-                            ctx.read<TopSecretariesCubit>().fetchTopSecretaries(
-                                limit: 10);
+                            ctx.read<TopSecretariesCubit>().fetchTopSecretaries(limit: 10);
                           }
                         },
                       );

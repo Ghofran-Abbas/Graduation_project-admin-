@@ -19,6 +19,8 @@ import '../../features/ads/presentation/manager/getAllAdsCubit/addAdd_cubit.dart
 import '../../features/ads/presentation/manager/getAllAdsCubit/getAllAdsCubit.dart';
 import '../../features/ads/presentation/manager/getAllAdsCubit/singleAdCubit.dart';
 import '../../features/ads/presentation/manager/getAllAdsCubit/updateAd_cubit.dart';
+import '../../features/dashboard/data/repos/dashboard_repo_impl.dart';
+
 import '../../features/employee/data/repos/employee_repo_impl.dart';
 import '../../features/gifts/data/repos/gift_repo.dart';
 import '../../features/gifts/data/repos/gift_repo_impl.dart';
@@ -40,6 +42,7 @@ import '../../features/secretary_features/report/data/repos/report_repo_impl.dar
 import '../../features/secretary_features/student/data/repos/student_repo_impl.dart';
 import '../../features/secretary_features/trainer/data/repos/trainer_repo_impl.dart';
 import '../../features/secretary_features/verification/data/repos/verification_repo_impl.dart';
+import '../../features/tasks/data/repos/task_repo_impl.dart';
 import 'api_service.dart';
 
 final getIt = GetIt.instance;
@@ -131,6 +134,7 @@ void setupServiceLocator() {
   );
 
 
+
   //////batool
   ////allAd
 
@@ -195,4 +199,12 @@ void setupServiceLocator() {
 
   // Cubits
   getIt.registerFactory(() => NotificationsCubit(getIt<NotificationsRepository>()));
+
+  getIt.registerSingleton<DashboardRepoImpl>(
+    DashboardRepoImpl(getIt.get<DioApiService>()),
+  );
+  getIt.registerSingleton<TaskRepoImpl>(
+    TaskRepoImpl(getIt.get<DioApiService>()),
+  );
+
 }

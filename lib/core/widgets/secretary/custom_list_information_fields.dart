@@ -54,7 +54,7 @@ class CustomListInformationFields extends StatelessWidget {
                   : SizedBox(width: showSecondBox ?? false ? 225.w : 175.w),
               showSecondField ?? false
                   ? Expanded(
-                    //flex: 2,
+                   flex: 2,
                     child: Text(
                       secondField ?? '',
                       style: Styles.l2Medium(color: AppColors.t3),

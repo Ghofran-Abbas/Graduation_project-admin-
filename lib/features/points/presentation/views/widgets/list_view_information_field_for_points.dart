@@ -1,76 +1,75 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../core/localization/app_localizations.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/styles.dart';
+import '../../../../../core/widgets/custom_icon_button.dart';
 
-/// A simple header + list wrapper for "Name / Points / Edit"
-class CustomListInformationFieldsForPoints extends StatelessWidget {
-  const CustomListInformationFieldsForPoints({
+const double _kActionColWidth = 48.0;
+
+class InformationFieldItemForPoints extends StatelessWidget {
+  const InformationFieldItemForPoints({
     super.key,
-    required this.widget,
-    this.showSecondField = false,
+    this.color,
+    required this.name,
+    this.nameColor,
+    required this.secondText,
+    this.secondTextColor,
+    required this.onEditTap,
   });
 
-  /// Whether to show the second column header
-  final bool showSecondField;
-
-  /// The ListView underneath the header
-  final Widget widget;
+  final Color? color;
+  final String name;
+  final Color? nameColor;
+  final String secondText;
+  final Color? secondTextColor;
+  final VoidCallback onEditTap;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: 24.h),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Container(
-            height: 48.h,
-            color: AppColors.white,
-            child: Row(
-              children: [
-                // Name (3/6 of width)
-                const Expanded(
-                  flex: 3,
-                  child: _HeaderText('Name'),
-                ),
-
-                // Points (2/6 of width)
-                if (showSecondField)
-                  const Expanded(
-                    flex: 2,
-                    child: _HeaderText('Points'),
-                  ),
-
-                // Spacer for icon column
-                const SizedBox(width: 48),
-              ],
+    return Container(
+      color: color ?? AppColors.white,
+      height: 66.h,
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
+      child: Row(
+        children: [
+          // Name (flex:3)
+          Expanded(
+            flex: 3,
+            child: Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(
+                name,
+                style: Styles.l2Medium(color: nameColor ?? AppColors.t3),
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
-        ),
-        SizedBox(height: 8.h),
-        widget,
-        SizedBox(height: 16.h),
-      ],
-    );
-  }
-}
-
-class _HeaderText extends StatelessWidget {
-  final String label;
-  const _HeaderText(this.label);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      AppLocalizations.of(context).translate(label),
-      style: Styles.l2Medium(color: AppColors.t3),
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
+          // Points (flex:2)
+          Expanded(
+            flex: 2,
+            child: Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(
+                secondText,
+                style: Styles.l2Medium(color: secondTextColor ?? AppColors.t3),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          // Trailing action with the same fixed width as header
+          SizedBox(
+            width: _kActionColWidth.w,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: CustomIconButton(
+                icon: Icons.edit_outlined,
+                onTap: onEditTap,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

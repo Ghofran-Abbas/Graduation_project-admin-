@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../core/localization/app_localizations.dart';
 import '../../../../../features/points/data/models/student_point_model.dart';
 import '../../../../../features/points/presentation/manager/update_points_cubit/update_points_cubit.dart';
 
@@ -48,17 +49,18 @@ class _EditPointsDialogState extends State<EditPointsDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
     return AlertDialog(
-      title: const Text('Edit Points'),
+      title: Text(t.translate('Edit points')),
       content: Form(
         key: _formKey,
         child: TextFormField(
           controller: _controller,
           keyboardType: TextInputType.number,
-          decoration: const InputDecoration(labelText: 'Points'),
+          decoration: InputDecoration(labelText: t.translate('Points')),
           validator: (v) {
-            if (v == null || v.isEmpty) return 'Required';
-            if (int.tryParse(v) == null) return 'Must be a number';
+            if (v == null || v.isEmpty) return t.translate('Required');
+            if (int.tryParse(v) == null) return t.translate('Must be a number');
             return null;
           },
         ),
@@ -66,7 +68,7 @@ class _EditPointsDialogState extends State<EditPointsDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('Cancel'),
+          child: Text(t.translate('Cancel')),
         ),
         TextButton(
           onPressed: () {
@@ -76,7 +78,7 @@ class _EditPointsDialogState extends State<EditPointsDialog> {
               Navigator.of(context).pop(true);
             }
           },
-          child: const Text('Save'),
+          child: Text(t.translate('Save')),
         ),
       ],
     );

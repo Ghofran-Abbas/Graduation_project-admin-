@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../core/localization/app_localizations.dart';
 import '../../../../../core/widgets/custom_circular_progress_indicator.dart';
 import '../../../../../core/widgets/custom_error_widget.dart';
 import '../../../../../core/widgets/custom_image_network.dart';
@@ -28,6 +29,7 @@ class EmployeeDetailsViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
     return BlocBuilder<DetailsEmployeeCubit, DetailsEmployeeState>(
       builder: (context, empState) {
         if (empState is DetailsEmployeeLoading) {
@@ -54,7 +56,7 @@ class EmployeeDetailsViewBody extends StatelessWidget {
                 child: CustomScreenBody(
                   onPressedFirst: () {},
                   onPressedSecond: () {},
-                  title: "Employee",
+                  title: t.translate('Employee'),
                   showSearchField: false,
                   showFirstButton: false,
                   showSecondButton: false,
@@ -120,7 +122,7 @@ class EmployeeDetailsViewBody extends StatelessWidget {
 
                             // ── UNCHANGED ──
                             showGifts: emp.role.toLowerCase() == 'secretary',
-                            textGifts: 'Click to see ${emp.name} awards',
+                            textGifts: t.translate('Click to see awards'),
                             onTapGifts: () {
                               context.go('/employees/${emp.id}/gifts');
                             },

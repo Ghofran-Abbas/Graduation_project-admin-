@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+
 import '../../features/ads/presentation/manager/getAllAdsCubit/active_cubit.dart';
 import '../../features/ads/presentation/manager/getAllAdsCubit/addAdd_cubit.dart';
 import '../../features/ads/presentation/manager/getAllAdsCubit/getAllAdsCubit.dart';
@@ -12,6 +13,9 @@ import '../../features/ads/presentation/manager/getAllAdsCubit/singleAdCubit.dar
 import '../../features/ads/presentation/views/widgets/adsDetail_view.dart';
 import '../../features/ads/presentation/views/widgets/ads_view.dart';
 import '../../features/ads/presentation/views/widgets/createAds_view.dart';
+
+import '../../features/dashboard/presentation/views/dashboard_view.dart';
+
 import '../../features/employee/presentation/views/employee_details_view.dart';
 import '../../features/employee/presentation/views/employees_view.dart';
 import '../../features/employee/presentation/views/search_employee_view.dart';
@@ -75,6 +79,7 @@ import '../../features/secretary_features/trainer/presentation/views/trainer_arc
 import '../../features/secretary_features/trainer/presentation/views/trainer_details_view.dart';
 import '../../features/secretary_features/trainer/presentation/views/trainers_view.dart';
 import '../../features/secretary_features/verification/presentation/views/verification_view.dart';
+import '../../features/tasks/presentation/views/tasks_view.dart';
 import '../widgets/secretary/main_scaffold.dart';
 import '../../features/secretary_features/student/presentation/views/students_view.dart';
 import 'go_router_path.dart';
@@ -93,6 +98,14 @@ class AppRouter {
             builder: (context, state, child) => MainScaffold(child: child),
             routes: [
 
+              GoRoute(
+                path: '/stat',
+                builder: (context, state) => const DashboardView(),
+              ),
+              GoRoute(
+                path: '/tasks',
+                builder: (context, state) => const TasksView(),
+              ),
               GoRoute(
                 path: '/dashboard',
                 builder: (context, state) => const DepartmentsView(),

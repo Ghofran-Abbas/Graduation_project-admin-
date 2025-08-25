@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../core/localization/app_localizations.dart';
 import '../../../data/models/gift_model.dart';
 import '../../manager/create_gift_cubit/create_gift_cubit.dart';
 import '../../manager/create_gift_cubit/create_gift_state.dart';
@@ -87,27 +88,33 @@ class _GiftFormDialogState extends State<GiftFormDialog> {
 
   @override
   Widget build(BuildContext ctx) {
+    final t = AppLocalizations.of(ctx);
+
     return AlertDialog(
-      title:
-      Text(widget.existing == null ? 'New Award' : 'Edit Award'),
+      title: Text(widget.existing == null
+          ? t.translate('New Award')
+          : t.translate('Edit Award')),
       content: Form(
         key: _formKey,
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           TextFormField(
             controller: _descC,
-            decoration: const InputDecoration(labelText: 'Description'),
-            validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+            decoration: InputDecoration(labelText: t.translate('Description')),
+            validator: (v) => v == null || v.isEmpty
+                ? t.translate('Required')
+                : null,
           ),
           TextFormField(
             controller: _dateC,
-            decoration: const InputDecoration(
-              labelText: 'Date',
-              suffixIcon: Icon(Icons.calendar_today),
+            decoration: InputDecoration(
+              labelText: t.translate('Date'),
+              suffixIcon: const Icon(Icons.calendar_today),
             ),
             readOnly: true,
-            validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+            validator: (v) => v == null || v.isEmpty
+                ? t.translate('Required')
+                : null,
             onTap: () async {
-              // show the date picker
               final picked = await showDatePicker(
                 context: context,
                 initialDate: widget.existing?.date ?? DateTime.now(),
@@ -115,7 +122,6 @@ class _GiftFormDialogState extends State<GiftFormDialog> {
                 lastDate: DateTime(2100),
               );
               if (picked != null) {
-                // format and store
                 _dateC.text = DateFormat('yyyy-MM-dd').format(picked);
               }
             },
@@ -125,19 +131,17 @@ class _GiftFormDialogState extends State<GiftFormDialog> {
             onTap: _pickPhoto,
             child: CircleAvatar(
               radius: 30,
-              backgroundImage:
-              _photo != null ? MemoryImage(_photo!) : null,
-              child: _photo == null
-                  ? const Icon(Icons.photo)
-                  : null,
+              backgroundImage: _photo != null ? MemoryImage(_photo!) : null,
+              child: _photo == null ? const Icon(Icons.photo) : null,
             ),
           ),
         ]),
       ),
       actions: [
         TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel')),
+          onPressed: () => Navigator.pop(ctx),
+          child: Text(t.translate('Cancel')),
+        ),
         BlocListener<CreateGiftCubit, CreateGiftState>(
           listener: (_, state) {
             if (state is CreateGiftSuccess) Navigator.pop(ctx, true);
@@ -148,8 +152,9 @@ class _GiftFormDialogState extends State<GiftFormDialog> {
             },
             child: ElevatedButton(
               onPressed: _submit,
-              child: Text(
-                  widget.existing == null ? 'Create' : 'Save'),
+              child: Text(widget.existing == null
+                  ? t.translate('Create')
+                  : t.translate('Save')),
             ),
           ),
         ),
