@@ -69,7 +69,7 @@ class StudentRepoImpl extends StudentRepo{
       var data = await (dioApiService.postWithImage(
         endPoint: '/secretary/student/registrationStudent',
         data: formData,
-        token: await  Constants.sercToken, /*SharedPreferencesHelper.getJwtToken(),*/
+        token: '', /*SharedPreferencesHelper.getJwtToken(),*/
       ));
       log(data.toString());
       CreateStudentModel createStudentModel;
@@ -202,8 +202,8 @@ class StudentRepoImpl extends StudentRepo{
   Future<Either<Failure, ArchiveSectionStudentModel>> fetchArchiveStudent({required int id, required int page}) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/secretary/section/getStudentArchive/$id?page=$page',
-        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+        endPoint: '/admin/section/getStudentArchive/$id?page=$page',
+        token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       ArchiveSectionStudentModel archiveSectionStudentModel;

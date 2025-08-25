@@ -7,14 +7,14 @@ import '../../constants.dart';
 
 class DioApiService
 {
-  final _baseUrl = "http://127.0.0.1:8000/api";
+  final _baseUrl = "http://127.0.0.1:8080/api";
   final Dio _dio;
 
   DioApiService(this._dio);
 
   Future<dynamic> get({
   required String endPoint,
-  String? token=Constants.adminToken,
+  String? token,
 }) async {
     _dio.options.headers = {
       'Authorization': 'Bearer $token',
@@ -29,7 +29,7 @@ class DioApiService
   Future<Map<String, dynamic>> post({
     required String endPoint,
     required Map<String, dynamic>? data,
-    String? token=Constants.adminToken,
+    String? token,
   }) async {
     _dio.options.headers = {
       'Authorization': 'Bearer $token',
@@ -45,7 +45,7 @@ class DioApiService
   Future<Map<String, dynamic>> put({
     required String endPoint,
     required Map<String, dynamic>? data,
-    String? token=Constants.adminToken,
+    String? token,
   }) async {
     _dio.options.headers = {
       'Authorization': 'Bearer $token',
@@ -61,7 +61,7 @@ class DioApiService
   Future<dynamic> delete({
     required String endPoint,
     required Map<String, dynamic>? data,
-    String? token=Constants.adminToken,
+    String? token,
   }) async {
     _dio.options.headers = {
       'Authorization': 'Bearer $token',
@@ -77,7 +77,7 @@ class DioApiService
   Future<dynamic> postWithImage({
     required String endPoint,
     required FormData data,
-    String? token = Constants.adminToken,
+    String? token,
   }) async {
     final url = '$_baseUrl$endPoint';
     debugPrint(

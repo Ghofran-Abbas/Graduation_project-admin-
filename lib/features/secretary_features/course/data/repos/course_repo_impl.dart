@@ -46,8 +46,8 @@ class CourseRepoImpl implements CourseRepo {
   Future<Either<Failure, CoursesModel>> fetchCourses({required int departmentId, required int page}) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/secretary/departments/$departmentId/courses?page=$page',
-        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+        endPoint: '/admin/departments/$departmentId/courses?page=$page',
+        token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       CoursesModel coursesModel;
@@ -100,8 +100,8 @@ class CourseRepoImpl implements CourseRepo {
   Future<Either<Failure, DetailsCourseModel>> fetchDetailsCourse({required int id}) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/secretary/courses/$id',
-        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+        endPoint: '/admin/courses/$id',
+        token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       DetailsCourseModel detailsCourseModel;
@@ -185,8 +185,8 @@ class CourseRepoImpl implements CourseRepo {
   Future<Either<Failure, SearchCourseModel>> fetchSearchCourse({required String querySearch, required int page}) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/secretary/searchCourses/$querySearch?page=$page',
-        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+        endPoint: '/admin/searchCourses/$querySearch?page=$page',
+        token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       SearchCourseModel searchCourseModel;
@@ -511,8 +511,8 @@ class CourseRepoImpl implements CourseRepo {
   Future<Either<Failure, StudentsSectionModel>> fetchStudentsSection({required int id, required int page}) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/secretary/section/getStudentsInSection/$id',
-        token: Constants.adminToken,
+        endPoint: '/admin/student/getStudentsInSection/$id',
+        token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       StudentsSectionModel studentsSectionModel;
@@ -599,7 +599,7 @@ class CourseRepoImpl implements CourseRepo {
       var data = await (dioApiService.get(
         endPoint: '/file/showAllFileInSection/$sectionId?page=$page',
         //token: await SharedPreferencesHelper.getJwtToken(),
-        token: Constants.trainerToken,
+        token: '',
       ));
       log(data.toString());
       FilesModel filesModel;
@@ -619,7 +619,7 @@ class CourseRepoImpl implements CourseRepo {
     try {
       var data = await (dioApiService.get(
         endPoint: '/trainer-rating/$trainerId/section/$sectionId/ratings',
-        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+        token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       TrainerRatingModel trainerRatingModel;
@@ -639,7 +639,7 @@ class CourseRepoImpl implements CourseRepo {
     try {
       var data = await (dioApiService.get(
         endPoint: '/section-rating/$sectionId/ratings',
-        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+        token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       SectionRatingModel sectionRatingModel;
@@ -678,8 +678,8 @@ class CourseRepoImpl implements CourseRepo {
   Future<Either<Failure, AllCoursesModel>> fetchAllCourses({required int page}) async {
     try {
       var data = await (dioApiService.get(
-        endPoint: '/secretary/courses?page=$page',
-        token: Constants.adminToken/*await SharedPreferencesHelper.getJwtToken()*/,
+        endPoint: '/admin/courses?page=$page',
+        token: await SharedPreferencesHelper.getJwtToken(),
       ));
       log(data.toString());
       AllCoursesModel allCoursesModel;
