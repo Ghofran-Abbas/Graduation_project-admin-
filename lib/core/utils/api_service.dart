@@ -14,7 +14,7 @@ class DioApiService
 
   Future<dynamic> get({
   required String endPoint,
-  String? token=Constants.adminToken,
+  String? token,
 }) async {
     _dio.options.headers = {
       'Authorization': 'Bearer $token',
@@ -29,7 +29,7 @@ class DioApiService
   Future<Map<String, dynamic>> post({
     required String endPoint,
     required Map<String, dynamic>? data,
-    String? token=Constants.adminToken,
+    String? token,
   }) async {
     _dio.options.headers = {
       'Authorization': 'Bearer $token',
@@ -45,7 +45,7 @@ class DioApiService
   Future<Map<String, dynamic>> put({
     required String endPoint,
     required Map<String, dynamic>? data,
-    String? token=Constants.adminToken,
+    String? token,
   }) async {
     _dio.options.headers = {
       'Authorization': 'Bearer $token',
@@ -61,7 +61,7 @@ class DioApiService
   Future<dynamic> delete({
     required String endPoint,
     required Map<String, dynamic>? data,
-    String? token=Constants.adminToken,
+    String? token,
   }) async {
     _dio.options.headers = {
       'Authorization': 'Bearer $token',
@@ -77,7 +77,7 @@ class DioApiService
   Future<dynamic> postWithImage({
     required String endPoint,
     required FormData data,
-    String? token = Constants.adminToken,
+    String? token,
   }) async {
     final url = '$_baseUrl$endPoint';
     debugPrint(

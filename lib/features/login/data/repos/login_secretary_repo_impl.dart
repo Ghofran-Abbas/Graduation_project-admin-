@@ -30,7 +30,7 @@ class LoginRepoImpl extends LoginRepo{
           "password": password,
           "fcm_token": fcm_token,
         },
-        token: Constants.adminToken,
+        token: '',
       ));
       log(data.toString());
       LoginSecretaryModel loginSecretaryModel;
