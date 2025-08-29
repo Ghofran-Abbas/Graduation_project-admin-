@@ -10,7 +10,7 @@ class SectionsModel {
   final String path;
   final int perPage;
   final String? prevPageUrl;
-  final int to;
+  final int? to;
   final int total;
 
   SectionsModel({

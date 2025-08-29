@@ -1,6 +1,6 @@
 class SectionProgressModel {
   final String message;
-  final int progressPercentage;
+  final double progressPercentage;
 
   SectionProgressModel({
     required this.message,
