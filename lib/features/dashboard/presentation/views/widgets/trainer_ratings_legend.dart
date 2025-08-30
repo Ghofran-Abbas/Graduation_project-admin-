@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../data/models/section_ratings_model.dart';
+import '../../../data/models/trainer_ratings_model.dart';
 
-class SectionRatingsLegend extends StatelessWidget {
-  final List<SectionRatingStat> items;
+class TrainerRatingsLegend extends StatelessWidget {
+  final List<TrainerRatingStat> items;
   final List<Color> colors;
-  const SectionRatingsLegend({super.key, required this.items, required this.colors});
+  const TrainerRatingsLegend({super.key, required this.items, required this.colors});
 
   @override
   Widget build(BuildContext context) {
@@ -17,28 +17,18 @@ class SectionRatingsLegend extends StatelessWidget {
         return Padding(
           padding: EdgeInsets.symmetric(vertical: 6.h),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // color dot
-              Container(
-                width: 10.w,
-                height: 10.w,
-                decoration: BoxDecoration(color: c.withOpacity(.9), shape: BoxShape.circle),
-              ),
+              Container(width: 10.w, height: 10.w,
+                  decoration: BoxDecoration(color: c.withOpacity(.9), shape: BoxShape.circle)),
               SizedBox(width: 10.w),
-
-              // ✅ Show COURSE — SECTION to be clearer
               Expanded(
                 child: Text(
-                  '${e.courseName} — ${e.sectionName}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  e.trainerName,
+                  maxLines: 1, overflow: TextOverflow.ellipsis,
                   style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600),
                 ),
               ),
               SizedBox(width: 8.w),
-
-              // stars
               Row(
                 children: List.generate(5, (s) {
                   final filled = e.averageRating >= s + 1;
@@ -46,16 +36,14 @@ class SectionRatingsLegend extends StatelessWidget {
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 1.5.w),
                     child: Icon(
-                      half ? Icons.star_half_rounded : (filled ? Icons.star_rounded : Icons.star_border_rounded),
-                      size: 16.sp,
-                      color: c.withOpacity(.95),
+                      half ? Icons.star_half_rounded :
+                      (filled ? Icons.star_rounded : Icons.star_border_rounded),
+                      size: 16.sp, color: c.withOpacity(.95),
                     ),
                   );
                 }),
               ),
               SizedBox(width: 8.w),
-
-              // total ratings chip
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                 decoration: BoxDecoration(

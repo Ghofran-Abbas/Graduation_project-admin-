@@ -5,6 +5,7 @@ import '../../../../core/utils/service_locator.dart';
 import '../../data/repos/dashboard_repo_impl.dart';
 import '../manager/section_ratings_cubit/section_ratings_cubit.dart';
 import '../manager/top_courses_cubit/top_courses_cubit.dart';
+import '../manager/trainer_ratings_cubit/trainer_ratings_cubit.dart';
 import '../manager/yearly_students_cubit/yearly_students_cubit.dart';
 import '../manager/monthly_students_cubit/monthly_students_cubit.dart';
 import 'widgets/dashboard_view_body.dart';
@@ -28,6 +29,9 @@ class DashboardView extends StatelessWidget {
             order: 'desc',
           )
         ),
+        BlocProvider(create: (_) => TrainerRatingsCubit(repo)..load()),
+
+
       ],
       child: const DashboardViewBody(),
     );

@@ -2,22 +2,16 @@ import 'dart:math' as math;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../data/models/section_ratings_model.dart';
+import '../../../data/models/trainer_ratings_model.dart';
 
-class SectionRatingsBarChart extends StatelessWidget {
-  final List<SectionRatingStat> items;
+class TrainerRatingsBarChart extends StatelessWidget {
+  final List<TrainerRatingStat> items;
   final List<Color> colors;
-
-  const SectionRatingsBarChart({
-    super.key,
-    required this.items,
-    required this.colors,
-  });
+  const TrainerRatingsBarChart({super.key, required this.items, required this.colors});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final onSurface = theme.colorScheme.onSurface.withOpacity(.75);
+    final onSurface = Theme.of(context).colorScheme.onSurface.withOpacity(.75);
 
     final groups = <BarChartGroupData>[
       for (int i = 0; i < items.length; i++)
@@ -28,8 +22,7 @@ class SectionRatingsBarChart extends StatelessWidget {
               toY: items[i].averageRating,
               width: 18.w,
               gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
+                begin: Alignment.bottomCenter, end: Alignment.topCenter,
                 colors: [colors[i].withOpacity(.9), colors[i].withOpacity(.6)],
               ),
               borderRadius: BorderRadius.circular(6.r),
@@ -40,57 +33,40 @@ class SectionRatingsBarChart extends StatelessWidget {
 
     return BarChart(
       BarChartData(
-        maxY: 5,
-        minY: 0,
-        alignment: BarChartAlignment.spaceAround,
+        maxY: 5, minY: 0, alignment: BarChartAlignment.spaceAround,
         gridData: FlGridData(
-          show: true,
-          drawVerticalLine: false,
+          show: true, drawVerticalLine: false,
           getDrawingHorizontalLine: (v) => FlLine(
-            color: onSurface.withOpacity(.12),
-            strokeWidth: 1,
+            color: onSurface.withOpacity(.12), strokeWidth: 1,
           ),
         ),
         borderData: FlBorderData(show: false),
         barTouchData: const BarTouchData(enabled: false),
-
         titlesData: FlTitlesData(
-          // Y axis (0..5)
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 36.w,
-              interval: 1,
+              showTitles: true, interval: 1, reservedSize: 36.w,
               getTitlesWidget: (v, _) => Padding(
                 padding: EdgeInsets.only(right: 6.w),
-                child: Text(
-                  v.toInt().toString(),
-                  style: TextStyle(fontSize: 10.sp, color: onSurface),
-                ),
+                child: Text('${v.toInt()}', style: TextStyle(fontSize: 10.sp, color: onSurface)),
               ),
             ),
           ),
-
-          // ✅ Bottom: show course names (angled)
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 52.h,
-              interval: 1,
+              showTitles: true, reservedSize: 52.h, interval: 1,
               getTitlesWidget: (v, _) {
                 final i = v.toInt();
                 if (i < 0 || i >= items.length) return const SizedBox.shrink();
-                final label = items[i].courseName; // could also use '${items[i].courseName}\n${items[i].sectionName}'
                 return Padding(
                   padding: EdgeInsets.only(top: 6.h),
                   child: Transform.rotate(
-                    angle: -math.pi / 6, // ~ -30°
+                    angle: -math.pi / 6,
                     child: SizedBox(
                       width: 80.w,
                       child: Text(
-                        label,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        items[i].trainerName,
+                        maxLines: 1, overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 10.sp, color: onSurface),
                       ),
@@ -100,29 +76,21 @@ class SectionRatingsBarChart extends StatelessWidget {
               },
             ),
           ),
-
           rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-
-          // Top: value labels above bars
           topTitles: AxisTitles(
             sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 24.h,
-              interval: 1,
+              showTitles: true, reservedSize: 24.h, interval: 1,
               getTitlesWidget: (v, _) {
                 final i = v.toInt();
                 if (i < 0 || i >= items.length) return const SizedBox.shrink();
-                final value = items[i].averageRating;
-                if (value <= 0) return const SizedBox.shrink();
-                return Text(
-                  value.toStringAsFixed(value % 1 == 0 ? 0 : 1),
-                  style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w700, color: onSurface),
-                );
+                final val = items[i].averageRating;
+                if (val <= 0) return const SizedBox.shrink();
+                return Text(val.toStringAsFixed(val % 1 == 0 ? 0 : 1),
+                    style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w700, color: onSurface));
               },
             ),
           ),
         ),
-
         barGroups: groups,
       ),
       duration: const Duration(milliseconds: 500),

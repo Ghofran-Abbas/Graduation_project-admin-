@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:admin_alhadara_dashboard/features/dashboard/presentation/views/widgets/section_ratings_card_content.dart';
+import 'package:admin_alhadara_dashboard/features/dashboard/presentation/views/widgets/trainer_ratings_card_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -348,6 +349,15 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
                               title: loc.translate('Section ratings statistics'),
                               subtitle: loc.translate('Filter by date, limit & order'),
                               child: SectionRatingsCardContent(buildPalette: _buildPalette),
+                            ),
+                          ),
+
+                          SizedBox(
+                            width: cardWidth,
+                            child: DashboardCard(
+                              title: loc.translate('Trainer ratings statistics'),
+                              subtitle: loc.translate('Filter by date, limit & order'),
+                              child: TrainerRatingsCardContent(buildPalette: _buildPalette),
                             ),
                           ),
                         ],

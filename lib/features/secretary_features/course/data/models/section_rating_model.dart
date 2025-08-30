@@ -44,7 +44,7 @@ class Rating {
     studentId: json["student_id"],
     courseSectionId: json["course_section_id"],
     rating: json["rating"],
-    comment: json["comment"],
+    comment: json["comment"] ?? '',
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
     student: Student.fromJson(json["student"]),

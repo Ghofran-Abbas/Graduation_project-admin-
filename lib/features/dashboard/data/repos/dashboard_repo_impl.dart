@@ -4,6 +4,7 @@ import '../../../../../core/utils/shared_preferences_helper.dart';
 import '../models/top_courses_model.dart';
 import '../models/students_stats_model.dart';
 import '../models/section_ratings_model.dart';
+import '../models/trainer_ratings_model.dart';
 import 'dashboard_repo.dart';
 
 class DashboardRepoImpl implements DashboardRepo {
@@ -52,4 +53,26 @@ class DashboardRepoImpl implements DashboardRepo {
     );
     return SectionRatingsPayload.fromJson(resp as Map<String, dynamic>);
   }
+  @override
+  Future<TrainerRatingsPayload> fetchTrainerRatings({
+    String? startDate,
+    String? endDate,
+    int? limit,
+    String? order,
+  }) async {
+    final token = await SharedPreferencesHelper.getJwtToken();
+    final qp = <String, String>{};
+    if (startDate != null && startDate.isNotEmpty) qp['start_date'] = startDate;
+    if (endDate != null && endDate.isNotEmpty) qp['end_date'] = endDate;
+    if (limit != null) qp['limit'] = '$limit';
+    if (order != null && order.isNotEmpty) qp['order'] = order;
+
+    final query = qp.isEmpty ? '' : '?${Uri(queryParameters: qp).query}';
+    final resp = await _api.get(
+      endPoint: '/admin/trainer/statistics$query',
+      token: token,
+    );
+    return TrainerRatingsPayload.fromJson(resp as Map<String, dynamic>);
+  }
+
 }
